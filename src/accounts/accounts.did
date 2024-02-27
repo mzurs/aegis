@@ -1,0 +1,15 @@
+type Account = record {
+  "principal" : principal;
+  user_name : opt text;
+  user_id : nat64;
+};
+type Metric = variant { UserCounts; ActiveUsers };
+type MetricValues = variant { UserCounts : nat64; ActiveUsers : nat64 };
+type Result = variant { Ok : bool; Err : text };
+type Result_1 = variant { Ok; Err : text };
+service : {
+  create_account : () -> (Result);
+  get_account : () -> (opt Account) query;
+  get_metrics : (Metric) -> (MetricValues) query;
+  update_account_user_name : (text) -> (Result_1);
+}

@@ -1,0 +1,11 @@
+{
+  "canisters": {
+    "accounts": {
+      "candid": "src/accounts.did",
+      "package": "accounts",
+      "type": "rust"
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
