@@ -5,12 +5,12 @@ use crate::{
     utils::increment_user_count,
 };
 
-pub async fn _create_account() -> Result<bool, String> {
-    Account::new().await
-}
-
 pub fn _get_account() -> Option<Account> {
     USER_ACCOUNTS.with(|accounts| accounts.borrow().get(&ic_cdk::caller()))
+}
+
+pub async fn _create_account() -> Result<bool, String> {
+    Account::new().await
 }
 
 pub fn _add_account(account_args: Account) -> Result<bool, String> {

@@ -1,7 +1,6 @@
 use candid::CandidType;
 use serde::Deserialize;
 
-
 #[derive(CandidType, Deserialize)]
 pub enum Metric {
     UserCounts,

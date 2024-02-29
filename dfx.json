@@ -4,6 +4,16 @@
       "candid": "src/accounts.did",
       "package": "accounts",
       "type": "rust"
+    },
+    "ckbtc_minter": {
+      "type": "custom",
+      "candid": "src/minter/ckbtc_minter.did",
+      "wasm": "src/minter/ckbtc_minter.wasm"
+    },
+    "cketh_minter": {
+      "type": "custom",
+      "candid": "src/minter/cketh_minter.did",
+      "wasm": "src/minter/cketh_minter.wasm"
     }
   },
   "output_env_file": ".env",
