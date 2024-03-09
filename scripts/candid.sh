@@ -4,7 +4,6 @@ function generate_did() {
     local canister=$1
     canister_root="src/$canister"
 
-    echo "$canister_root"
     cargo build --manifest-path="$canister_root/Cargo.toml" \
         --target wasm32-unknown-unknown \
         --release --package "$canister" -p "$canister" --locked

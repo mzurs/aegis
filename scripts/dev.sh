@@ -6,6 +6,8 @@ function setup() {
     bash scripts/ledgers.sh fetch_ledgers
     # Fetch minters
     bash scripts/ledgers.sh fetch_minters
+    # Fetch KYT
+    bash scripts/ledgers.sh fetch_kyt
 
 }
 
@@ -16,6 +18,9 @@ function main() {
     "setup")
         setup
 
+        ;;
+    "deploy")
+        bash scripts/deploy.sh deploy
         ;;
 
     *) echo "Invalid arguments passed in ""$0" ;;

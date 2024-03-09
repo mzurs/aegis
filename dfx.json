@@ -1,7 +1,7 @@
 {
   "canisters": {
     "accounts": {
-      "candid": "src/accounts.did",
+      "candid": "src/accounts/accounts.did",
       "package": "accounts",
       "type": "rust"
     },
@@ -14,6 +14,21 @@
       "type": "custom",
       "candid": "src/minter/cketh_minter.did",
       "wasm": "src/minter/cketh_minter.wasm"
+    },
+    "cketh_ledger": {
+      "type": "custom",
+      "wasm": "src/ledgers/cketh_ledger.wasm",
+      "candid": "src/ledgers/cketh_ledger.did"
+    },
+    "ckbtc_ledger": {
+      "type": "custom",
+      "candid": "src/ledgers/ckbtc_ledger.did",
+      "wasm": "src/ledgers/ckbtc_ledger.wasm"
+    },
+    "kyt": {
+      "type": "custom",
+      "candid": "src/minter/kyt.did",
+      "wasm": "src/minter/kyt.wasm"
     }
   },
   "output_env_file": ".env",

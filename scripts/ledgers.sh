@@ -47,6 +47,20 @@ function fetch_minters() {
 
     cd ../..
 }
+
+function fetch_kyt() {
+
+    cd src/minter || bash
+
+    IC_VERSION=ac04d772c23ff771eaf526bee9ca9e9b411e129d
+
+    curl -o kyt.wasm.gz https://download.dfinity.systems/ic/$IC_VERSION/canisters/ic-ckbtc-kyt.wasm.gz
+
+    gunzip kyt.wasm.gz
+
+    cd ../..
+
+}
 function main() {
 
     case $1 in
@@ -58,6 +72,10 @@ function main() {
     "fetch_minters")
 
         fetch_minters
+        ;;
+
+    "fetch_kyt")
+        fetch_kyt
         ;;
 
     *) echo "Invalid argument pass in " "$0" ;;
