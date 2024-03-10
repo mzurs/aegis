@@ -10,9 +10,8 @@ crate-type = ["cdylib"]
 
 [dependencies]
 candid = "0.10"
-ic-cdk-macros = "0.8.4"
-ic-cdk = "0.12"
-ic-cdk-timers = "0.6"
+ic-cdk = "0.13.1"
+ic-cdk-timers = "0.7.0"
 serde = { version = "1.0.193", features = ["derive"] }
 ic-stable-structures = "0.6.2"
 byteorder = "1.5.0"

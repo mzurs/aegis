@@ -72,6 +72,9 @@ function bitcoin_wallet() {
 
     elif [[ $2 == "send" ]]; then
 
+        echo "$3"
+
+        echo "$4"
         .bitcoin/bin/bitcoin-cli -conf="$(pwd)"/.bitcoin.conf -rpcwallet=testwallet sendtoaddress "$3" "$4" "drinks" "room77" true true null "unset" null 1.1
 
         # after transfer mine 1 block to attach tx in a next block
@@ -80,6 +83,10 @@ function bitcoin_wallet() {
     elif [[ $2 == "mine" ]]; then
 
         .bitcoin/bin/bitcoin-cli -conf="$(pwd)"/.bitcoin.conf -rpcwallet=testwallet generatetoaddress 101 "$3"
+
+    elif [[ $2 == "mine_one_block" ]]; then
+
+        .bitcoin/bin/bitcoin-cli -conf="$(pwd)"/.bitcoin.conf -rpcwallet=testwallet generatetoaddress 1 "$3"
 
     elif [[ $2 == "balance" ]]; then
 
@@ -108,9 +115,9 @@ function main() {
         start_bitcoin_node
         ;;
     "wallet")
-        bitcoin_wallet "$1" "$2" "$3"
+        bitcoin_wallet "$1" "$2" "$3" "$4"
         ;;
     *) echo "Invalid Argument!" ;;
     esac
 }
-main "$1" "$2" "$3"
+main "$1" "$2" "$3" "$4"

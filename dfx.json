@@ -7,8 +7,8 @@
     },
     "ckbtc_minter": {
       "type": "custom",
-      "candid": "src/minter/ckbtc_minter.did",
-      "wasm": "src/minter/ckbtc_minter.wasm"
+      "candid": "src/minter/minter.did",
+      "wasm": "src/minter/minter.wasm.gz"
     },
     "cketh_minter": {
       "type": "custom",
@@ -22,13 +22,13 @@
     },
     "ckbtc_ledger": {
       "type": "custom",
-      "candid": "src/ledgers/ckbtc_ledger.did",
-      "wasm": "src/ledgers/ckbtc_ledger.wasm"
+      "candid": "src/ledgers/ledger.did",
+      "wasm": "src/ledgers/ledger.wasm.gz"
     },
     "kyt": {
       "type": "custom",
       "candid": "src/minter/kyt.did",
-      "wasm": "src/minter/kyt.wasm"
+      "wasm": "src/minter/kyt.wasm.gz"
     }
   },
   "output_env_file": ".env",

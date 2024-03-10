@@ -382,7 +382,7 @@ service : (minter_arg : MinterArg) -> {
     //
     // If the owner is not set, it defaults to the caller's principal.
     get_btc_address : (record { owner: opt principal; subaccount : opt blob }) -> (text);
-
+dfx canister call ckbtc_minter get_btc_address 'record { }'
     // Returns UTXOs of the given account known by the minter (with no
     // guarantee in the ordering of the returned values).
     //

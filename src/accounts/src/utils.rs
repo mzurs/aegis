@@ -1,12 +1,85 @@
 use byteorder::{BigEndian, ByteOrder};
-use ic_cdk::api::call::RejectionCode;
+use ic_cdk::api::{call::RejectionCode, management_canister::bitcoin::BitcoinNetwork};
 
 use crate::{
     enums::{Metric, MetricValues},
-    memory::ACCOUNT_METRICS,
+    memory::{ACCOUNT_METRICS, INIT_ARGS},
     types::states::AccountMetrics,
 };
 
+use candid::Principal;
+// use ic_cdk::api::call::call_with_payment;
+use icrc_ledger_types::icrc1::account::Subaccount;
+
+// use super::{
+//     constants::{
+//         get_xrc_canister_id,
+//         ledger_contracts::{get_ckbtc_ledger, get_cketh_ledger, get_icp_ledger},
+//     },
+//     enums::xrc::enum_exchange_rate_error,
+//     types::{
+//         interfaces::{Asset as Assets, Icrcs},
+//         other_canister::{
+//             Asset, AssetClass, ExchangeRate, GetExchangeRateRequest, GetExchangeRateResult,
+//         },
+//     },
+// };
+// use crate::canister_utils::types::interfaces::Asset::{Bitcoin, Ethereum, ICRC};
+
+pub fn _principal_to_subaccount(principal_id: &Principal) -> [u8; 32] {
+    let mut subaccount: [u8; 32] = [0; std::mem::size_of::<Subaccount>()];
+    let principal_id = principal_id.as_slice();
+    subaccount[0] = principal_id.len().try_into().unwrap();
+    subaccount[1..1 + principal_id.len()].copy_from_slice(principal_id);
+
+    // let byte_buf: ByteBuf = ByteBuf::from(subaccount);
+    // byte_buf
+    subaccount
+}
+
+pub fn convert_u64_to_subaccount(num: u64) -> [u8; 32] {
+    let mut network_bytes: [u8; 32] = [0; 32];
+    network_bytes[..8].copy_from_slice(&num.to_ne_bytes());
+
+    // Little-endian byte order
+    let mut little_endian_bytes: [u8; 32] = [0; 32];
+    little_endian_bytes[..8].copy_from_slice(&num.to_le_bytes());
+    little_endian_bytes
+}
+
+// pub async fn _get_exchange_rate(asset: Assets) -> Result<ExchangeRate, String> {
+//     let base_asset: String = _get_asset_str(asset);
+
+//     let quote_asset = String::from("USDT");
+//     let xrc_canister_id: Principal = get_xrc_canister_id();
+//     let xrc_canister_cycles_cost = 1_000_000_000;
+
+//     let xrc_args: GetExchangeRateRequest = GetExchangeRateRequest {
+//         timestamp: Option::None,
+//         quote_asset: Asset {
+//             class: AssetClass::Cryptocurrency,
+//             symbol: quote_asset,
+//         },
+//         base_asset: Asset {
+//             class: AssetClass::Cryptocurrency,
+//             symbol: base_asset,
+//         },
+//     };
+//     let (res): (GetExchangeRateResult,) = call_with_payment(
+//         xrc_canister_id,
+//         "get_exchange_rate",
+//         (xrc_args,),
+//         xrc_canister_cycles_cost,
+//     )
+//     .await
+//     .unwrap();
+
+//     let rate = match res {
+//         (GetExchangeRateResult::Ok(result),) => result,
+//         (GetExchangeRateResult::Err(err),) => return Err(enum_exchange_rate_error(err)),
+//     };
+//     Ok(rate)
+// }
 /**
     @title: Implementation of Random Number Generator using Management Canister
 */
@@ -36,11 +109,16 @@ pub fn increment_user_count() -> () {
     ()
 }
 
-pub fn _get_metrics(metric: Metric) -> MetricValues {
+pub fn get_metrics(metric: Metric) -> MetricValues {
     match metric {
         Metric::UserCounts => {
             MetricValues::UserCounts(ACCOUNT_METRICS.with_borrow(|m| m.get().user_counts))
         }
         Metric::ActiveUsers => MetricValues::ActiveUsers(0),
     }
+}
+
+/// Get the current Bitcoin Network used by Account Canister
+pub fn get_bitcoin_network() -> BitcoinNetwork {
+    INIT_ARGS.with(|n| n.borrow().get().bitcoin_network)
 }

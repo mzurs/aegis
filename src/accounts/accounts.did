@@ -3,13 +3,89 @@ type Account = record {
   user_name : opt text;
   user_id : nat64;
 };
+type BitcoinNetwork = variant { mainnet; regtest; testnet };
+type Constants = record { minter_ids : MinterIds; ledger_ids : LedgerIds };
+type InitArgs = record { bitcoin_network : BitcoinNetwork };
+type LedgerIds = record {
+  ckbtc_ledger_id : principal;
+  icp_ledger_id : principal;
+  cketh_ledger_id : principal;
+};
 type Metric = variant { UserCounts; ActiveUsers };
 type MetricValues = variant { UserCounts : nat64; ActiveUsers : nat64 };
+type MinterIds = record {
+  ckbtc_minter_id : principal;
+  cketh_minter_id : principal;
+};
+type PendingUtxo = record {
+  confirmations : nat32;
+  value : nat64;
+  outpoint : UtxoOutpoint;
+};
+type RejectionCode = variant {
+  NoError;
+  CanisterError;
+  SysTransient;
+  DestinationInvalid;
+  Unknown;
+  SysFatal;
+  CanisterReject;
+};
 type Result = variant { Ok : bool; Err : text };
-type Result_1 = variant { Ok; Err : text };
-service : {
+type Result_1 = variant {
+  Ok : record { RetrieveBtcRet };
+  Err : record { RejectionCode; text };
+};
+type Result_2 = variant { Ok; Err : text };
+type Result_3 = variant {
+  Ok : record { UpdateBalanceRet };
+  Err : record { RejectionCode; text };
+};
+type RetrieveBtcError = variant {
+  MalformedAddress : text;
+  GenericError : record { error_message : text; error_code : nat64 };
+  TemporarilyUnavailable : text;
+  AlreadyProcessing;
+  AmountTooLow : nat64;
+  InsufficientFunds : record { balance : nat64 };
+};
+type RetrieveBtcOk = record { block_index : nat64 };
+type RetrieveBtcRet = variant { Ok : RetrieveBtcOk; Err : RetrieveBtcError };
+type UpdateBalanceError = variant {
+  GenericError : record { error_message : text; error_code : nat64 };
+  TemporarilyUnavailable : text;
+  AlreadyProcessing;
+  NoNewUtxos : record {
+    required_confirmations : nat32;
+    pending_utxos : opt vec PendingUtxo;
+    current_confirmations : opt nat32;
+  };
+};
+type UpdateBalanceRet = variant {
+  Ok : vec UtxoStatus;
+  Err : UpdateBalanceError;
+};
+type Utxo = record { height : nat32; value : nat64; outpoint : UtxoOutpoint };
+type UtxoOutpoint = record { txid : vec nat8; vout : nat32 };
+type UtxoStatus = variant {
+  ValueTooSmall : Utxo;
+  Tainted : Utxo;
+  Minted : record { minted_amount : nat64; block_index : nat64; utxo : Utxo };
+  Checked : Utxo;
+};
+service : (InitArgs) -> {
   create_account : () -> (Result);
   get_account : () -> (opt Account) query;
+  get_bitcoin_network : () -> (BitcoinNetwork) query;
+  get_btc_address : () -> (text);
+  get_btc_balance : (text) -> (nat64);
+  get_constants : () -> (Constants) query;
+  get_deposit_fee : () -> (nat64) query;
+  get_id : () -> (principal) query;
   get_metrics : (Metric) -> (MetricValues) query;
-  update_account_user_name : (text) -> (Result_1);
+  get_user_balance : () -> (nat) query;
+  principal_to_subaccount : (principal) -> (vec nat8) query;
+  retrieve_btc : (text, nat64) -> (Result_1);
+  update_account_user_name : (text) -> (Result_2);
+  update_btc_balance : () -> (Result_3);
 }
