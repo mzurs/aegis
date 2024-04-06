@@ -1,7 +1,19 @@
 [workspace]
-members = ["src/accounts"]
+members = ["src/accounts",]
 
 resolver = "2"
 
 [workspace.lints.rust]
 unused = "allow"
+
+[workspace.dependencies]
+candid = "0.10"
+ic-cdk = "0.13.1"
+ic-cdk-timers = "0.7.0"
+serde = { version = "1.0.193", features = ["derive"] }
+ic-stable-structures = "0.6.2"
+byteorder = "1.5.0"
+icrc-ledger-types = "0.1.5"
+sha2 = "0.10.8"
+serde_bytes = "0.11.14"
+hex = { version = "0.4.3", features = ["serde"] }

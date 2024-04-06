@@ -1,0 +1,27 @@
+{
+  "license": "MIT",
+  "scripts": {
+    "test:accounts": "jest -c ./jest.config.ts",
+    "start": "bash scripts/dev.sh start",
+    "setup": "bash scripts/dev.sh setup",
+    "deploy:all": "bash scripts/dev.sh deploy"
+  },
+  "devDependencies": {
+    "@dfinity/agent": "^1.0.1",
+    "@dfinity/candid": "^1.0.1",
+    "@dfinity/identity": "^1.0.1",
+    "@dfinity/principal": "^1.0.1",
+    "@hadronous/pic": "^0.6.0",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.26",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.2"
+  },
+  "dependencies": {
+    "@dfinity/ledger-icp": "^2.2.2",
+    "@dfinity/utils": "^2.1.3",
+    "ethers": "^6.11.1"
+  }
+}

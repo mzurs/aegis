@@ -3,32 +3,79 @@
     "accounts": {
       "candid": "src/accounts/accounts.did",
       "package": "accounts",
-      "type": "rust"
+      "type": "rust",
+      "declarations": {
+        "bindings": ["js", "ts"],
+        "env_override": null,
+        "node_compatibility": true,
+        "output": "declarations/accounts"
+      }
     },
     "ckbtc_minter": {
       "type": "custom",
       "candid": "src/minter/minter.did",
-      "wasm": "src/minter/minter.wasm.gz"
+      "wasm": "src/minter/minter.wasm.gz",
+      "declarations": {
+        "bindings": ["js", "ts"],
+        "env_override": null,
+        "node_compatibility": true,
+        "output": "declarations/ckbtc_minter"
+      }
     },
     "cketh_minter": {
       "type": "custom",
       "candid": "src/minter/cketh_minter.did",
-      "wasm": "src/minter/cketh_minter.wasm"
+      "wasm": "src/minter/cketh_minter.wasm",
+      "declarations": {
+        "bindings": ["js", "ts"],
+        "env_override": null,
+        "node_compatibility": true,
+        "output": "declarations/cketh_minter"
+      }
+    },
+    "icp_ledger":{
+      "type": "custom",
+      "wasm": "src/ledgers/icp_ledger.wasm",
+      "candid": "src/ledgers/icp_ledger.did",
+      "declarations": {
+        "bindings": ["js", "ts"],
+        "env_override": null,
+        "node_compatibility": true,
+        "output": "declarations/icp_ledger"
+      }
     },
     "cketh_ledger": {
       "type": "custom",
       "wasm": "src/ledgers/cketh_ledger.wasm",
-      "candid": "src/ledgers/cketh_ledger.did"
+      "candid": "src/ledgers/cketh_ledger.did",
+      "declarations": {
+        "bindings": ["js", "ts"],
+        "env_override": null,
+        "node_compatibility": true,
+        "output": "declarations/cketh_ledger"
+      }
     },
     "ckbtc_ledger": {
       "type": "custom",
-      "candid": "src/ledgers/ledger.did",
-      "wasm": "src/ledgers/ledger.wasm.gz"
+      "candid": "src/ledgers/ckbtc_ledger.did",
+      "wasm": "src/ledgers/ckbtc_ledger.wasm",
+      "declarations": {
+        "bindings": ["js", "ts"],
+        "env_override": null,
+        "node_compatibility": true,
+        "output": "declarations/ckbtc_ledger"
+      }
     },
     "kyt": {
       "type": "custom",
       "candid": "src/minter/kyt.did",
-      "wasm": "src/minter/kyt.wasm.gz"
+      "wasm": "src/minter/kyt.wasm",
+      "declarations": {
+        "bindings": ["js", "ts"],
+        "env_override": null,
+        "node_compatibility": true,
+        "output": "declarations/kyt"
+      }
     }
   },
   "output_env_file": ".env",
