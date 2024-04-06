@@ -7,8 +7,26 @@ pub mod memory {
 
 pub mod states {
 
+    use self::initialization_configs::InitArgs;
+    use crate::memory::init_stable_states;
     use candid::{CandidType, Principal};
-    use serde::Deserialize;
+    use ic_stable_structures::{StableBTreeMap, StableCell};
+    use serde::{Deserialize, Serialize};
+
+    use super::memory::Memory;
+
+    pub struct StableStates {
+        pub user_accounts: StableBTreeMap<Principal, Account, Memory>,
+        pub constants: StableCell<Constants, Memory>,
+        pub init: StableCell<InitArgs, Memory>,
+        pub account_metrics: StableCell<AccountMetrics, Memory>,
+    }
+
+    #[derive(Serialize, Deserialize)]
+    pub struct State {
+        #[serde(skip, default = "init_stable_states")]
+        pub stable_state: StableStates,
+    }
 
     pub mod initialization_configs {
         use candid::CandidType;
@@ -62,24 +80,35 @@ pub mod interfaces {
     pub mod account {
         use candid::{CandidType, Principal};
 
+        use crate::ledgers::services::ledger::TransferError;
+
         #[derive(CandidType, Debug)]
         pub struct AccountAddresses {
             pub icrc: Principal,
             pub eth: String,
             pub btc: String,
         }
+
+        #[derive(CandidType)]
+        pub enum CkBtc2BtcErr {
+            ErrMessage(String),
+            TransferError(TransferError),
+        }
     }
 }
 
 pub mod types_impls {
-
+    use crate::memory::init_stable_states;
+    use crate::memory::STATE;
     use candid::{Decode, Encode, Principal};
     use ic_cdk::api::management_canister::bitcoin::BitcoinNetwork;
     use ic_stable_structures::{storable::Bound, Storable};
     use std::borrow::Cow;
+    // use crate::memory::CONSTANTS;
 
     use super::states::{
         initialization_configs::InitArgs, Account, AccountMetrics, Constants, LedgerIds, MinterIds,
+        StableStates, State,
     };
 
     impl Storable for Account {
@@ -162,9 +191,40 @@ pub mod types_impls {
             }
         }
     }
+    impl Constants {
+        pub fn set_ledger_ids(ids: LedgerIds) -> () {
+            let _ = STATE.with_borrow_mut(|c| {
+                let state: &mut StableStates = &mut c.stable_state;
 
+                let constants: &Constants = state.constants.get();
+                state.constants.set(Constants {
+                    ledger_ids: ids,
+                    minter_ids: MinterIds {
+                        ..constants.minter_ids
+                    },
+                })
+            });
+        }
 
-impl Constants {
-    
-}
+        pub fn set_minter_ids(ids: MinterIds) -> () {
+            let _ = STATE.with_borrow_mut(|c| {
+                let state: &mut StableStates = &mut c.stable_state;
+                let constants: &Constants = state.constants.get();
+                state.constants.set(Constants {
+                    ledger_ids: LedgerIds {
+                        ..constants.ledger_ids
+                    },
+                    minter_ids: ids,
+                })
+            });
+        }
+    }
+
+    impl Default for State {
+        fn default() -> Self {
+            Self {
+                stable_state: init_stable_states(),
+            }
+        }
+    }
 }

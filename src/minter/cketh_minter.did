@@ -6,29 +6,29 @@ type EthereumNetwork = variant {
 };
 
 type CanisterStatusResponse = record {
-  query_stats : QueryStats;
-  status : CanisterStatusType;
-  memory_size : nat;
-  cycles : nat;
-  settings : DefiniteCanisterSettings;
-  idle_cycles_burned_per_day : nat;
-  module_hash : opt vec nat8;
+    query_stats : QueryStats;
+    status : CanisterStatusType;
+    memory_size : nat;
+    cycles : nat;
+    settings : DefiniteCanisterSettings;
+    idle_cycles_burned_per_day : nat;
+    module_hash : opt vec nat8;
 };
 
 type CanisterStatusType = variant { stopped; stopping; running };
 
 type DefiniteCanisterSettings = record {
-  freezing_threshold : nat;
-  controllers : vec principal;
-  memory_allocation : nat;
-  compute_allocation : nat;
+    freezing_threshold : nat;
+    controllers : vec principal;
+    memory_allocation : nat;
+    compute_allocation : nat;
 };
 
 type QueryStats = record {
-  response_payload_bytes_total : nat;
-  num_instructions_total : nat;
-  num_calls_total : nat;
-  request_payload_bytes_total : nat;
+    response_payload_bytes_total : nat;
+    num_instructions_total : nat;
+    num_calls_total : nat;
+    request_payload_bytes_total : nat;
 };
 
 type BlockTag = variant {
@@ -60,7 +60,7 @@ type InitArg = record {
     ledger_id : principal;
 
     // Determine ethereum block height observed by minter.
-    ethereum_block_height: BlockTag;
+    ethereum_block_height : BlockTag;
 
     // Minimum amount in Wei that can be withdrawn.
     minimum_withdrawal_amount : nat;
@@ -114,16 +114,16 @@ type Eip1559TransactionPrice = record {
 
 type MinterInfo = record {
     // Ethereum address controlled by the minter via threshold ECDSA.
-    minter_address: opt text;
+    minter_address : opt text;
 
     // Address of the helper smart contract.
-    smart_contract_address: opt text;
+    smart_contract_address : opt text;
 
     // Minimum amount in Wei that can be withdrawn when converting ckETH -> ETH.
     minimum_withdrawal_amount : opt nat;
 
     // Determine ethereum block height observed by minter.
-    ethereum_block_height: opt BlockTag;
+    ethereum_block_height : opt BlockTag;
 
     // Last Ethereum block number observed by the minter.
     last_observed_block_number : opt nat;
@@ -133,9 +133,8 @@ type MinterInfo = record {
     eth_balance : opt nat;
 
     // Last gas fee estimate.
-    last_gas_fee_estimate: opt GasFeeEstimate;
+    last_gas_fee_estimate : opt GasFeeEstimate;
 };
-
 
 type GasFeeEstimate = record {
     // Maximum amount of Wei per gas unit that the transaction is willing to pay in total.
@@ -148,7 +147,7 @@ type GasFeeEstimate = record {
 
     // Timestamp of when the price was estimated.
     // Nanoseconds since the UNIX epoch.
-    timestamp: nat64;
+    timestamp : nat64;
 };
 
 type EthTransaction = record { transaction_hash : text };
@@ -198,8 +197,8 @@ type WithdrawalError = variant {
     InsufficientFunds : record { balance : nat };
     // The allowance given to the minter is too low.
     InsufficientAllowance : record { allowance : nat };
-   // Recipient's address is blocked.
-   // No withdrawal can be made to that address.
+    // Recipient's address is blocked.
+    // No withdrawal can be made to that address.
     RecipientAddressBlocked : record { address : text };
     // The minter is overloaded, retry the request.
     // The payload contains a human-readable message explaining what caused the unavailability.
@@ -250,8 +249,8 @@ type Event = record {
             reason : text;
         };
         MintedCkEth : record {
-            event_source: EventSource;
-            mint_block_index: nat;
+            event_source : EventSource;
+            mint_block_index : nat;
         };
         SyncedToBlock : record {
             block_number : nat;
@@ -262,7 +261,7 @@ type Event = record {
             ledger_burn_index : nat;
             from : principal;
             from_subaccount : opt blob;
-            created_at: opt nat64;
+            created_at : opt nat64;
         };
         CreatedTransaction : record {
             withdrawal_id : nat;
@@ -329,4 +328,4 @@ service : (MinterArg) -> {
     // Retrieve events from the minter's audit log.
     // The endpoint can return fewer events than requested to bound the response size.
     get_events : (record { start : nat64; length : nat64 }) -> (record { events : vec Event; total_event_count : nat64 }) query;
-}
+};

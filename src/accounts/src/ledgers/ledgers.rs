@@ -5,8 +5,6 @@ use ic_cdk::{
 };
 use icrc_ledger_types::icrc1::{account::Account, transfer::TransferArg};
 
-use crate::{memory::CONSTANTS, utils::_principal_to_subaccount};
-
 use super::{
     services::{
         ledger::Result_,
@@ -14,17 +12,41 @@ use super::{
     },
     types::{CKBTCMinter, ICRCLedgerType, Ledger},
 };
+use crate::memory::STATE;
+use crate::utils::_principal_to_subaccount;
 
 impl Ledger {
     pub fn new(ledger: ICRCLedgerType) -> Self {
+        // let state: StableStates = STATE.with(|c| c.borrow().stable_state);
+
+        // // state.constants.get().ledger_ids.icp_ledger_id)
+        // let CONSTANTS=state.constants.get(ledger);
         Self(match ledger {
-            ICRCLedgerType::ICP => CONSTANTS.with(|c| c.borrow().get().ledger_ids.icp_ledger_id),
-            ICRCLedgerType::CKBTC => {
-                CONSTANTS.with(|c| c.borrow().get().ledger_ids.ckbtc_ledger_id)
-            }
-            ICRCLedgerType::CKETH => {
-                CONSTANTS.with(|c| c.borrow().get().ledger_ids.cketh_ledger_id)
-            }
+            ICRCLedgerType::ICP => STATE.with(|c| {
+                c.borrow()
+                    .stable_state
+                    .constants
+                    .get()
+                    .ledger_ids
+                    .icp_ledger_id
+            }),
+            ICRCLedgerType::CKBTC => STATE.with(|c| {
+                c.borrow()
+                    .stable_state
+                    .constants
+                    .get()
+                    .ledger_ids
+                    .ckbtc_ledger_id
+            }),
+
+            ICRCLedgerType::CKETH => STATE.with(|c| {
+                c.borrow()
+                    .stable_state
+                    .constants
+                    .get()
+                    .ledger_ids
+                    .cketh_ledger_id
+            }),
         })
     }
 
@@ -35,22 +57,26 @@ impl Ledger {
     }
 
     /// transfer any icrc ledger tokens to Principal for a given canister id
-    pub async fn icrc1_transfer(self: Self, to: Principal, amount: u64) {
+    pub async fn icrc1_transfer(
+        self: Self,
+        from_subaccount: Option<[u8; 32]>,
+        to: Account,
+        amount: Nat,
+    ) -> Result_ {
         let transfer_args: TransferArg = TransferArg {
-            from_subaccount: Option::None,
-            to: Account {
-                owner: to,
-                subaccount: Option::None,
-            },
+            from_subaccount,
+            to: Account { ..to },
             fee: Option::Some(self.icrc1_fee().await),
             created_at_time: Option::Some(ic_cdk::api::time()),
             memo: Option::None,
-            amount: Nat::from(amount),
+            amount: (amount),
         };
 
         // result of transfer operation
-        let _transfer_result: Result<(Result_,), (RejectionCode, String)> =
+        let transfer_result: Result<(Result_,), (RejectionCode, String)> =
             ic_cdk::call(self.0, "icrc1_transfer", (transfer_args,)).await;
+
+        transfer_result.unwrap().0
     }
 
     pub async fn icrc1_balance_of(self: Self, principal: Principal) -> Nat {
@@ -69,7 +95,16 @@ impl Ledger {
 
 impl CKBTCMinter {
     pub fn new() -> Self {
-        Self(CONSTANTS.with(|c| c.borrow().get().minter_ids.ckbtc_minter_id))
+        Self(STATE.with(|c| {
+            {
+                c.borrow()
+                    .stable_state
+                    .constants
+                    .get()
+                    .minter_ids
+                    .ckbtc_minter_id
+            }
+        }))
     }
 
     /// Function to get new btc address for a given id
@@ -122,6 +157,12 @@ impl CKBTCMinter {
         };
         let result: CallResult<(RetrieveBtcRet,)> =
             call(self.0, "retrieve_btc", (retrieve_args,)).await;
+
+        result
+    }
+
+    pub async fn get_withdrawal_account(&self) -> CallResult<(Account,)> {
+        let result: CallResult<(Account,)> = call(self.0, "get_withdrawal_account", ()).await;
 
         result
     }

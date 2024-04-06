@@ -1,5 +1,6 @@
 use candid::{Nat, Principal};
 use ic_cdk::{api::call::CallResult, query, update};
+use icrc_ledger_types::icrc1::account::Account;
 
 use crate::mgmt::MgmtCanister;
 
@@ -53,4 +54,10 @@ async fn retrieve_btc(btc_address: String, amount: u64) -> CallResult<(RetrieveB
     let minter: CKBTCMinter = CKBTCMinter::new();
 
     minter.retrieve_btc(btc_address, amount).await
+}
+
+#[update]
+async fn get_withdrawal_account() -> CallResult<(Account,)> {
+    let minter: CKBTCMinter = CKBTCMinter::new();
+    minter.get_withdrawal_account().await
 }

@@ -5,6 +5,7 @@ type Account = record {
 };
 type BitcoinNetwork = variant { mainnet; regtest; testnet };
 type Constants = record { minter_ids : MinterIds; ledger_ids : LedgerIds };
+type ICRCLedgerType = variant { ICP; CKBTC; CKETH };
 type InitArgs = record { bitcoin_network : BitcoinNetwork };
 type LedgerIds = record {
   ckbtc_ledger_id : principal;
@@ -33,11 +34,16 @@ type RejectionCode = variant {
 };
 type Result = variant { Ok : bool; Err : text };
 type Result_1 = variant {
+  Ok : record { Account };
+  Err : record { RejectionCode; text };
+};
+type Result_2 = variant {
   Ok : record { RetrieveBtcRet };
   Err : record { RejectionCode; text };
 };
-type Result_2 = variant { Ok; Err : text };
-type Result_3 = variant {
+type Result_3 = variant { Ok : nat; Err : TransferError };
+type Result_4 = variant { Ok; Err : text };
+type Result_5 = variant {
   Ok : record { UpdateBalanceRet };
   Err : record { RejectionCode; text };
 };
@@ -51,6 +57,16 @@ type RetrieveBtcError = variant {
 };
 type RetrieveBtcOk = record { block_index : nat64 };
 type RetrieveBtcRet = variant { Ok : RetrieveBtcOk; Err : RetrieveBtcError };
+type TransferError = variant {
+  GenericError : record { message : text; error_code : nat };
+  TemporarilyUnavailable;
+  BadBurn : record { min_burn_amount : nat };
+  Duplicate : record { duplicate_of : nat };
+  BadFee : record { expected_fee : nat };
+  CreatedInFuture : record { ledger_time : nat64 };
+  TooOld;
+  InsufficientFunds : record { balance : nat };
+};
 type UpdateBalanceError = variant {
   GenericError : record { error_message : text; error_code : nat64 };
   TemporarilyUnavailable : text;
@@ -66,7 +82,7 @@ type UpdateBalanceRet = variant {
   Err : UpdateBalanceError;
 };
 type Utxo = record { height : nat32; value : nat64; outpoint : UtxoOutpoint };
-type UtxoOutpoint = record { txid : vec nat8; vout : nat32 };
+type UtxoOutpoint = record { txid : blob; vout : nat32 };
 type UtxoStatus = variant {
   ValueTooSmall : Utxo;
   Tainted : Utxo;
@@ -84,8 +100,13 @@ service : (InitArgs) -> {
   get_id : () -> (principal) query;
   get_metrics : (Metric) -> (MetricValues) query;
   get_user_balance : () -> (nat) query;
-  principal_to_subaccount : (principal) -> (vec nat8) query;
-  retrieve_btc : (text, nat64) -> (Result_1);
-  update_account_user_name : (text) -> (Result_2);
-  update_btc_balance : () -> (Result_3);
+  get_withdrawal_account : () -> (Result_1);
+  principal_to_hex : (principal) -> (text) query;
+  principal_to_subaccount : (principal) -> (blob) query;
+  retrieve_btc : (text, nat64) -> (Result_2);
+  set_ledger_ids : (LedgerIds) -> ();
+  set_minter_ids : (MinterIds) -> ();
+  transfer_from_account : (nat64, ICRCLedgerType) -> (Result_3);
+  update_account_user_name : (text) -> (Result_4);
+  update_btc_balance : () -> (Result_5);
 }
