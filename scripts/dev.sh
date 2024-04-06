@@ -15,6 +15,10 @@ function main() {
 
     case $1 in
 
+    "start")
+        dfx start --clean
+        ;;
+
     "setup")
         setup
 
