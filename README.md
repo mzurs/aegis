@@ -2,6 +2,8 @@
 
 The Account Canister acts as Exchange Wallet for User to Trade, Deposit & Withdraw Funds. The Canister supports mutliple asset from other chains such as BTC, ETH, etc
 
+This repo contains Backend Canisters code, for Frontend Canister code, please visit [Aegis-Dapp](https://github.com/AegisFinance/aegis-dapp)
+
 ## Start IC Replica
 
 ```bash
