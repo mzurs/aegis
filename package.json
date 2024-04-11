@@ -4,7 +4,11 @@
     "test:accounts": "jest -c ./jest.config.ts",
     "start": "bash scripts/dev.sh start",
     "setup": "bash scripts/dev.sh setup",
-    "deploy:all": "bash scripts/dev.sh deploy"
+    "deploy:all": "bash scripts/dev.sh deploy",
+    "bitcoind:start": "bash scripts/bitcoin.sh start",
+    "bitcoind:install": "bash scripts/bitcoin.sh install",
+    "bitcoind:download":"bash scripts/bitcoin.sh download",
+    "replica:start":"dfx start --clean --host 127.0.0.1:8080 --enable-bitcoin"
   },
   "devDependencies": {
     "@dfinity/agent": "^1.0.1",
