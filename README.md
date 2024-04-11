@@ -1,6 +1,6 @@
 # AEGIS Accounts
 
-The Account Canister acts as Exchange Wallet for User to Deposit Funds. The Canister supports mutliple asset from other chain such as BTC, ETH, and EVM chains.
+The Account Canister acts as Exchange Wallet for User to Trade, Deposit & Withdraw Funds. The Canister supports mutliple asset from other chains such as BTC, ETH, etc
 
 ## Start IC Replica
 
