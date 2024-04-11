@@ -86,13 +86,6 @@ describe("Account Canister", () => {
       CANISTERS_NAME.CKBTC_MINTER
     )) as Actor<_CKBTC_MINTER>;
 
-    // ckethMinterActor = (await setupCanister(
-    //   pic,
-    //   minter.getPrincipal(),
-    //   CKETH_MINTER_WASM_PATH,
-    //   CANISTERS_NAME.CKETH_MINTER
-    // )) as Actor<_CKETH_MINTER>;
-
     (await setupCanister(
       pic,
       minter.getPrincipal(),
@@ -132,13 +125,12 @@ describe("Account Canister", () => {
     });
 
     it("Minter status", async () => {
-
-    ckethMinterActor = (await setupCanister(
-      pic,
-      minter.getPrincipal(),
-      CKETH_MINTER_WASM_PATH,
-      CANISTERS_NAME.CKETH_MINTER
-    )) as Actor<_CKETH_MINTER>;
+      ckethMinterActor = (await setupCanister(
+        pic,
+        minter.getPrincipal(),
+        CKETH_MINTER_WASM_PATH,
+        CANISTERS_NAME.CKETH_MINTER
+      )) as Actor<_CKETH_MINTER>;
 
       ckbtcMinterActor.setIdentity(user);
       // ckethMinterActor.setIdentity(user);

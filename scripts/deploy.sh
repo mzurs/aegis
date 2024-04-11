@@ -19,6 +19,8 @@ CANDID
 }
 
 function deploy_minters() {
+  export CKETH_MINTER_ID="sv3dd-oaaaa-aaaar-qacoa-cai"
+  export CKSEPOPLIA_ETH_MINTER_ID="jzenf-aiaaa-aaaar-qaa7q-cai"
 
   #  Deploying ckBTC Minter Canister
   read -r -d '' ckbtc_argument <<CANDID
@@ -77,11 +79,14 @@ CANDID
     })
 CANDID
 
-  dfx deploy cketh_minter --specified-id sv3dd-oaaaa-aaaar-qacoa-cai --argument "$cketh_argument"
+  dfx deploy cketh_minter --specified-id $CKSEPOPLIA_ETH_MINTER_ID --argument "$cketh_argument"
 
 }
 
 function deploy_ledgers() {
+  CKETH_LEDGER_ID="ss2fx-dyaaa-aaaar-qacoq-cai"
+  CKSEPOPLIA_ETH_LEDGER_ID="apia6-jaaaa-aaaar-qabma-cai"
+
   # Deploy ICP Ledger Canister
   dfx identity use minter
   MINT_ACC=$(dfx ledger account-id)
@@ -160,7 +165,7 @@ CANDID
     })
 CANDID
 
-  dfx deploy cketh_ledger --specified-id ss2fx-dyaaa-aaaar-qacoq-cai --argument "$cketh_argument"
+  dfx deploy cketh_ledger --specified-id $CKSEPOPLIA_ETH_LEDGER_ID --argument "$cketh_argument"
 
 }
 
