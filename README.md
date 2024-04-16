@@ -35,5 +35,9 @@ yarn  deploy:all
 [PocketIC](https://github.com/dfinity/pocketic) is being used for testing Aegis Canisters, [tests](tests/accounts.spec.ts)
 
 ```bash
+yarn deploy:all
+```
+
+```bash
 yarn test:accounts 
 ```
