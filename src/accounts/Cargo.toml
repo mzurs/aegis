@@ -16,6 +16,5 @@ serde.workspace = true
 ic-stable-structures.workspace = true
 byteorder.workspace = true
 icrc-ledger-types.workspace = true
-sha2.workspace = "0.10.8"
 serde_bytes.workspace = true
 hex.workspace = true

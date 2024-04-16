@@ -15,7 +15,6 @@ dependencies = [
  "icrc-ledger-types",
  "serde",
  "serde_bytes",
- "sha2",
 ]
 
 [[package]]
