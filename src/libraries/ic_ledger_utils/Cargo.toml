@@ -1,0 +1,12 @@
+[package]
+name = "ic_ledger_utils"
+edition = "2021"
+version = "0.1.0"
+
+[dependencies]
+candid.workspace = true
+ic-cdk.workspace = true
+icrc-ledger-types.workspace = true
+ic_utils.workspace = true
+serde.workspace = true
+serde_bytes.workspace = true

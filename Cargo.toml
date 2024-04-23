@@ -1,5 +1,11 @@
 [workspace]
-members = ["src/accounts"]
+members = [
+    "src/canisters/accounts",
+    "src/libraries/canister_state_macro",
+    "src/libraries/serializer",
+    "src/libraries/*",
+
+]
 
 resolver = "2"
 
@@ -16,6 +22,14 @@ byteorder = "1.5.0"
 icrc-ledger-types = "0.1.5"
 serde_bytes = "0.11.14"
 hex = { version = "0.4.3", features = ["serde"] }
+tracing = "0.1"
+rmp-serde = "1.1.2"
+canister_state_macro = { path = "src/libraries/canister_state_macro" }
+serializer = { path = "src/libraries/serializer" }
+stable_memory = { path = "src/libraries/stable_memory" }
+minter_utils = { path = "src/libraries/minter_utils" }
+ic_ledger_utils = { path = "src/libraries/ic_ledger_utils" }
+ic_utils = { path = "src/libraries/ic_utils" }
 
 
 [profile.release]

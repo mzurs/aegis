@@ -4,3 +4,5 @@ bitcoin.tar.gz
 .bitcoin
 node_modules
 .env
+declarations
+ 

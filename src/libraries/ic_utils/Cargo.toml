@@ -1,0 +1,12 @@
+[package]
+name = "ic_utils"
+edition = "2021"
+version = "0.1.0"
+
+
+[dependencies]
+icrc-ledger-types.workspace = true
+candid.workspace = true
+hex.workspace = true
+byteorder.workspace = true
+ic-cdk.workspace = true

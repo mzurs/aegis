@@ -1,0 +1,13 @@
+[package]
+name = "minter_utils"
+edition = "2021"
+version = "0.1.0"
+
+[dependencies]
+candid.workspace = true
+ic-cdk.workspace = true
+serde.workspace = true
+serde_bytes.workspace = true
+ic_utils.workspace = true
+ic_ledger_utils.workspace=true
+icrc-ledger-types.workspace = true
