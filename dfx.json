@@ -1,7 +1,7 @@
 {
   "canisters": {
     "accounts": {
-      "candid": "src/accounts/accounts.did",
+      "candid": "src/canisters/accounts/accounts.did",
       "package": "accounts",
       "type": "rust",
       "declarations": {
@@ -33,7 +33,7 @@
         "output": "declarations/cketh_minter"
       }
     },
-    "icp_ledger":{
+    "icp_ledger": {
       "type": "custom",
       "wasm": "src/ledgers/icp_ledger.wasm",
       "candid": "src/ledgers/icp_ledger.did",
@@ -78,6 +78,18 @@
       }
     }
   },
-  "output_env_file": ".env",
+  "netwoorks": {
+    "local": {
+      "bind": "127.0.0.1:8080",
+      "type": "ephemeral",
+      "replica": {
+        "subnet_type": "system"
+      }
+    },
+    "ic": {
+      "providers": ["https://ic0.app/"],
+      "type": "persistent"
+    }
+  },
   "version": 1
 }

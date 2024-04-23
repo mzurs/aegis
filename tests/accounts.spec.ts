@@ -8,7 +8,6 @@ import {
   _CKETH_MINTER,
   _ICP_LEDGER,
   _KYT,
-  Account as AccounInterface,
 } from "./utils/exports";
 import { Identity } from "@dfinity/agent";
 import {
@@ -28,8 +27,8 @@ import { principalToSubAccount } from "@dfinity/utils";
 import { Account } from "@dfinity/ledger-icp";
 import { Icrc1TransferResult } from "../declarations/icp_ledger/icp_ledger.did";
 import {
+  AegisAccountInfo,
   ICRCLedgerType,
-  Result_4,
 } from "../declarations/accounts/accounts.did";
 import { parseEther } from "ethers/utils";
 
@@ -161,9 +160,7 @@ describe("Account Canister", () => {
     it("Update user account with UserName", async () => {
       accountsActor.setIdentity(user);
 
-      const res: Result_4 = await accountsActor.update_account_user_name(
-        "zohaib"
-      );
+      const res = await accountsActor.update_account_user_name("zohaib");
       expect(res).toMatchObject({ Ok: null });
     });
 
@@ -171,14 +168,12 @@ describe("Account Canister", () => {
       accountsActor.setIdentity(user);
 
       const res = await accountsActor.get_account();
-      type res_omit_type = Omit<AccounInterface, "user_id">;
+      type res_omit_type = Omit<AegisAccountInfo, "user_id">;
       const res_omit: res_omit_type = {
         user_name: res[0]?.user_name!,
-        principal: res[0]?.principal!,
       };
       expect(res_omit).toMatchObject<res_omit_type>({
         user_name: ["zohaib"],
-        principal: user.getPrincipal(),
       });
     });
 

@@ -6,15 +6,21 @@ version = 3
 name = "accounts"
 version = "0.1.0"
 dependencies = [
- "byteorder",
  "candid",
- "hex",
+ "canister_state_macro",
  "ic-cdk",
  "ic-cdk-timers",
  "ic-stable-structures",
+ "ic_ledger_utils",
+ "ic_utils",
  "icrc-ledger-types",
+ "minter_utils",
+ "rmp-serde",
  "serde",
  "serde_bytes",
+ "serializer",
+ "stable_memory",
+ "tracing",
 ]
 
 [[package]]
@@ -113,6 +119,10 @@ dependencies = [
  "quote",
  "syn 2.0.57",
 ]
+
+[[package]]
+name = "canister_state_macro"
+version = "0.1.0"
 
 [[package]]
 name = "cc"
@@ -341,6 +351,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a54b5297861c651551676e8c43df805dad175cc33bc97dbd992edbbb85dcbcdf"
 
 [[package]]
+name = "ic_ledger_utils"
+version = "0.1.0"
+dependencies = [
+ "candid",
+ "ic-cdk",
+ "ic_utils",
+ "icrc-ledger-types",
+ "serde",
+ "serde_bytes",
+]
+
+[[package]]
 name = "ic_principal"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -351,6 +373,17 @@ dependencies = [
  "serde",
  "sha2",
  "thiserror",
+]
+
+[[package]]
+name = "ic_utils"
+version = "0.1.0"
+dependencies = [
+ "byteorder",
+ "candid",
+ "hex",
+ "ic-cdk",
+ "icrc-ledger-types",
 ]
 
 [[package]]
@@ -389,10 +422,27 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9c198f91728a82281a64e1f4f9eeb25d82cb32a5de251c6bd1b5154d63a8e7bd"
 
 [[package]]
+name = "management_canister"
+version = "0.1.0"
+
+[[package]]
 name = "memchr"
 version = "2.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6c8640c5d730cb13ebd907d8d04b52f55ac9a2eec55b440c8892f40d56c76c1d"
+
+[[package]]
+name = "minter_utils"
+version = "0.1.0"
+dependencies = [
+ "candid",
+ "ic-cdk",
+ "ic_ledger_utils",
+ "ic_utils",
+ "icrc-ledger-types",
+ "serde",
+ "serde_bytes",
+]
 
 [[package]]
 name = "num-bigint"
@@ -423,6 +473,12 @@ checksum = "da0df0e5185db44f69b44f26786fe401b6c293d1907744beaa7fa62b2e5a517a"
 dependencies = [
  "autocfg",
 ]
+
+[[package]]
+name = "once_cell"
+version = "1.19.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3fdb12b2476b595f9358c5161aa467c2438859caa136dec86c26fdd2efe17b92"
 
 [[package]]
 name = "paste"
@@ -481,6 +537,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "rmp"
+version = "0.8.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "228ed7c16fa39782c3b3468e974aec2795e9089153cd08ee2e9aefb3613334c4"
+dependencies = [
+ "byteorder",
+ "num-traits",
+ "paste",
+]
+
+[[package]]
+name = "rmp-serde"
+version = "1.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "938a142ab806f18b88a97b0dea523d39e0fd730a064b035726adcfc58a8a5188"
+dependencies = [
+ "byteorder",
+ "rmp",
+ "serde",
+]
+
+[[package]]
 name = "rustversion"
 version = "1.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -527,6 +605,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "serializer"
+version = "0.1.0"
+dependencies = [
+ "rmp-serde",
+ "serde",
+]
+
+[[package]]
 name = "sha2"
 version = "0.10.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -553,6 +639,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dbff4acf519f630b3a3ddcfaea6c06b42174d9a44bc70c620e9ed1649d58b82a"
 dependencies = [
  "version_check",
+]
+
+[[package]]
+name = "stable_memory"
+version = "0.1.0"
+dependencies = [
+ "ic-cdk",
+ "ic-stable-structures",
 ]
 
 [[package]]
@@ -608,6 +702,37 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.57",
+]
+
+[[package]]
+name = "tracing"
+version = "0.1.40"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c3523ab5a71916ccf420eebdf5521fcef02141234bbc0b8a49f2fdc4544364ef"
+dependencies = [
+ "pin-project-lite",
+ "tracing-attributes",
+ "tracing-core",
+]
+
+[[package]]
+name = "tracing-attributes"
+version = "0.1.27"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "34704c8d6ebcbc939824180af020566b01a7c01f80641264eba0999f6c2b6be7"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.57",
+]
+
+[[package]]
+name = "tracing-core"
+version = "0.1.32"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c06d3da6113f116aaee68e4d601191614c9053067f9ab7f6edbcb161237daa54"
+dependencies = [
+ "once_cell",
 ]
 
 [[package]]
