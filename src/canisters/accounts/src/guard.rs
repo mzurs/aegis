@@ -9,7 +9,7 @@ pub fn account_exist() -> Result<(), String> {
     if aegis_account.is_account_exists() {
         return Err(String::from("AegisAccount Already Exist"));
     }
-    return Ok(());
+    Ok(())
 }
 
 /// Check if the caller is an Admin of a AegisAccount Canister

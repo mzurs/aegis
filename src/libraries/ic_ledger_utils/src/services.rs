@@ -57,7 +57,7 @@ pub struct InitArgs {
 #[derive(CandidType, Deserialize)]
 pub enum LedgerCanisterPayload {
     Upgrade(Option<UpgradeArgs>),
-    Init(InitArgs),
+    Init(Box<InitArgs>),
 }
 
 #[derive(CandidType, Deserialize)]

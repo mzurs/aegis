@@ -13,7 +13,7 @@ impl CkBTCMinter {
     }
 
     /// Function to get new btc address for a given id
-    pub async fn get_btc_address(self: Self, principal: Principal) -> String {
+    pub async fn get_btc_address(self, principal: Principal) -> String {
         let account: Account = Account {
             owner: id(),
             subaccount: Option::Some(principal_to_subaccount(&principal)),
@@ -21,14 +21,14 @@ impl CkBTCMinter {
 
         let address: CallResult<(String,)> = call(self.0, "get_btc_address", (account,)).await;
 
-        return match address {
+        match address {
             Ok(addr) => addr.0,
             Err(err) => err.1,
-        };
+        }
     }
 
     /// Function to Update BTC Balance for a given details
-    pub async fn update_balance(self: Self, principal: Principal) -> CallResult<(UpdateBalanceRet,)> {
+    pub async fn update_balance(self, principal: Principal) -> CallResult<(UpdateBalanceRet,)> {
         let update_args: UpdateBalanceArg = UpdateBalanceArg {
             owner: Option::Some(ic_cdk::id()),
             subaccount: Option::Some(principal_to_subaccount(&principal)),
@@ -40,14 +40,14 @@ impl CkBTCMinter {
     }
 
     /// To get the current Bitcoin Network Fee
-    pub async fn get_deposit_fee(self: Self) -> u64 {
+    pub async fn get_deposit_fee(self) -> u64 {
         let fee: CallResult<(u64,)> = call(self.0, "get_deposit_fee", ()).await;
 
         fee.unwrap().0
     }
 
     /// Retrieve Bitcoin from a Account Canister to a given BTC Address
-    pub async fn retrieve_btc(self: Self, btc_address: String, amount: u64) -> CallResult<(RetrieveBtcRet,)> {
+    pub async fn retrieve_btc(self, btc_address: String, amount: u64) -> CallResult<(RetrieveBtcRet,)> {
         let retrieve_args: RetrieveBtcArgs = RetrieveBtcArgs {
             address: btc_address,
             amount,

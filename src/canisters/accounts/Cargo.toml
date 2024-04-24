@@ -23,4 +23,4 @@ serializer.workspace = true
 stable_memory.workspace = true
 minter_utils.workspace = true
 ic_ledger_utils.workspace = true
-ic_utils.workspace=true
+ic_utils.workspace = true

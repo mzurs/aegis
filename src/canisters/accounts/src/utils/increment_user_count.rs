@@ -3,7 +3,7 @@ use crate::{
 };
 
 /// Increment the total no of user account by one
-pub fn increment_user_count() -> () {
+pub fn increment_user_count() {
     mutate_state(|s| {
         let state: &mut StableStates = &mut s.stable_state;
 
