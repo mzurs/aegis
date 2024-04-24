@@ -14,8 +14,6 @@ pub fn principal_to_subaccount(principal_id: &Principal) -> [u8; 32] {
 
 /// Convert the principal an Ethereum Address
 pub fn principal_to_eth_address(principal: Principal) -> String {
-    let principal = principal;
-
     let n = principal.as_slice().len();
     assert!(n <= 29);
     let mut fixed_bytes = [0u8; 32];
@@ -37,8 +35,6 @@ pub async fn generate_random_number() -> Result<u64, String> {
 
     Ok(random_number)
 }
-
-
 
 pub fn convert_u64_to_subaccount(num: u64) -> [u8; 32] {
     let mut network_bytes: [u8; 32] = [0; 32];

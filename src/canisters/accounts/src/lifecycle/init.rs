@@ -9,7 +9,7 @@ use crate::{
 };
 
 #[init]
-fn init(args: InitArgs) -> () {
+fn init(args: InitArgs) {
     init_state(State::default());
 
     mutate_state(|s| {
@@ -25,5 +25,5 @@ fn init(args: InitArgs) -> () {
         let _ = res.init.set(args);
     });
 
-    ()
+    
 }

@@ -39,7 +39,7 @@ impl Default for Constants {
 }
 
 impl Constants {
-    pub fn set_ledger_ids(ids: LedgerIds) -> () {
+    pub fn set_ledger_ids(ids: LedgerIds) {
         let _ = mutate_state(|c| {
             let state: &mut StableStates = &mut c.stable_state;
 
@@ -51,7 +51,7 @@ impl Constants {
         });
     }
 
-    pub fn set_minter_ids(ids: MinterIds) -> () {
+    pub fn set_minter_ids(ids: MinterIds) {
         let _ = mutate_state(|s| {
             let state: &mut StableStates = &mut s.stable_state;
 

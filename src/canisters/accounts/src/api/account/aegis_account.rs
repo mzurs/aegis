@@ -38,6 +38,12 @@ impl Storable for AegisAccount {
     const BOUND: Bound = Bound::Unbounded;
 }
 
+impl Default for AegisAccount {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl AegisAccount {
     pub fn new() -> Self {
         Self(ic_cdk::caller())
@@ -49,7 +55,7 @@ impl AegisAccount {
 
     pub fn get_account(&self) -> Option<AegisAccountInfo> {
         // STATE.with(|s| s.borrow().stable_state.aegis_account.get(&self))
-        read_state(|s| s.stable_state.aegis_account.get(&self))
+        read_state(|s| s.stable_state.aegis_account.get(self))
     }
 
     pub async fn create_account(&self) -> Result<bool, String> {

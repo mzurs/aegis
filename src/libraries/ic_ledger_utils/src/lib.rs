@@ -16,13 +16,13 @@ impl Ledger {
     }
 
     /// get the fee for any ledger for a given canister id
-    pub async fn icrc1_fee(self: Self) -> Nat {
+    pub async fn icrc1_fee(self) -> Nat {
         let (fee,): (Nat,) = call(self.0, "icrc1_fee", ()).await.unwrap();
         fee
     }
 
     /// transfer any icrc ledger tokens to Principal for a given canister id
-    pub async fn icrc1_transfer(self: Self, from_subaccount: Option<[u8; 32]>, to: Account, amount: Nat) -> TransferResult {
+    pub async fn icrc1_transfer(self, from_subaccount: Option<[u8; 32]>, to: Account, amount: Nat) -> TransferResult {
         let transfer_args: TransferArg = TransferArg {
             from_subaccount,
             to: Account { ..to },
@@ -38,7 +38,7 @@ impl Ledger {
         transfer_result.unwrap().0
     }
 
-    pub async fn icrc1_balance_of(self: Self, principal: Principal) -> Nat {
+    pub async fn icrc1_balance_of(self, principal: Principal) -> Nat {
         let account: Account = Account {
             owner: ic_cdk::id(),
             subaccount: Option::Some(principal_to_subaccount(&principal)),
@@ -46,6 +46,6 @@ impl Ledger {
 
         let (balance,): (Nat,) = call(self.0, "icrc1_balance_of", (account,)).await.unwrap();
 
-        return balance;
+        balance
     }
 }
