@@ -35,4 +35,5 @@ jobs:
           dfx start --background
       - run: npm run deploy:all
       - run: dfx generate
-      - run: npm test:accounts 
+      - run: npm install
+      - run: npm run test:accounts 
