@@ -11,13 +11,15 @@ use icrc_ledger_types::icrc1::account::Account;
 use minter_utils::ckbtc::CkBTCMinter;
 
 use crate::{
-    api::interfaces::{
-        account::{AegisAccount, AegisAccountInfo},
-        ledger::ICRCLedgerType,
-        state::StableStates,
+    api::{
+        interfaces::{
+            account::{AegisAccount, AegisAccountInfo},
+            ledger::ICRCLedgerType,
+            state::StableStates,
+        },
+        metrics::increment_user_count::increment,
     },
     mutate_state, read_state,
-    utils::increment_user_count::increment_user_count,
 };
 
 #[derive(CandidType)]
@@ -73,7 +75,7 @@ impl AegisAccount {
                 },
             )
         });
-        increment_user_count();
+        increment();
 
         Ok(true)
     }
