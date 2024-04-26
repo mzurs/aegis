@@ -29,11 +29,17 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - name: Install dfx
         uses: dfinity/setup-dfx@main
+      - name: Install candid-extractor
+        run: cargo install candid-extractor
       - name: Start dfx
         run: |
           dfx cache install
           dfx start --background
-      - run: npm run deploy:all
-      - run: dfx generate
-      - run: npm install
-      - run: npm run test:accounts 
+      - name: Deploying Canister
+        run: npm run deploy:all
+      - name: Generate Candid Declarations
+        run: dfx generate
+      - name: Install Node Dependencies
+        run: npm install
+      - name: Run Tests
+        run: npm run test:accounts

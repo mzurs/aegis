@@ -3,7 +3,7 @@ use std::borrow::Cow;
 use candid::{Decode, Encode};
 use ic_stable_structures::{storable::Bound, Storable};
 
-use super::interfaces::account_metrics::AccountMetrics;
+use crate::api::interfaces::account_metrics::AccountMetrics;
 
 impl Default for AccountMetrics {
     fn default() -> Self {
