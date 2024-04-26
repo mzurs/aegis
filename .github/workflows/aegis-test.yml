@@ -34,4 +34,5 @@ jobs:
           dfx cache install
           dfx start --background
       - run: npm run deploy:all
-      - run: npm  test:accounts
+      - run: dfx generate
+      - run: npm test:accounts
