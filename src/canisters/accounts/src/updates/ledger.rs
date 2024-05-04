@@ -1,6 +1,5 @@
-use candid::{Nat, Principal};
+use candid::Principal;
 use ic_cdk::{api::call::CallResult, query, update};
-use ic_ledger_utils::Ledger;
 use icrc_ledger_types::icrc1::account::Account;
 use minter_utils::{
     ckbtc::CkBTCMinter,
@@ -18,13 +17,13 @@ async fn get_deposit_fee() -> u64 {
     minter.get_deposit_fee().await
 }
 
-#[query]
-async fn get_user_balance() -> Nat {
-    let ledger_id: Principal = read_state(|s| s.stable_state.constants.get().ledger_ids.ckbtc_ledger_id);
+// #[query]
+// async fn get_user_balance() -> Nat {
+//     let ledger_id: Principal = read_state(|s| s.stable_state.constants.get().ledger_ids.ckbtc_ledger_id);
 
-    let ledger: Ledger = Ledger::new(ledger_id);
-    ledger.icrc1_balance_of(ic_cdk::caller()).await
-}
+//     let ledger: Ledger = Ledger::new(ledger_id);
+//     ledger.icrc1_balance_of(ic_cdk::caller()).await
+// }
 
 #[query]
 fn get_id() -> Principal {

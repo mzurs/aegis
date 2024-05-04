@@ -6,18 +6,16 @@ pub mod queries;
 pub mod updates;
 pub mod utils;
 
-use candid::{Nat, Principal};
+use candid::Principal;
 use ic_cdk::{
     api::{call::CallResult, management_canister::bitcoin::BitcoinNetwork},
     export_candid,
 };
-use ic_ledger_utils::services::TransferResult;
 
 use api::interfaces::{
     account::AegisAccountInfo,
     account_metrics::{Metric, MetricValues},
     constants::{Constants, LedgerIds, MinterIds},
-    ledger::ICRCLedgerType,
     state::State,
 };
 use canister_state_macro::canister_state;

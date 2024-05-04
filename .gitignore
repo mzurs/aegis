@@ -5,4 +5,4 @@ bitcoin.tar.gz
 node_modules
 .env
 declarations
- 
+.canbench

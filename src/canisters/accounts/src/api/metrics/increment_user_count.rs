@@ -1,5 +1,6 @@
 use crate::{
-    api::interfaces::{account_metrics::AccountMetrics, state::StableStates}, mutate_state
+    api::interfaces::{account_metrics::AccountMetrics, state::StableStates},
+    mutate_state,
 };
 
 /// Increment the total no of user account by one

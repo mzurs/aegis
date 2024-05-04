@@ -24,6 +24,7 @@ serde_bytes = "0.11.14"
 hex = { version = "0.4.3", features = ["serde"] }
 tracing = "0.1"
 rmp-serde = "1.1.2"
+ciborium = "0.2.2"
 canister_state_macro = { path = "src/libraries/canister_state_macro" }
 serializer = { path = "src/libraries/serializer" }
 stable_memory = { path = "src/libraries/stable_memory" }
@@ -37,5 +38,3 @@ lto = true
 opt-level = "z"
 codegen-units = 1
 debug = false
-
-
