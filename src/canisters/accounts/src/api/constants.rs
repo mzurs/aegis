@@ -1,66 +1,44 @@
-use std::borrow::Cow;
+use std::collections::BTreeMap;
 
-use candid::{Decode, Encode, Principal};
-use ic_stable_structures::{storable::Bound, Storable};
+use candid::Principal;
 
-use crate::mutate_state;
+use crate::{mutate_state, read_state};
 
-use super::interfaces::{
-    constants::{Constants, LedgerIds, MinterIds},
-    state::StableStates,
-};
+use super::interfaces::constants::CanisterName;
 
-impl Storable for Constants {
-    fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
-        Cow::Owned(Encode!(self).unwrap())
-    }
-
-    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
-        Decode!(bytes.as_ref(), Self).unwrap()
-    }
-
-    const BOUND: Bound = Bound::Unbounded;
+pub(crate) fn set_canister_id(key: CanisterName, value: Principal) {
+    mutate_state(|s| {
+        s.heap_state.canister_ids.insert(key, value);
+    })
 }
 
-impl Default for Constants {
-    fn default() -> Self {
-        Self {
-            ledger_ids: LedgerIds {
-                ckbtc_ledger_id: Principal::from_text("mxzaz-hqaaa-aaaar-qaada-cai").unwrap(),
-                cketh_ledger_id: Principal::from_text("ss2fx-dyaaa-aaaar-qacoq-cai").unwrap(),
-                icp_ledger_id: Principal::from_text("ryjl3-tyaaa-aaaaa-aaaba-cai").unwrap(),
-            },
-            minter_ids: MinterIds {
-                ckbtc_minter_id: Principal::from_text("mqygn-kiaaa-aaaar-qaadq-cai").unwrap(),
-                cketh_minter_id: Principal::from_text("sv3dd-oaaaa-aaaar-qacoa-cai").unwrap(),
-            },
-        }
-    }
+pub(crate) fn get_canister_id(key: CanisterName) -> Principal {
+    read_state(|s| *s.heap_state.canister_ids.get(&key).unwrap())
 }
 
-impl Constants {
-    pub fn set_ledger_ids(ids: LedgerIds) {
-        let _ = mutate_state(|c| {
-            let state: &mut StableStates = &mut c.stable_state;
+pub(crate) fn init_canister_ids() -> BTreeMap<CanisterName, Principal> {
+    let mut map: BTreeMap<CanisterName, Principal> = BTreeMap::new();
 
-            let constants: &Constants = state.constants.get();
-            state.constants.set(Constants {
-                ledger_ids: ids,
-                minter_ids: MinterIds { ..constants.minter_ids },
-            })
-        });
-    }
+    map.insert(
+        CanisterName::ICP,
+        Principal::from_text("ryjl3-tyaaa-aaaaa-aaaba-cai").unwrap(),
+    );
+    map.insert(
+        CanisterName::CKBTC,
+        Principal::from_text("mxzaz-hqaaa-aaaar-qaada-cai").unwrap(),
+    );
+    map.insert(
+        CanisterName::CKETH,
+        Principal::from_text("ss2fx-dyaaa-aaaar-qacoq-cai").unwrap(),
+    );
+    map.insert(
+        CanisterName::CKBTCMINTER,
+        Principal::from_text("mqygn-kiaaa-aaaar-qaadq-cai").unwrap(),
+    );
+    map.insert(
+        CanisterName::CKETHMINTER,
+        Principal::from_text("sv3dd-oaaaa-aaaar-qacoa-cai").unwrap(),
+    );
 
-    pub fn set_minter_ids(ids: MinterIds) {
-        let _ = mutate_state(|s| {
-            let state: &mut StableStates = &mut s.stable_state;
-
-            let constants: &Constants = state.constants.get();
-
-            state.constants.set(Constants {
-                ledger_ids: LedgerIds { ..constants.ledger_ids },
-                minter_ids: ids,
-            })
-        });
-    }
+    map
 }

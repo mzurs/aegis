@@ -9,3 +9,5 @@ pub struct AegisAccountInfo {
     pub user_id: u64,
     pub user_name: Option<String>,
 }
+
+

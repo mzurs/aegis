@@ -1,13 +1,21 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, u64};
 
-use candid::{Decode, Encode, Principal};
+use candid::{Decode, Encode, Nat, Principal};
 
+use ic_ledger_utils::{icrc::IcrcLedger, types::icrc_types::IcrcTransferResult};
 use ic_stable_structures::{storable::Bound, Storable};
-use ic_utils::generate_random_number;
+use ic_utils::{generate_random_number, principal_to_subaccount};
+use icrc_ledger_types::icrc1::account::Account;
+use minter_utils::{ckbtc::CkBTCMinter, services::ckbtc::RetrieveBtcRet};
 
 use crate::{
     api::{
-        interfaces::account::{AegisAccount, AegisAccountInfo},
+        constants::get_canister_id,
+        interfaces::{
+            account::{AegisAccount, AegisAccountInfo},
+            constants::CanisterName,
+            ledger::{ConvertCkBTCResult, RetrieveBtcResult},
+        },
         metrics::increment_user_count::increment,
     },
     mutate_state, read_state,
@@ -86,79 +94,98 @@ impl AegisAccount {
         Ok(())
     }
 
-    // pub async fn ckbtc_to_btc_from_account(amount: u64, btc_address: String) -> Result<bool, CkBtc2BtcErr> {
-    //     let minter_id: Principal = read_state(|s| s.stable_state.constants.get().minter_ids.ckbtc_minter_id);
-    //     let minter: CkBTCMinter = CkBTCMinter::new(minter_id);
+    pub async fn get_balance(&self, ledger: CanisterName) -> Nat {
+        let ledger_id: Principal = get_canister_id(ledger);
 
-    //     let withdrawl_account_opt = minter.get_withdrawal_account().await;
+        let ledger: IcrcLedger = IcrcLedger::new(ledger_id);
 
-    //     let withdrawl_account: Account = match withdrawl_account_opt {
-    //         Ok(acc) => acc.0,
-    //         Err(err) => return Err(CkBtc2BtcErr::ErrMessage(err.1)),
-    //     };
+        let account: Account = Account {
+            owner: self.0,
+            subaccount: None,
+        };
 
-    //     let ledger_id: Principal = read_state(|s| s.stable_state.constants.get().ledger_ids.ckbtc_ledger_id);
+        ledger.balance(account).await
+    }
 
-    //     let ckbtc: Ledger = Ledger::new(ledger_id);
-    //     let ckbtc_transfer_result = ckbtc
-    //         .icrc1_transfer(
-    //             Option::Some(principal_to_subaccount(&ic_cdk::caller())),
-    //             withdrawl_account,
-    //             amount.into(),
-    //         )
-    //         .await;
+    pub(crate) async fn convert_ckbtc(&self, btc_address: String, amount: &Nat) -> ConvertCkBTCResult {
+        let minter_id: Principal = get_canister_id(CanisterName::CKBTCMINTER);
 
-    //     match ckbtc_transfer_result {
-    //         TransferResult::Ok(_) => (),
-    //         TransferResult::Err(err) => return Err(CkBtc2BtcErr::TransferError(err)),
-    //     }
+        let minter: CkBTCMinter = CkBTCMinter::new(minter_id);
 
-    //     let retrieve_btc_result = minter.retrieve_btc(btc_address, amount).await;
+        let withdrawal_account: Account = match minter.get_withdrawal_account().await {
+            Ok(acc) => acc.0,
+            Err(err) => return ConvertCkBTCResult::ErrMessage(err.1),
+        };
 
-    //     match retrieve_btc_result {
-    //         Ok(_) => (),
-    //         Err(err) => return Err(CkBtc2BtcErr::ErrMessage(err.1)),
-    //     }
+        let transfer_result: IcrcTransferResult = self
+            .transfer_from_account(CanisterName::CKBTCMINTER, Some(withdrawal_account), amount.to_owned())
+            .await;
 
-    //     Ok(true)
-    // }
+        match transfer_result {
+            IcrcTransferResult::TransferSuccess(_) => (),
+            IcrcTransferResult::TransferErrorMessage(err) => {
+                return ConvertCkBTCResult::IcrcTransferResult(IcrcTransferResult::TransferErrorMessage(err))
+            }
+            IcrcTransferResult::TransferErrorString(err) => {
+                return ConvertCkBTCResult::IcrcTransferResult(IcrcTransferResult::TransferErrorString(err))
+            }
+        }
 
-    // pub async fn transfer_from_account(amount: u64, asset_type: ICRCLedgerType) -> TransferResult {
-    //     let asset_map: HashMap<ICRCLedgerType, Principal> = HashMap::from([
-    //         (
-    //             ICRCLedgerType::ICP,
-    //             mutate_state(|c| {
-    //                 let state: &StableStates = &c.stable_state;
-    //                 state.constants.get().ledger_ids.icp_ledger_id
-    //             }), // Principal::from_text("ryjl3-tyaaa-aaaaa-aaaba-cai").unwrap(),
-    //         ),
-    //         (
-    //             ICRCLedgerType::CKETH,
-    //             mutate_state(|c| {
-    //                 let state: &StableStates = &c.stable_state;
-    //                 state.constants.get().ledger_ids.cketh_ledger_id
-    //             }),
-    //         ),
-    //         (
-    //             ICRCLedgerType::CKBTC,
-    //             mutate_state(|c| {
-    //                 let state: &StableStates = &c.stable_state;
-    //                 state.constants.get().ledger_ids.ckbtc_ledger_id
-    //             }),
-    //         ),
-    //     ]);
-    //     let ledger = Ledger(*asset_map.get(&asset_type).unwrap());
-    //     let to: icrc_ledger_types::icrc1::account::Account = icrc_ledger_types::icrc1::account::Account {
-    //         owner: ic_cdk::caller(),
-    //         subaccount: None,
-    //     };
-    //     let res: TransferResult = ledger
-    //         .icrc1_transfer(
-    //             Option::Some(principal_to_subaccount(&ic_cdk::caller())),
-    //             to,
-    //             candid::Nat::from(amount),
-    //         )
-    //         .await;
-    //     res
-    // }
+        let retrieve_btc_result: RetrieveBtcResult = AegisAccount::retrieve_btc(btc_address, amount.clone()).await;
+
+        match retrieve_btc_result {
+            RetrieveBtcResult::RetrieveBtcOk(res) => ConvertCkBTCResult::ConvertSuccess(Nat::from(res.block_index)),
+            RetrieveBtcResult::RetrieveBtcError(err) => ConvertCkBTCResult::RetrieveBtcError(err),
+            RetrieveBtcResult::RetrieveBtcString(msg) => ConvertCkBTCResult::ErrMessage(msg),
+        }
+    }
+
+    pub(crate) async fn transfer_from_account(
+        &self,
+        ledger: CanisterName,
+        to: Option<Account>,
+        amount: Nat,
+    ) -> IcrcTransferResult {
+        let ledger_id: Principal = get_canister_id(ledger);
+
+        let ledger: IcrcLedger = IcrcLedger::new(ledger_id);
+
+        let from_subaccount: Option<[u8; 32]> = Option::Some(principal_to_subaccount(&ic_cdk::caller()));
+
+        let to: Account = match to {
+            Some(acc) => acc,
+            None => Account {
+                owner: ic_cdk::caller(),
+                subaccount: None,
+            },
+        };
+
+        ledger.transfer(from_subaccount, to, amount).await
+    }
+
+    pub async fn get_btc_address(&self) -> String {
+        let minter_id = get_canister_id(CanisterName::CKBTCMINTER);
+
+        let minter: CkBTCMinter = CkBTCMinter::new(minter_id);
+
+        minter.get_btc_address(self.0).await
+    }
+
+    pub(crate) async fn retrieve_btc(btc_address: String, amount: Nat) -> RetrieveBtcResult {
+        let minter_id: Principal = get_canister_id(CanisterName::CKBTCMINTER);
+
+        let minter: CkBTCMinter = CkBTCMinter::new(minter_id);
+
+        let result = minter
+            .retrieve_btc(btc_address, Nat::to_string(&amount).parse::<u64>().unwrap())
+            .await;
+
+        return match result {
+            Ok(res) => match res.0 {
+                RetrieveBtcRet::Ok(res) => RetrieveBtcResult::RetrieveBtcOk(res),
+                RetrieveBtcRet::Err(err) => RetrieveBtcResult::RetrieveBtcError(err),
+            },
+            Err(err) => RetrieveBtcResult::RetrieveBtcString(err.1),
+        };
+    }
 }

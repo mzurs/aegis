@@ -1,20 +1,11 @@
 use candid::Principal;
 use ic_cdk::{api::management_canister::bitcoin::BitcoinNetwork, query};
 
-use crate::{
-    api::interfaces::{constants::Constants, state::StableStates},
-    read_state,
-};
+use crate::{api::interfaces::state::StableStates, read_state};
 
 #[query]
 fn principal_to_eth_address(principal: candid::Principal) -> String {
     ic_utils::principal_to_eth_address(principal)
-}
-
-#[query]
-/// Get the constants for AegisAccount Canister
-pub fn get_constants() -> Constants {
-    read_state(|c| c.stable_state.constants.get().to_owned())
 }
 
 #[query]
