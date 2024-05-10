@@ -28,7 +28,7 @@ import { Account } from "@dfinity/ledger-icp";
 import { Icrc1TransferResult } from "../declarations/icp_ledger/icp_ledger.did";
 import {
   AegisAccountInfo,
-  ICRCLedgerType,
+  IcrcTransferResult,
 } from "../declarations/accounts/accounts.did";
 import { parseEther } from "ethers/utils";
 
@@ -95,17 +95,28 @@ describe("Account Canister", () => {
     accountsActor.setIdentity(minter);
 
     // set the ledger ids in the Account Canister
-    accountsActor.set_ledger_ids({
-      icp_ledger_id: CANISTER_IDS_MAP.get(CANISTERS_NAME.ICP_LEDGER)!,
-      ckbtc_ledger_id: CANISTER_IDS_MAP.get(CANISTERS_NAME.CKBTC_LEDGER)!,
-      cketh_ledger_id: CANISTER_IDS_MAP.get(CANISTERS_NAME.CKETH_LEDGER)!,
-    });
+    accountsActor.set_canister_id(
+      { ICP: null },
+      CANISTER_IDS_MAP.get(CANISTERS_NAME.ICP_LEDGER)!
+    );
+    accountsActor.set_canister_id(
+      { CKBTC: null },
+      CANISTER_IDS_MAP.get(CANISTERS_NAME.CKBTC_LEDGER)!
+    );
+    accountsActor.set_canister_id(
+      { CKETH: null },
+      CANISTER_IDS_MAP.get(CANISTERS_NAME.CKETH_LEDGER)!
+    );
 
     // set the minter ids in the Account Canister
-    accountsActor.set_minter_ids({
-      ckbtc_minter_id: CANISTER_IDS_MAP.get(CANISTERS_NAME.CKBTC_MINTER)!,
-      cketh_minter_id: CANISTER_IDS_MAP.get(CANISTERS_NAME.CKETH_MINTER)!,
-    });
+    accountsActor.set_canister_id(
+      { CKBTCMINTER: null },
+      CANISTER_IDS_MAP.get(CANISTERS_NAME.CKBTC_MINTER)!
+    );
+    accountsActor.set_canister_id(
+      { CKETHMINTER: null },
+      CANISTER_IDS_MAP.get(CANISTERS_NAME.CKETH_MINTER)!
+    );
   });
 
   afterAll(async () => {
@@ -197,7 +208,7 @@ describe("Account Canister", () => {
       expect(ckETHBalance).toBe(0n);
     });
 
-    it("Transfer 11 ICP,ckBTC,ckETH to user", async () => {
+    it("Transfer 11 ICP,ckBTC,ckETH to user wallet", async () => {
       icpLedgerActor.setIdentity(minter);
       ckbtcLedgerActor.setIdentity(minter);
       ckethLedgerActor.setIdentity(minter);
@@ -240,7 +251,7 @@ describe("Account Canister", () => {
       expect(transferckETH).toHaveProperty("Ok");
     });
 
-    it("User Balance should be 11 ICP, 11 ckBTC, 1 ckETH", async () => {
+    it("User Wallet Balance should be 11 ICP, 11 ckBTC, 1 ckETH", async () => {
       icpLedgerActor.setIdentity(user);
 
       let args: Account = {
@@ -257,7 +268,7 @@ describe("Account Canister", () => {
       expect(balanceCKETH).toBe(parseEther("1"));
     });
 
-    it("Transfer 10 ICP, 10 ckBTC, 0.9 ckETH from user to user Account", async () => {
+    it("Transfer 10 ICP, 10 ckBTC, 0.9 ckETH from user wallet to user Account", async () => {
       icpLedgerActor.setIdentity(user);
 
       let to: Account = {
@@ -314,7 +325,7 @@ describe("Account Canister", () => {
       expect(balanceCKETH).toBe(parseEther("0.9"));
     });
 
-    it("User Balance should be 0.9999 ICP,<0.9999 ckBTC, <0.5 ckETH", async () => {
+    it("User Wallet Balance should be 0.9999 ICP,<0.9999 ckBTC, <0.5 ckETH", async () => {
       icpLedgerActor.setIdentity(user);
 
       let args: Account = {
@@ -329,25 +340,26 @@ describe("Account Canister", () => {
 
     it("Transfer 9 ICP, 9ckBTC , 0.8 ckETH from User Account to User", async () => {
       accountsActor.setIdentity(user);
-      const resICP = await accountsActor.transfer_from_account(humanToE8s(9), {
-        ICP: null,
-      } as ICRCLedgerType);
-      const resCKBTC = await accountsActor.transfer_from_account(
-        humanToE8s(9),
-        {
-          CKBTC: null,
-        } as ICRCLedgerType
-      );
-      const resCKETH = await accountsActor.transfer_from_account(
-        parseEther("0.8"),
-        {
-          CKETH: null,
-        } as ICRCLedgerType
-      );
 
-      expect(resICP).toHaveProperty("Ok");
-      expect(resCKBTC).toHaveProperty("Ok");
-      expect(resCKETH).toHaveProperty("Ok");
+      const resICP = await accountsActor.transfer_from_account(
+        { ICP: null },
+        [],
+        humanToE8s(9)
+      );
+      const resCKBTC = await accountsActor.transfer_from_account(
+        { CKBTC: null },
+        [],
+        humanToE8s(9)
+      );
+      const resCKETH: IcrcTransferResult =
+        await accountsActor.transfer_from_account(
+          { CKETH: null },
+          [],
+          parseEther("0.8")
+        );
+      expect(resICP).toHaveProperty("TransferSuccess");
+      expect(resCKBTC).toHaveProperty("TransferSuccess");
+      expect(resCKETH).toHaveProperty("TransferSuccess");
     });
 
     it("Account of user should contain 0.9999 ICP,ckBTC,ckETH", async () => {
