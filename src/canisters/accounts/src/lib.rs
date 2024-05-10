@@ -7,25 +7,22 @@ pub mod updates;
 pub mod utils;
 
 use candid::{Nat, Principal};
-use ic_cdk::{
-    api::{call::CallResult, management_canister::bitcoin::BitcoinNetwork},
-    export_candid,
-};
-use ic_ledger_utils::services::TransferResult;
+use ic_cdk::{api::management_canister::bitcoin::BitcoinNetwork, export_candid};
 
 use api::interfaces::{
     account::AegisAccountInfo,
     account_metrics::{Metric, MetricValues},
-    constants::{Constants, LedgerIds, MinterIds},
-    ledger::ICRCLedgerType,
+    constants::CanisterName,
+    ledger::{ConvertCkBTCResult, RetrieveBtcResult},
     state::State,
 };
 use canister_state_macro::canister_state;
+use ic_ledger_utils::types::icrc_types::IcrcTransferResult;
 use icrc_ledger_types::icrc1::account::Account;
-use minter_utils::services::ckbtc::{RetrieveBtcRet, UpdateBalanceRet};
 
 use crate::api::lifecycle::init::InitArgs;
 
 canister_state!(State);
 
+// type  a=IcrcTransferResult;
 export_candid!();

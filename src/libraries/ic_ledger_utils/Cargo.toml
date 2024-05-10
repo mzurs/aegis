@@ -2,6 +2,13 @@
 name = "ic_ledger_utils"
 edition = "2021"
 version = "0.1.0"
+license = "MIT OR Apache-2.0"
+description = "Useful Function Related to ICRC Ledger"
+readme = "README.md"
+repository = "https://github.com/AegisFinance/aegis-accounts/tree/main/src/libraries/ic_ledger_utils"
+homepage = "src/libraries/ic_ledger_utils/README.md"
+keywords = ["icrc", "IC", "canister", "ledger", "internet-computer"]
+categories = ["icrc", "IC", "canister", "ledger", "internet-computer"]
 
 [dependencies]
 candid.workspace = true

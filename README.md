@@ -39,5 +39,9 @@ yarn deploy:all
 ```
 
 ```bash
-yarn test:accounts 
+dfx generate
+```
+
+```bash
+yarn test:accounts
 ```

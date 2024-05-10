@@ -7,7 +7,6 @@ pub type Memory = VirtualMemory<DefaultMemoryImpl>;
 pub const UPGRADES_MEMORY: MemoryId = MemoryId::new(0);
 pub const ACCOUNT_METRICS_MEMORY: MemoryId = MemoryId::new(1);
 pub const USER_ACCOUNTS_MEMORY: MemoryId = MemoryId::new(2);
-pub const CONSTANTS_MEMORY: MemoryId = MemoryId::new(3);
 pub const INIT_MEMORY: MemoryId = MemoryId::new(4);
 
 std::thread_local! {
