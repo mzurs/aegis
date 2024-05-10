@@ -40,19 +40,23 @@ impl Default for AegisAccount {
 }
 
 impl AegisAccount {
+    /// Returns the AegisAccount object of the caller
     pub fn new() -> Self {
         Self(ic_cdk::caller())
     }
 
+    /// Returns true if user account(caller) account exists in Stable Memory
     pub fn is_account_exists(&self) -> bool {
         read_state(|acc| acc.stable_state.aegis_account.contains_key(self))
     }
 
+    /// Retrieve User Account(caller) from memory
     pub fn get_account(&self) -> Option<AegisAccountInfo> {
         read_state(|s| s.stable_state.aegis_account.get(self))
     }
 
-    pub async fn create_account(&self) -> Result<bool, String> {
+    /// Function to create User AegisAccount
+    pub(crate) async fn create_account(&self) -> Result<bool, String> {
         let user_id: u64 = match generate_random_number().await {
             Ok(id) => id,
             Err(err) => return Err(err),
@@ -72,7 +76,8 @@ impl AegisAccount {
         Ok(true)
     }
 
-    pub fn update_account_user_name(&self, user_name: String) -> Result<(), String> {
+    /// Function to update user account name
+    pub(crate) fn update_account_user_name(&self, user_name: String) -> Result<(), String> {
         let principal: &Principal = &ic_cdk::caller();
 
         if self.is_account_exists() {
@@ -94,6 +99,7 @@ impl AegisAccount {
         Ok(())
     }
 
+    /// Get the account(aegis canister) balance of a user(caller)  
     pub async fn get_balance(&self, ledger: CanisterName) -> Nat {
         let ledger_id: Principal = get_canister_id(ledger);
 
@@ -107,6 +113,7 @@ impl AegisAccount {
         ledger.balance(account).await
     }
 
+    /// Convert CKBTC to BTC from a User(Caller) Canister Based Account
     pub(crate) async fn convert_ckbtc(&self, btc_address: String, amount: &Nat) -> ConvertCkBTCResult {
         let minter_id: Principal = get_canister_id(CanisterName::CKBTCMINTER);
 
@@ -118,7 +125,7 @@ impl AegisAccount {
         };
 
         let transfer_result: IcrcTransferResult = self
-            .transfer_from_account(CanisterName::CKBTCMINTER, Some(withdrawal_account), amount.to_owned())
+            .icrc_transfer_from_account(CanisterName::CKBTCMINTER, Some(withdrawal_account), amount.to_owned())
             .await;
 
         match transfer_result {
@@ -140,7 +147,8 @@ impl AegisAccount {
         }
     }
 
-    pub(crate) async fn transfer_from_account(
+    /// Transfer ICRC Ledger funds from User(caller) Canister Based Account to other account
+    pub(crate) async fn icrc_transfer_from_account(
         &self,
         ledger: CanisterName,
         to: Option<Account>,
@@ -163,8 +171,13 @@ impl AegisAccount {
         ledger.transfer(from_subaccount, to, amount).await
     }
 
+    // pub(crate) async fn transfer_to_account(ledger: CanisterName,)->IcrcTransferFromResult{
+    //     let ledger_id: Principal = get_canister_id(ledger);
+
+    //     IcrcTransferFromResult::TransferFromErrorString("()".to_string())
+    // }
     pub async fn get_btc_address(&self) -> String {
-        let minter_id = get_canister_id(CanisterName::CKBTCMINTER);
+        let minter_id: Principal = get_canister_id(CanisterName::CKBTCMINTER);
 
         let minter: CkBTCMinter = CkBTCMinter::new(minter_id);
 
