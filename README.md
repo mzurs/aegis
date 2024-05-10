@@ -1,6 +1,14 @@
-# AEGIS Accounts
+# AEGIS FINANCE
 
-The Account Canister acts as Exchange Wallet for User to Trade, Deposit & Withdraw Funds. The Canister supports mutliple asset from other chains such as BTC, ETH, etc
+Aegis Finance leverages the IC blockchain to power its decentralized exchange platform, enabling a range of use cases.
+
+1. It acts as Exchange Wallet for User to Trade, Deposit & Withdraw Funds. The Canister supports mutliple asset from other chains such as BTC, ETH, etc.
+
+2. Allow users to trade inusrance contracts.
+
+3. Allow users to trade options contracts
+
+#### Note
 
 This repo contains Backend Canisters code, for Frontend Canister code, please visit [Aegis-Dapp](https://github.com/AegisFinance/aegis-dapp)
 
