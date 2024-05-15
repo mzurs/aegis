@@ -8,6 +8,11 @@ type ConvertCkBTCResult = variant {
   ErrMessage : text;
   RetrieveBtcError : RetrieveBtcError;
 };
+type IcrcTransferFromResult = variant {
+  TransferFromErrorMessage : TransferFromError;
+  TransferFromSuccess : nat;
+  TransferFromErrorString : text;
+};
 type IcrcTransferResult = variant {
   TransferErrorString : text;
   TransferErrorMessage : TransferError;
@@ -42,21 +47,33 @@ type TransferError = variant {
   TooOld;
   InsufficientFunds : record { balance : nat };
 };
+type TransferFromError = variant {
+  GenericError : record { message : text; error_code : nat };
+  TemporarilyUnavailable;
+  InsufficientAllowance : record { allowance : nat };
+  BadBurn : record { min_burn_amount : nat };
+  Duplicate : record { duplicate_of : nat };
+  BadFee : record { expected_fee : nat };
+  CreatedInFuture : record { ledger_time : nat64 };
+  TooOld;
+  InsufficientFunds : record { balance : nat };
+};
 service : (InitArgs) -> {
   convert_ckbtc : (text, nat) -> (ConvertCkBTCResult);
   create_account : () -> (Result);
   get_account : () -> (opt AegisAccountInfo) query;
-  get_balance : (CanisterName) -> (nat) query;
   get_bitcoin_network : () -> (BitcoinNetwork) query;
   get_btc_address : () -> (text);
   get_canister_id : (CanisterName) -> (principal) query;
   get_metrics : (Metric) -> (MetricValues) query;
+  icrc_get_balance : (CanisterName) -> (nat) query;
+  icrc_transfer_from_account : (CanisterName, opt Account, nat) -> (
+      IcrcTransferResult,
+    );
+  icrc_transfer_to_account : (CanisterName, nat) -> (IcrcTransferFromResult);
   principal_to_eth_address : (principal) -> (text) query;
   principal_to_subaccount : (principal) -> (blob) query;
   retrieve_btc : (text, nat) -> (RetrieveBtcResult);
   set_canister_id : (CanisterName, principal) -> ();
-  transfer_from_account : (CanisterName, opt Account, nat) -> (
-      IcrcTransferResult,
-    );
   update_account_user_name : (text) -> (Result_1);
 }

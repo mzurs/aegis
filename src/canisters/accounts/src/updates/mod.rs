@@ -1,3 +1,3 @@
 pub mod account;
 pub mod constants;
-pub mod ledger;
+pub mod wallet;

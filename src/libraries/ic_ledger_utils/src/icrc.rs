@@ -28,19 +28,16 @@ impl IcrcLedger {
         };
     }
 
-    pub async fn transfer(&self, from_subaccount: Option<[u8; 32]>, to: Account, amount: Nat) -> IcrcTransferResult {
+    pub async fn transfer(&self, args: TransferArg) -> IcrcTransferResult {
         let fee: Nat = match Self::fee(&self).await {
             IcrcFee::Fee(res) => res,
             IcrcFee::ErrorMessage(err) => return IcrcTransferResult::TransferErrorString(err),
         };
 
         let args: TransferArg = TransferArg {
-            from_subaccount,
-            to,
             fee: Some(fee),
             created_at_time: Option::Some(ic_cdk::api::time()),
-            memo: Option::None,
-            amount,
+            ..args
         };
 
         let transfer_result: CallResult<(TransferResult,)> = call(self.0, "icrc1_transfer", (args,)).await;
@@ -56,26 +53,16 @@ impl IcrcLedger {
         }
     }
 
-    pub async fn transfer_from(
-        &self,
-        spender_subaccount: Option<[u8; 32]>,
-        from: Account,
-        to: Account,
-        amount: Nat,
-    ) -> IcrcTransferFromResult {
+    pub async fn transfer_from(&self, args: TransferFromArgs) -> IcrcTransferFromResult {
         let fee: Nat = match Self::fee(&self).await {
             IcrcFee::Fee(res) => res,
             IcrcFee::ErrorMessage(err) => return IcrcTransferFromResult::TransferFromErrorString(err),
         };
 
         let args: TransferFromArgs = TransferFromArgs {
-            spender_subaccount,
-            from,
-            to,
-            amount,
             fee: Some(fee),
-            memo: Option::None,
             created_at_time: Option::Some(ic_cdk::api::time()),
+            ..args
         };
 
         let transfer_from_result: CallResult<(TransferFromResult,)> = call(self.0, "icrc2_transfer_from", (args,)).await;
