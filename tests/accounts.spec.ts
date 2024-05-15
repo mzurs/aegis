@@ -117,7 +117,7 @@ describe("Account Canister", () => {
       { CKETHMINTER: null },
       CANISTER_IDS_MAP.get(CANISTERS_NAME.CKETH_MINTER)!
     );
-  });
+  }, 10000);
 
   afterAll(async () => {
     await pic.tearDown();
@@ -341,18 +341,18 @@ describe("Account Canister", () => {
     it("Transfer 9 ICP, 9ckBTC , 0.8 ckETH from User Account to User", async () => {
       accountsActor.setIdentity(user);
 
-      const resICP = await accountsActor.transfer_from_account(
+      const resICP = await accountsActor.icrc_transfer_from_account(
         { ICP: null },
         [],
         humanToE8s(9)
       );
-      const resCKBTC = await accountsActor.transfer_from_account(
+      const resCKBTC = await accountsActor.icrc_transfer_from_account(
         { CKBTC: null },
         [],
         humanToE8s(9)
       );
       const resCKETH: IcrcTransferResult =
-        await accountsActor.transfer_from_account(
+        await accountsActor.icrc_transfer_from_account(
           { CKETH: null },
           [],
           parseEther("0.8")

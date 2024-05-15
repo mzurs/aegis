@@ -17,12 +17,12 @@ use api::interfaces::{
     state::State,
 };
 use canister_state_macro::canister_state;
-use ic_ledger_utils::types::icrc_types::IcrcTransferResult;
+use ic_ledger_utils::types::icrc_types::{IcrcTransferFromResult, IcrcTransferResult};
 use icrc_ledger_types::icrc1::account::Account;
 
 use crate::api::lifecycle::init::InitArgs;
 
 canister_state!(State);
 
-// type  a=IcrcTransferResult;
+// type  a=IcrcTransferFromResult;;
 export_candid!();
