@@ -64,12 +64,12 @@ impl AegisAccount {
             .retrieve_btc(btc_address, Nat::to_string(&amount).parse::<u64>().unwrap())
             .await;
 
-        return match result {
+        match result {
             Ok(res) => match res.0 {
                 RetrieveBtcRet::Ok(res) => RetrieveBtcResult::RetrieveBtcOk(res),
                 RetrieveBtcRet::Err(err) => RetrieveBtcResult::RetrieveBtcError(err),
             },
             Err(err) => RetrieveBtcResult::RetrieveBtcString(err.1),
-        };
+        }
     }
 }
