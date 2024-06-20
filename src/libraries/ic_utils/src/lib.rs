@@ -1,3 +1,5 @@
+pub mod principal_conversion;
+
 use byteorder::{BigEndian, ByteOrder};
 use candid::Principal;
 use ic_cdk::api::{call::RejectionCode, management_canister::main::raw_rand};
@@ -23,9 +25,9 @@ pub fn principal_to_eth_address(principal: Principal) -> String {
 }
 
 /**
-    Implementation of Random Number Generator using Management Canister
+    Implementation of u64 Random Number Generator using Management Canister
 */
-pub async fn generate_random_number() -> Result<u64, String> {
+pub async fn generate_random_number_u64() -> Result<u64, String> {
     let random_bytes: Result<(Vec<u8>,), (RejectionCode, String)> = raw_rand().await;
 
     let random_number: u64 = match random_bytes {
@@ -36,6 +38,19 @@ pub async fn generate_random_number() -> Result<u64, String> {
     Ok(random_number)
 }
 
+/**
+    Implementation of u32 Random Number Generator using Management Canister
+*/
+pub async fn generate_random_number_u32() -> Result<u32, String> {
+    let random_bytes: Result<(Vec<u8>,), (RejectionCode, String)> = raw_rand().await;
+
+    let random_number: u32 = match random_bytes {
+        Ok(rand_bytes) => BigEndian::read_u32(rand_bytes.0.as_slice()),
+        Err(err) => return Err(err.1),
+    };
+
+    Ok(random_number)
+}
 pub fn convert_u64_to_subaccount(num: u64) -> [u8; 32] {
     let mut network_bytes: [u8; 32] = [0; 32];
     network_bytes[..8].copy_from_slice(&num.to_ne_bytes());
@@ -45,3 +60,15 @@ pub fn convert_u64_to_subaccount(num: u64) -> [u8; 32] {
     little_endian_bytes[..8].copy_from_slice(&num.to_le_bytes());
     little_endian_bytes
 }
+
+
+pub fn convert_u32_to_subaccount(num: u32) -> [u8; 32] {
+    // Allocate a mutable array of 32 u8 elements filled with zeros
+    let mut buffer: [u8; 32] = [0; 32];
+  
+    // Use unchecked copy_from_slice for performance (safe as both slices have the same length)
+    buffer[..4].copy_from_slice(&num.to_ne_bytes());
+  
+    // Return the filled buffer
+    buffer
+  }
