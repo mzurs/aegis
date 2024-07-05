@@ -172,6 +172,8 @@ CANDID
 function deploy_canisters() {
   bash scripts/candid.sh accounts
   dfx deploy accounts --argument='(record { bitcoin_network= variant { regtest }})' --specified-id 222qi-2qaaa-aaaao-anesa-cai
+  dfx deploy insurance --argument='(record { bitcoin_network= variant { regtest }})' --specified-id suaf3-hqaaa-aaaaf-bfyoa-cai		
+
 }
 
 function deploy() {
