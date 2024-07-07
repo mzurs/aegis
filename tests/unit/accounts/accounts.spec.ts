@@ -1,5 +1,5 @@
 import { Actor, PocketIc } from "@hadronous/pic";
-import { createIdentityFromSeed, setupCanister } from "./utils/configs";
+import { createIdentityFromSeed, setupCanister } from "../../utils/configs";
 import {
   _ACCOUNTS,
   _CKBTC_LEDGER,
@@ -8,7 +8,7 @@ import {
   _CKETH_MINTER,
   _ICP_LEDGER,
   _KYT,
-} from "./utils/exports";
+} from "../../utils/exports";
 import { Identity } from "@dfinity/agent";
 import {
   ACCOUNTS_WASM_PATH,
@@ -21,15 +21,15 @@ import {
   // CKETH_MINTER_WASM_PATH,
   ICP_LEDGER_WASM_PATH,
   KYT_WASM_PATH,
-} from "./utils/constants";
-import { humanToE8s } from "./utils/helpers";
+} from "../../utils/constants";
+import { humanToE8s } from "../../utils/helpers";
 import { principalToSubAccount } from "@dfinity/utils";
 import { Account } from "@dfinity/ledger-icp";
-import { Icrc1TransferResult } from "../declarations/icp_ledger/icp_ledger.did";
+import { Icrc1TransferResult } from "../../../declarations/icp_ledger/icp_ledger.did";
 import {
   AegisAccountInfo,
   IcrcTransferResult,
-} from "../declarations/accounts/accounts.did";
+} from "../../../declarations/accounts/accounts.did";
 import { parseEther } from "ethers/utils";
 
 describe("Account Canister", () => {
@@ -44,7 +44,9 @@ describe("Account Canister", () => {
   let ckethMinterActor: Actor<_CKETH_MINTER>;
 
   beforeAll(async () => {
-    pic = await PocketIc.create({ nns: true, fiduciary: true, bitcoin: true });
+    pic = await PocketIc.create(process.env.PIC_URL,{ nns: true, fiduciary: true, bitcoin: true });
+
+    // pic = await PocketIc.create({ nns: true, fiduciary: true, bitcoin: true });
 
     // Generate new Identities
     minter = createIdentityFromSeed("minter");
@@ -156,6 +158,7 @@ describe("Account Canister", () => {
       expect(true).toBe(true);
     });
   });
+
   describe("Accounts", () => {
     it("Create Account", async () => {
       accountsActor.setIdentity(user);

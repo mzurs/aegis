@@ -1,8 +1,15 @@
 import {
   _SERVICE as _ACCOUNTS,
   idlFactory as idlFactoryAccounts,
-  init as initAccounts,Account
+  init as initAccounts,
+  Account,
 } from "../../declarations/accounts/accounts.did";
+
+import {
+  _SERVICE as _INSURANCE,
+  idlFactory as idlFactoryInsurance,
+  init as initInsurance,
+} from "../../declarations/insurance/insurance.did";
 
 import {
   _SERVICE as _ICP_LEDGER,
@@ -40,15 +47,18 @@ import {
   init as intKYT,
 } from "../../declarations/kyt/kyt.did";
 export {
+  
   _ICP_LEDGER,
   _CKBTC_MINTER,
   _CKETH_LEDGER,
   _CKETH_MINTER,
   _ACCOUNTS,
+  _INSURANCE,
   _CKBTC_LEDGER,
   _KYT,
   idlFactoryKYT,
   idlFactoryAccounts,
+  idlFactoryInsurance,
   idlFactoryCkbtcLedger,
   idlFactoryCkbtcMinter,
   idlFactoryCkethLedger,
@@ -62,11 +72,13 @@ export type SERVICES =
   | _CKETH_LEDGER
   | _CKETH_MINTER
   | _ACCOUNTS
+  | _INSURANCE
   | _CKBTC_LEDGER
   | _KYT;
 
 export type IDLS =
   | typeof idlFactoryAccounts
+  | typeof idlFactoryInsurance
   | typeof idlFactoryCkbtcLedger
   | typeof idlFactoryCkbtcMinter
   | typeof idlFactoryCkethLedger
@@ -76,6 +88,7 @@ export type IDLS =
 
 export {
   initAccounts,
+  initInsurance,
   initCkBtcLedger,
   initCkBtcMinter,
   initCkEthLedger,
@@ -84,6 +97,4 @@ export {
   intKYT,
 };
 
-export {
-  Account
-}
+export { Account };
