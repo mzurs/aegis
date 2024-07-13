@@ -1,7 +1,7 @@
 {
   "license": "MIT",
   "scripts": {
-    "test:all": "bash scripts/test.sh unit && bash scripts/test.sh integration",
+    "test:all": "bash scripts/test.sh all",
     "test:unit": "bash scripts/test.sh unit",
     "test:unit:accounts": "bash scripts/test.sh unit accounts",
     "test:unit:insurance": "bash scripts/test.sh unit insurance",
