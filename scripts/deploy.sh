@@ -19,6 +19,8 @@ CANDID
 }
 
 function deploy_minters() {
+  dfx identity new minter || true
+
   export CKETH_MINTER_ID="sv3dd-oaaaa-aaaar-qacoa-cai"
   export CKSEPOPLIA_ETH_MINTER_ID="jzenf-aiaaa-aaaar-qaa7q-cai"
 
