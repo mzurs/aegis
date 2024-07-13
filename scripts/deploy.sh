@@ -184,6 +184,7 @@ function deploy() {
   deploy_canisters
 
 }
+
 function main() {
 
   case $1 in

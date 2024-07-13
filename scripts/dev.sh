@@ -27,6 +27,10 @@ function main() {
         bash scripts/deploy.sh deploy
         ;;
 
+    "uninstall")
+        bash scripts/uninstall_code.sh uninstall
+        ;;
+
     *) echo "Invalid arguments passed in ""$0" ;;
     esac
 

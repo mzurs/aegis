@@ -37,6 +37,8 @@ function main() {
 
         # Copies the Wasm from .dfx to wasm dir
         move_to_wasm_folder
+
+        dfx generate
     fi
 
 }
