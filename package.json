@@ -3,7 +3,11 @@
   "scripts": {
     "test:all": "bash scripts/test.sh unit && bash scripts/test.sh integration",
     "test:unit": "bash scripts/test.sh unit",
+    "test:unit:accounts": "bash scripts/test.sh unit accounts",
+    "test:unit:insurance": "bash scripts/test.sh unit insurance",
     "test:integration": "bash scripts/test.sh integration",
+    "test:integration:accounts": "bash scripts/test.sh integration accounts",
+    "test:integration:insurance": "bash scripts/test.sh integration insurance",
     "start": "bash scripts/dev.sh start",
     "setup": "bash scripts/dev.sh setup",
     "deploy:all": "bash scripts/dev.sh deploy",

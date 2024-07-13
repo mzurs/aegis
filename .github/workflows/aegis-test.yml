@@ -35,10 +35,10 @@ jobs:
         run: |
           dfx cache install
           dfx start --clean --background --host 127.0.0.1:8080
-      # - name: Deploying Canister
-      #   run: npm run deploy:all
-      # - name: Generate Candid Declarations
-      #   run: dfx generate
+      - name: Deploying Canister
+        run: npm run deploy:all
+      - name: Generate Candid Declarations
+        run: dfx generate
       - name: Install Node Dependencies
         run: npm install
       - name: Run Tests
