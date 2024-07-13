@@ -11,6 +11,17 @@
         "output": "declarations/accounts"
       }
     },
+    "insurance": {
+      "candid": "src/canisters/insurance/insurance.did",
+      "package": "insurance",
+      "type": "rust",
+      "declarations": {
+        "bindings": ["js", "ts"],
+        "env_override": null,
+        "node_compatibility": true,
+        "output": "declarations/insurance"
+      }
+    },
     "ckbtc_minter": {
       "type": "custom",
       "candid": "src/minter/minter.did",

@@ -19,6 +19,8 @@ CANDID
 }
 
 function deploy_minters() {
+  dfx identity new minter || true
+
   export CKETH_MINTER_ID="sv3dd-oaaaa-aaaar-qacoa-cai"
   export CKSEPOPLIA_ETH_MINTER_ID="jzenf-aiaaa-aaaar-qaa7q-cai"
 
@@ -172,6 +174,8 @@ CANDID
 function deploy_canisters() {
   bash scripts/candid.sh accounts
   dfx deploy accounts --argument='(record { bitcoin_network= variant { regtest }})' --specified-id 222qi-2qaaa-aaaao-anesa-cai
+  dfx deploy insurance --argument='(record { bitcoin_network= variant { regtest }})' --specified-id suaf3-hqaaa-aaaaf-bfyoa-cai		
+
 }
 
 function deploy() {
@@ -182,6 +186,7 @@ function deploy() {
   deploy_canisters
 
 }
+
 function main() {
 
   case $1 in

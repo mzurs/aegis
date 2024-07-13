@@ -3,6 +3,5 @@ target
 bitcoin.tar.gz
 .bitcoin
 node_modules
-declarations
 .canbench
 .env

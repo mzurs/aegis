@@ -3,7 +3,7 @@ use std::{borrow::Cow, u64};
 use candid::{Decode, Encode, Principal};
 
 use ic_stable_structures::{storable::Bound, Storable};
-use ic_utils::generate_random_number;
+use ic_utils::generate_random_number_u64;
 
 use crate::{
     api::{
@@ -49,7 +49,7 @@ impl AegisAccount {
 
     /// Function to create User AegisAccount
     pub(crate) async fn create_account(&self) -> Result<bool, String> {
-        let user_id: u64 = match generate_random_number().await {
+        let user_id: u64 = match generate_random_number_u64().await {
             Ok(id) => id,
             Err(err) => return Err(err),
         };

@@ -17,12 +17,14 @@ import {
   _CKETH_LEDGER,
   _CKETH_MINTER,
   _ICP_LEDGER,
+  _INSURANCE,
   _KYT,
   idlFactoryAccounts,
   idlFactoryCkbtcLedger,
   idlFactoryCkbtcMinter,
   idlFactoryCkethLedger,
   idlFactoryCkethMinter,
+  idlFactoryInsurance,
   idlFactoryKYT,
 } from "./exports";
 import { Identity } from "@dfinity/agent";
@@ -363,6 +365,31 @@ export async function setupCanister(
   let mainSubnetId = applicationSubnets[0].id;
 
   switch (canisterName) {
+    case CANISTERS_NAME.INSURANCE:
+      fixture = await pic.setupCanister<_INSURANCE>({
+        sender,
+        idlFactory: idlFactoryInsurance,
+        wasm,
+        targetSubnetId: mainSubnetId,
+        arg: IDL.encode(
+          [
+            IDL.Record({
+              bitcoin_network: IDL.Variant({
+                mainnet: IDL.Null,
+                regtest: IDL.Null,
+                testnet: IDL.Null,
+              }),
+            }),
+          ],
+          [
+            {
+              bitcoin_network: { regtest: null },
+            },
+          ]
+        ),
+      });
+      CANISTER_IDS_MAP.set(CANISTERS_NAME.INSURANCE, fixture.canisterId);
+      return fixture.actor;
     case CANISTERS_NAME.ACCOUNTS:
       fixture = await pic.setupCanister<_ACCOUNTS>({
         sender,
@@ -475,4 +502,8 @@ export async function setupCanister(
 
 export function createIdentityFromSeed(seed?: string): Identity {
   return createIdentity(seed!);
+}
+
+export async function wait(min: number) {
+  await new Promise((resolve) => setTimeout(resolve, 60000 * min)); // Wait for 1 minute (60 seconds)
 }

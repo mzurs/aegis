@@ -10,3 +10,4 @@ candid.workspace = true
 hex.workspace = true
 byteorder.workspace = true
 ic-cdk.workspace = true
+sha2="0.10.8"

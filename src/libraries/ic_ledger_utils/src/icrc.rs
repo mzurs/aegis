@@ -7,6 +7,7 @@ use icrc_ledger_types::{
 
 use crate::types::icrc_types::{IcrcFee, IcrcTransferFromResult, IcrcTransferResult, TransferFromResult, TransferResult};
 
+#[derive(Clone, Copy)]
 pub struct IcrcLedger(Principal);
 
 impl IcrcLedger {

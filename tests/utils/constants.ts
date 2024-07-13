@@ -4,6 +4,7 @@ import { resolve } from "path";
 
 export enum CANISTERS_NAME {
   ACCOUNTS,
+  INSURANCE,
   ICP_LEDGER,
   CKBTC_LEDGER,
   CKETH_LEDGER,
@@ -25,6 +26,7 @@ export const MINTER_PRINCIPAL = (): Principal => {
   return principal;
 };
 let CANISTER_IDS: (CANISTERS_NAME | Principal)[][] = [
+
   [
     CANISTERS_NAME.ICP_LEDGER,
     Principal.fromText("4fq4b-sqaaa-aaaar-qadna-cai"),
@@ -47,6 +49,30 @@ let CANISTER_IDS: (CANISTERS_NAME | Principal)[][] = [
   ],
   [CANISTERS_NAME.ACCOUNTS, Principal.fromText("222qi-2qaaa-aaaao-anesa-cai")],
   [CANISTERS_NAME.KYT, Principal.fromText("3rrzb-lyaaa-aaaar-qad6q-cai")],
+  
+  // [
+  //   CANISTERS_NAME.ICP_LEDGER,
+  //   Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai"),
+  // ],
+  // [
+  //   CANISTERS_NAME.CKBTC_LEDGER,
+  //   Principal.fromText("mxzaz-hqaaa-aaaar-qaada-cai"),
+  // ],
+  // [
+  //   CANISTERS_NAME.CKETH_LEDGER,
+  //   Principal.fromText("apia6-jaaaa-aaaar-qabma-cai"),
+  // ],
+  // [
+  //   CANISTERS_NAME.CKBTC_MINTER,
+  //   Principal.fromText("mqygn-kiaaa-aaaar-qaadq-cai"),
+  // ],
+  // [
+  //   CANISTERS_NAME.CKETH_MINTER,
+  //   Principal.fromText("jzenf-aiaaa-aaaar-qaa7q-cai"),
+  // ],
+  // [CANISTERS_NAME.ACCOUNTS, Principal.fromText("222qi-2qaaa-aaaao-anesa-cai")],
+  // [CANISTERS_NAME.INSURANCE,Principal.fromText("suaf3-hqaaa-aaaaf-bfyoa-cai")],
+  // [CANISTERS_NAME.KYT, Principal.fromText("pjihx-aaaaa-aaaar-qaaka-cai")],
 ];
 
 export let CANISTER_IDS_MAP = new Map(
@@ -55,6 +81,7 @@ export let CANISTER_IDS_MAP = new Map(
 
 export const CANISTERS: string[] = [
   "accounts",
+  "insurance",
   "icp_ledger",
   "ckbtc_ledger",
   "cketh_ledger",
@@ -73,6 +100,17 @@ export const ACCOUNTS_WASM_PATH = resolve(
   "canisters",
   "accounts",
   "accounts.wasm"
+);
+
+export const INSURANCE_WASM_PATH = resolve(
+  __dirname,
+  "..",
+  "..",
+  ".dfx",
+  "local",
+  "canisters",
+  "insurance",
+  "insurance.wasm"
 );
 
 export const ICP_LEDGER_WASM_PATH = resolve(

@@ -1,3 +1,6 @@
 {
-  "rust-analyzer.linkedProjects": ["./src/canisters/accounts/Cargo.toml"]
+  "rust-analyzer.linkedProjects": [
+    "./src/canisters/accounts/Cargo.toml",
+    "./src/canisters/insurance/Cargo.toml"
+  ]
 }

@@ -17,7 +17,7 @@ pub mod icrc_types {
         Err(TransferError),
     }
 
-    #[derive(CandidType, Deserialize)]
+    #[derive(CandidType, Deserialize, Debug)]
     pub enum IcrcTransferResult {
         TransferSuccess(Nat),
         TransferErrorMessage(TransferError),
@@ -30,7 +30,7 @@ pub mod icrc_types {
         Err(TransferFromError),
     }
 
-    #[derive(CandidType, Deserialize)]
+    #[derive(CandidType, Deserialize, Debug)]
     pub enum IcrcTransferFromResult {
         TransferFromSuccess(Nat),
         TransferFromErrorMessage(TransferFromError),
