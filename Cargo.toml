@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "src/canisters/accounts",
+    "src/canisters/insurance",
     "src/libraries/canister_state_macro",
     "src/libraries/serializer",
     "src/libraries/*",
@@ -14,10 +15,10 @@ unused = "allow"
 
 [workspace.dependencies]
 candid = "0.10"
-ic-cdk = "0.13.1"
-ic-cdk-timers = "0.7.0"
+ic-cdk = "0.15.0"
+ic-cdk-timers = "0.9.0"
 serde = { version = "1.0.193", features = ["derive"] }
-ic-stable-structures = "0.6.2"
+ic-stable-structures = "0.6.4"
 byteorder = "1.5.0"
 icrc-ledger-types = "0.1.5"
 serde_bytes = "0.11.14"
@@ -31,7 +32,7 @@ stable_memory = { path = "src/libraries/stable_memory" }
 minter_utils = { path = "src/libraries/minter_utils" }
 ic_ledger_utils = { path = "src/libraries/ic_ledger_utils" }
 ic_utils = { path = "src/libraries/ic_utils" }
-
+serde_json="1.0.117"
 
 [profile.release]
 lto = true

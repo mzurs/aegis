@@ -18,8 +18,7 @@ import {
   CKBTC_MINTER_WASM_PATH,
   CKETH_LEDGER_WASM_PATH,
   CKETH_MINTER_WASM_PATH,
-  // CKETH_MINTER_WASM_PATH,
-  ICP_LEDGER_WASM_PATH,
+   ICP_LEDGER_WASM_PATH,
   KYT_WASM_PATH,
 } from "../../utils/constants";
 import { humanToE8s } from "../../utils/helpers";
@@ -44,9 +43,12 @@ describe("Account Canister", () => {
   let ckethMinterActor: Actor<_CKETH_MINTER>;
 
   beforeAll(async () => {
-    pic = await PocketIc.create(process.env.PIC_URL,{ nns: true, fiduciary: true, bitcoin: true });
-
-    // pic = await PocketIc.create({ nns: true, fiduciary: true, bitcoin: true });
+    pic = await PocketIc.create(process.env.PIC_URL, {
+      nns: true,
+      fiduciary: true,
+      bitcoin: true,
+      system:1
+    });
 
     // Generate new Identities
     minter = createIdentityFromSeed("minter");
@@ -158,7 +160,6 @@ describe("Account Canister", () => {
       expect(true).toBe(true);
     });
   });
-
   describe("Accounts", () => {
     it("Create Account", async () => {
       accountsActor.setIdentity(user);

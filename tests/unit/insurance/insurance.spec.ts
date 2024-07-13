@@ -1,4 +1,3 @@
-import { Actor, PocketIc, PocketIcServer } from "@hadronous/pic";
 import {
   _ACCOUNTS,
   _CKBTC_LEDGER,
@@ -10,40 +9,25 @@ import {
   _KYT,
 } from "../../utils/exports";
 import { ActorSubclass, Identity } from "@dfinity/agent";
-import { Principal } from "@dfinity/principal";
 import {
   CANISTER_IDS_MAP,
   CANISTERS_NAME,
-  CKBTC_LEDGER_WASM_PATH,
-  CKBTC_MINTER_WASM_PATH,
-  CKETH_LEDGER_WASM_PATH,
-  ICP_LEDGER_WASM_PATH,
-  INSURANCE_WASM_PATH,
-  KYT_WASM_PATH,
 } from "../../utils/constants";
-import { createIdentityFromSeed, setupCanister } from "../../utils/configs";
+import { createIdentityFromSeed } from "../../utils/configs";
 import {
   createCanisterActor,
   delete_canisters,
   install_canister,
 } from "../../utils/non-pic/setup-canister";
 import {
-  CANISTER_IDS_MAP_NO_PIC,
   CANISTERS_NAME_NO_PIC,
 } from "../../utils/non-pic/constants";
-import { InsuranceContractInitArgs } from "../../../declarations/insurance/insurance.did";
-import { currentTimePlusExtraMinutesInNanoseconds } from "../../utils/non-pic/utils";
-import { createInsuranceContract } from "./methods/create_insurance";
+import { createInsuranceContract } from "../../utils/methods/insurance/create_insurance";
 
 describe("\n================================= Insurance Canister Unit Testing =================================\n", () => {
   let minter: Identity;
   let user: Identity;
   let insuranceActor: ActorSubclass<_INSURANCE>;
-  let icpLedgerActor: Actor<_ICP_LEDGER>;
-  let ckethLedgerActor: Actor<_CKETH_LEDGER>;
-  let ckbtcLedgerActor: Actor<_CKBTC_LEDGER>;
-  let ckbtcMinterActor: Actor<_CKBTC_MINTER>;
-  //   let ckethMinterActor: Actor<_CKETH_MINTER>;
 
   beforeAll(async () => {
     await install_canister(CANISTERS_NAME_NO_PIC.INSURANCE);
@@ -56,9 +40,7 @@ describe("\n================================= Insurance Canister Unit Testing ==
       CANISTERS_NAME_NO_PIC.INSURANCE
     ) as ActorSubclass<_INSURANCE>;
 
-    // insuranceActor.setIdentity(minter);
-
-    // set the ledger ids in the Account Canister
+    // set the ledger ids in the Insurance Canister
     insuranceActor.set_ledger_canister_id(
       { ICP: null },
       CANISTER_IDS_MAP.get(CANISTERS_NAME.ICP_LEDGER)!
@@ -100,9 +82,9 @@ describe("\n================================= Insurance Canister Unit Testing ==
     });
 
     it("Insurance Contract With Anonymous Principal can not be created", async () => {
-      let res;
+      let res: any;
       try {
-        res = await createInsuranceContract(insuranceActor);
+        res = await createInsuranceContract({ identity: user });
       } catch (error) {
         expect(error);
       }
@@ -114,10 +96,11 @@ describe("\n================================= Insurance Canister Unit Testing ==
         user
       ) as ActorSubclass<_INSURANCE>;
 
-      let res = await createInsuranceContract(insuranceActor);
+      let res = await createInsuranceContract({ identity: user });
       expect(res).toHaveProperty("TransferError");
     });
   });
+
   afterAll(async () => {
     console.log("Deleting Canister...");
     let delCanisters: CANISTERS_NAME_NO_PIC[] = [

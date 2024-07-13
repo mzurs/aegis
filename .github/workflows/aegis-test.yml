@@ -42,4 +42,4 @@ jobs:
       - name: Install Node Dependencies
         run: npm install
       - name: Run Tests
-        run: npm run test:accounts
+        run: npm run test:all

@@ -503,3 +503,7 @@ export async function setupCanister(
 export function createIdentityFromSeed(seed?: string): Identity {
   return createIdentity(seed!);
 }
+
+export async function wait(min: number) {
+  await new Promise((resolve) => setTimeout(resolve, 60000 * min)); // Wait for 1 minute (60 seconds)
+}
