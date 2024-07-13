@@ -8,4 +8,3 @@ fn get_account() -> Option<AegisAccountInfo> {
 
     aegis_account.get_account()
 }
-

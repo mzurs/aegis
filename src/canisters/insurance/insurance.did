@@ -1,0 +1,150 @@
+type BuyInsuranceArgs = record { premium : nat; insurance_id : nat32 };
+type BuyInsuranceRes = variant {
+  ErrorMessage : text;
+  TransferError : IcrcTransferFromResult;
+  Success;
+};
+type Country = variant { UK; US };
+type ExecuteInsuranceContractRes = variant {
+  ErrorMessage : text;
+  TransferError : IcrcTransferResult;
+  Success;
+};
+type HttpHeader = record { value : text; name : text };
+type HttpResponse = record {
+  status : nat;
+  body : blob;
+  headers : vec HttpHeader;
+};
+type IcrcTransferFromResult = variant {
+  TransferFromErrorMessage : TransferFromError;
+  TransferFromSuccess : nat;
+  TransferFromErrorString : text;
+};
+type IcrcTransferResult = variant {
+  TransferErrorString : text;
+  TransferErrorMessage : TransferError;
+  TransferSuccess : nat;
+};
+type InflationBasedInsurance = record {
+  country : Country;
+  target_expiry : nat64;
+  inflation_target : float32;
+};
+type Insurance = record {
+  multiplier : InsuranceRewardsMultiplier;
+  status : InsuranceContractStatus;
+  title : text;
+  last_pool_balance : nat;
+  min_premium_amount : nat;
+  description : text;
+  is_muliple_seller_allowed : bool;
+  issuer : principal;
+  expiry_date : nat64;
+  category : InsuranceCategory;
+  insurance_asset : InsuranceAssets;
+  last_executed_time : nat64;
+  last_premium_balance : nat;
+  min_share_amount : opt nat;
+};
+type InsuranceActiveListKey = record {
+  "principal" : principal;
+  insurance_id : nat32;
+};
+type InsuranceAssets = variant { ICP; CKBTC; CKETH };
+type InsuranceBuyersKey = record {
+  "principal" : principal;
+  insurance_id : nat32;
+  time_stamp : nat64;
+};
+type InsuranceCategory = variant {
+  InflationBasedInsurance : InflationBasedInsurance;
+};
+type InsuranceContractExecutionLogsKeys = record {
+  insurance_id : nat32;
+  message : text;
+  timestamp : nat64;
+};
+type InsuranceContractInitArgs = record {
+  multiplier : InsuranceRewardsMultiplier;
+  title : text;
+  min_premium_amount : nat;
+  description : text;
+  is_muliple_seller_allowed : bool;
+  expiry_date : nat64;
+  category : InsuranceCategory;
+  insurance_asset : InsuranceAssets;
+  amount : nat;
+  min_share_amount : opt nat;
+};
+type InsuranceContractStatus = variant { OPEN; CLOSED };
+type InsuranceInitRes = variant {
+  ErrorMessage : text;
+  TransferError : IcrcTransferFromResult;
+  Success : nat32;
+};
+type InsuranceRewardsMultiplier = variant { M2X; M3X; M4X };
+type Result = variant { Ok : float32; Err : text };
+type SellInsuranceArgs = record { insurance_id : nat32; amount : nat };
+type TransferError = variant {
+  GenericError : record { message : text; error_code : nat };
+  TemporarilyUnavailable;
+  BadBurn : record { min_burn_amount : nat };
+  Duplicate : record { duplicate_of : nat };
+  BadFee : record { expected_fee : nat };
+  CreatedInFuture : record { ledger_time : nat64 };
+  TooOld;
+  InsufficientFunds : record { balance : nat };
+};
+type TransferFromError = variant {
+  GenericError : record { message : text; error_code : nat };
+  TemporarilyUnavailable;
+  InsufficientAllowance : record { allowance : nat };
+  BadBurn : record { min_burn_amount : nat };
+  Duplicate : record { duplicate_of : nat };
+  BadFee : record { expected_fee : nat };
+  CreatedInFuture : record { ledger_time : nat64 };
+  TooOld;
+  InsufficientFunds : record { balance : nat };
+};
+type TransformArgs = record { context : blob; response : HttpResponse };
+type UserInsuranceListHistoryKey = record {
+  "principal" : principal;
+  insurance_id : nat32;
+};
+service : (record {}) -> {
+  buy_insurance_contract : (BuyInsuranceArgs) -> (BuyInsuranceRes);
+  convert_u64_to_date : (opt nat64) -> (text) query;
+  create_insurance_contract : (InsuranceContractInitArgs) -> (InsuranceInitRes);
+  division : (nat, nat) -> (float64) query;
+  execute_insurance_contract_manual : (nat32) -> (ExecuteInsuranceContractRes);
+  f64_to_biguint : (float64) -> (nat) query;
+  get_all_contract_execution_logs : () -> (
+      vec InsuranceContractExecutionLogsKeys,
+    ) query;
+  get_buy_insurance_contract_list_by_princicpal : () -> (
+      vec InsuranceBuyersKey,
+    ) query;
+  get_contract_execution_logs_by_insurance_id : (nat32) -> (
+      vec InsuranceContractExecutionLogsKeys,
+    ) query;
+  get_inflation_data : (Country, opt text) -> (Result);
+  get_insurance_by_id : (nat32) -> (opt Insurance) query;
+  get_ledger_canister_id : (InsuranceAssets) -> (principal);
+  get_pool_balance_by_insurance_id : (nat32) -> (nat) query;
+  get_premium_pool_balance_by_insurance_id : (nat32) -> (nat) query;
+  get_seller_insurance_contract_list_by_princicpal : () -> (
+      vec InsuranceBuyersKey,
+    ) query;
+  get_user_insurance_history_by_principal : () -> (
+      vec record { UserInsuranceListHistoryKey; nat64 },
+    ) query;
+  list_insurance_contract : () -> (
+      vec record { InsuranceActiveListKey; null },
+    ) query;
+  multiplication : (float64, float64) -> (float64) query;
+  nat_to_f64 : (nat) -> (float64) query;
+  sell_insurance_contract : (SellInsuranceArgs) -> (BuyInsuranceRes);
+  set_ledger_canister_id : (InsuranceAssets, principal) -> ();
+  transform_fred : (TransformArgs) -> (HttpResponse) query;
+}

@@ -61,14 +61,13 @@ pub fn convert_u64_to_subaccount(num: u64) -> [u8; 32] {
     little_endian_bytes
 }
 
-
 pub fn convert_u32_to_subaccount(num: u32) -> [u8; 32] {
     // Allocate a mutable array of 32 u8 elements filled with zeros
     let mut buffer: [u8; 32] = [0; 32];
-  
+
     // Use unchecked copy_from_slice for performance (safe as both slices have the same length)
     buffer[..4].copy_from_slice(&num.to_ne_bytes());
-  
+
     // Return the filled buffer
     buffer
-  }
+}

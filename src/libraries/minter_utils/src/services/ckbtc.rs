@@ -109,8 +109,6 @@ pub struct GetEventsArg {
     pub length: u64,
 }
 
-
-
 #[derive(CandidType, Deserialize)]
 pub struct UtxoOutpoint {
     pub txid: serde_bytes::ByteBuf,
