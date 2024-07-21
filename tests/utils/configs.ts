@@ -12,6 +12,7 @@ import { Principal } from "@dfinity/principal";
 import {
   SERVICES,
   _ACCOUNTS,
+  _AEGIS_LEDGER,
   _CKBTC_LEDGER,
   _CKBTC_MINTER,
   _CKETH_LEDGER,
@@ -19,13 +20,16 @@ import {
   _ICP_LEDGER,
   _INSURANCE,
   _KYT,
+  _MAIN,
   idlFactoryAccounts,
+  idlFactoryAegisLedger,
   idlFactoryCkbtcLedger,
   idlFactoryCkbtcMinter,
   idlFactoryCkethLedger,
   idlFactoryCkethMinter,
   idlFactoryInsurance,
   idlFactoryKYT,
+  idlFactoryMain,
 } from "./exports";
 import { Identity } from "@dfinity/agent";
 import {
@@ -120,6 +124,37 @@ let icpArgs: ICPLedgerCanisterPayloadJS = {
     feature_flags: [{ icrc2: true }],
   },
 };
+
+let aegisArgs: LedgerArgJS = {
+  Init: {
+    decimals: [8],
+    token_symbol: "AEGIS",
+    transfer_fee: 100_000n,
+    metadata: [],
+    minting_account: {
+      owner: MINTER_PRINCIPAL()!,
+      subaccount: [],
+    },
+    initial_balances: [],
+    maximum_number_of_accounts: [],
+    accounts_overflow_trim_quantity: [],
+    fee_collector_account: [],
+    archive_options: {
+      num_blocks_to_archive: 0n,
+      max_transactions_per_response: [],
+      trigger_threshold: 0n,
+      max_message_size_bytes: [],
+      cycles_for_archive_creation: [],
+      node_max_memory_size_bytes: [],
+      controller_id: MINTER_PRINCIPAL()!,
+      more_controller_ids: [], //[sender!],
+    },
+    token_name: "AEGIS",
+    max_memo_length: [],
+    feature_flags: [{ icrc2: true }],
+  },
+};
+
 let ckbtcArgs: LedgerArgJS = {
   Init: {
     decimals: [8],
@@ -192,7 +227,15 @@ export const createCanisters = async (
     sender,
     targetSubnetId: subnetId,
   });
+  const mainCanisterId = await pic.createCanister({
+    sender,
+    targetSubnetId: subnetId,
+  });
   const icpCanisterId = await pic.createCanister({
+    sender,
+    targetSubnetId: subnetId,
+  });
+  const aegisCanisterId = await pic.createCanister({
     sender,
     targetSubnetId: subnetId,
   });
@@ -219,9 +262,11 @@ export const createCanisters = async (
   CANISTER_IDS_MAP.set(CANISTERS_NAME.CKETH_LEDGER, ckethCanisterId);
   CANISTER_IDS_MAP.set(CANISTERS_NAME.CKBTC_MINTER, ckbtcMinterCanisterId);
   CANISTER_IDS_MAP.set(CANISTERS_NAME.CKETH_MINTER, ckethMinterCanisterId);
+  CANISTER_IDS_MAP.set(CANISTERS_NAME.AEGIS_LEDGER, aegisCanisterId);
+  CANISTER_IDS_MAP.set(CANISTERS_NAME.CKETH_MINTER, mainCanisterId);
 
   // console.log(CANISTER_IDS_MAP.get(CANISTERS_NAME.ACCOUNTS)?.toString());
-  console.log(CANISTER_IDS_MAP.get(CANISTERS_NAME.CKETH_LEDGER)?.toString());
+  // console.log(CANISTER_IDS_MAP.get(CANISTERS_NAME.CKETH_LEDGER)?.toString());
 
   return;
 };
@@ -390,6 +435,33 @@ export async function setupCanister(
       });
       CANISTER_IDS_MAP.set(CANISTERS_NAME.INSURANCE, fixture.canisterId);
       return fixture.actor;
+
+    case CANISTERS_NAME.MAIN:
+      fixture = await pic.setupCanister<_MAIN>({
+        sender,
+        idlFactory: idlFactoryMain,
+        wasm,
+        targetSubnetId: mainSubnetId,
+        arg: IDL.encode(
+          [
+            IDL.Record({
+              bitcoin_network: IDL.Variant({
+                mainnet: IDL.Null,
+                regtest: IDL.Null,
+                testnet: IDL.Null,
+              }),
+            }),
+          ],
+          [
+            {
+              bitcoin_network: { regtest: null },
+            },
+          ]
+        ),
+      });
+      CANISTER_IDS_MAP.set(CANISTERS_NAME.MAIN, fixture.canisterId);
+
+      return fixture.actor;
     case CANISTERS_NAME.ACCOUNTS:
       fixture = await pic.setupCanister<_ACCOUNTS>({
         sender,
@@ -470,6 +542,18 @@ export async function setupCanister(
         arg: IDL.encode([ICPLedgerCanisterPayloadCandid], [icpArgs]),
       });
       CANISTER_IDS_MAP.set(CANISTERS_NAME.ICP_LEDGER, fixture.canisterId);
+      return fixture.actor;
+
+    case CANISTERS_NAME.AEGIS_LEDGER:
+      fixture = await pic.setupCanister<_AEGIS_LEDGER>({
+        targetCanisterId: CANISTER_IDS_MAP.get(CANISTERS_NAME.AEGIS_LEDGER),
+        sender,
+        idlFactory: idlFactoryAegisLedger,
+        wasm,
+        targetSubnetId: fiduciarySubnetId,
+        arg: IDL.encode([LedgerArgCandid], [aegisArgs]),
+      });
+      CANISTER_IDS_MAP.set(CANISTERS_NAME.AEGIS_LEDGER, fixture.canisterId);
       return fixture.actor;
 
     case CANISTERS_NAME.CKBTC_LEDGER:

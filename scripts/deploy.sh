@@ -171,18 +171,92 @@ CANDID
 
 }
 
-function deploy_canisters() {
-  bash scripts/candid.sh accounts
-  dfx deploy accounts --argument='(record { bitcoin_network= variant { regtest }})' --specified-id 222qi-2qaaa-aaaao-anesa-cai
-  dfx deploy insurance --argument='(record { bitcoin_network= variant { regtest }})' --specified-id suaf3-hqaaa-aaaaf-bfyoa-cai		
+function deploy_aegis() {
+  # Deploy ICP Ledger Canister
+  dfx identity use minter
+  MINTING_PRINCIPAL=$(dfx identity get-principal)
 
+  dfx identity use default
+  LEDGER_PRINCIPAL=$(dfx identity get-principal)
+
+  AEGIS_LEDGER_ID="2jymc-fyaaa-aaaar-qad2q-cai"
+  AEGIS_INDEX_ID="2dm64-liaaa-aaaar-qaega-cai"
+
+  # echo "Fetching Aegis Ledger Canister Wasm..."
+  # curl -o aegis_ledger.wasm.gz "https://download.dfinity.systems/ic/$IC_VERSION/canisters/ic-icrc1-ledger.wasm.gz",
+
+  # echo "Fetching Aegis Ledger Canister Candid..."
+  # curl -o aegis_ledger.did "https://raw.githubusercontent.com/dfinity/ic/$IC_VERSION/rs/rosetta-api/icrc1/ledger/ledger.did",
+
+  read -r -d '' aegis_ledger_argument <<CANDID
+    (variant {
+        Init = record {
+            minting_account = record {
+                owner = principal "$MINTING_PRINCIPAL"
+            };
+            feature_flags  = opt record { icrc2 = true };
+            decimals = opt 8; 
+            max_memo_length = opt 80;
+            transfer_fee = 100_000 ;
+            token_symbol = "AEGIS";
+            token_name = "AEGIS FINANCE";
+            metadata = vec {};
+            initial_balances = vec {};
+            archive_options = record {
+            num_blocks_to_archive = 1000; 
+            trigger_threshold = 2000; 
+            max_message_size_bytes = null; 
+            cycles_for_archive_creation = opt 1_000_000_000_000; 
+            node_max_memory_size_bytes = opt 3_221_225_472; 
+            controller_id = principal "$LEDGER_PRINCIPAL";
+            }
+        }
+    })
+CANDID
+
+  dfx deploy aegis_ledger --specified-id $AEGIS_LEDGER_ID --argument "$aegis_ledger_argument"
+
+  read -r -d '' aegis_index_argument <<CANDID
+    (opt variant {
+        Init = record {
+        ledger_id = principal "$AEGIS_LEDGER_ID"
+           
+             }
+    })
+CANDID
+
+  dfx deploy aegis_index --argument "$aegis_index_argument" --specified-id $AEGIS_INDEX_ID
+
+  #
+  #
+  #
+  dfx canister call aegis_index ledger_id '()'
+  dfx canister call aegis_index status '()'
+}
+
+function deploy_canisters() {
+
+  bash scripts/candid.sh accounts
+
+  bash scripts/candid.sh insurance
+  
+  bash scripts/candid.sh main
+
+  dfx deploy accounts --argument='(record { bitcoin_network= variant { regtest }})' --specified-id 222qi-2qaaa-aaaao-anesa-cai
+
+  dfx deploy insurance --argument='(record { bitcoin_network= variant { regtest }})' --specified-id suaf3-hqaaa-aaaaf-bfyoa-cai
+
+  dfx deploy main --argument='(record { bitcoin_network= variant { regtest }})'  --specified-id 23633-jiaaa-aaaar-qadzq-cai
+
+  dfx generate
 }
 
 function deploy() {
 
+  deploy_aegis
   deploy_ledgers
-  deploy_minters
-  deploy_kyt
+  # deploy_minters
+  # deploy_kyt
   deploy_canisters
 
 }

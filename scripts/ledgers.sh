@@ -6,7 +6,7 @@ function fetch_ledgers() {
 
     cd src/ledgers || bash
 
-    IC_VERSION=ac04d772c23ff771eaf526bee9ca9e9b411e129d
+    IC_VERSION=7dee90107a88b836fc72e78993913988f4f73ca2
 
     echo "Fetching ICP ledger wasm..."
     curl -o icp_ledger.wasm.gz https://download.dfinity.systems/ic/$IC_VERSION/canisters/ledger-canister.wasm.gz
@@ -25,6 +25,24 @@ function fetch_ledgers() {
     gunzip cketh_ledger.wasm.gz
 
     cd ../..
+
+    echo "Fetching Aegis Index Canister Wasm..."
+    curl -o aegis_index.wasm.gz "https://download.dfinity.systems/ic/$IC_VERSION/canisters/ic-icrc1-index-ng.wasm.gz"
+
+    echo "Fetching Aegis Index Canister Candid..."
+    curl -o aegis_index.did "https://raw.githubusercontent.com/dfinity/ic/$IC_VERSION/rs/rosetta-api/icrc1/index-ng/index-ng.did"
+
+    # gunzip aegis_ledger.wasm.gz
+    gunzip aegis_index.wasm.gz
+
+    # cp aegis_ledger.wasm wasms/
+    cp aegis_index.wasm wasms/
+
+    # cp aegis_ledger.did candid/
+    cp aegis_index.did candid/
+
+    rm aegis_index.wasm
+    rm aegis_index.did
 
 }
 

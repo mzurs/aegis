@@ -205,7 +205,6 @@ impl Insurance {
                 .filter(|(key, _)| key.insurance_id == insurance_id)
                 .map(|(k, _)| k)
                 .collect()
-           
         })
     }
 
@@ -218,7 +217,6 @@ impl Insurance {
                 // .filter(|(key, _)| key.insurance_id == insurance_id)
                 .map(|(k, _)| k)
                 .collect()
-           
         })
     }
 
@@ -952,7 +950,7 @@ impl Insurance {
                     ic_cdk::println!("total_amount {}", total_amount);
 
                     let payout_amount_f64: f64 = total_amount;
-                 
+
                     ic_cdk::println!("payout_amount_f64 {}", payout_amount_f64);
 
                     let payout_amount = match f64_to_biguint(payout_amount_f64) {
@@ -1034,8 +1032,6 @@ impl Insurance {
                 })
         });
 
-       
-
         ic_cdk::println!("Total Sellers Iterations {}", i);
 
         ExecuteInsuranceContractRes::Success
@@ -1103,7 +1099,7 @@ impl Insurance {
                     ic_cdk::println!("total_amount {}", total_amount);
 
                     let payout_amount_f64: f64 = total_amount;
-                 
+
                     ic_cdk::println!("payout_amount_f64 {}", payout_amount_f64);
 
                     let payout_amount = match f64_to_biguint(payout_amount_f64) {
@@ -1312,7 +1308,6 @@ impl Insurance {
 
         ic_cdk::println!("Execute Buyer Insurance Contract End");
 
-       
         ExecuteInsuranceContractRes::Success
     }
 
@@ -1414,12 +1409,9 @@ impl Insurance {
             }
         };
 
- 
         // At the time of invokation of a insurance contract the present time should equal
         // or greater than insurance expiry time otherwise the error message will generate
         if ic_cdk::api::time() < insurance.expiry_date.clone() {
-         
-
             // this entry can not stored in logs stable memory
             return ExecuteInsuranceContractRes::ErrorMessage(format!(
                 "Expiry time {} for a contract is not reached",
@@ -1427,23 +1419,20 @@ impl Insurance {
             ));
         }
 
-      
         // get the balance of a insurance contract liquiduty pool
         let insurance_pool_balance: Nat =
             get_pool_balance_by_insurance_id(insurance_id, insurance.insurance_asset.clone()).await;
         ic_cdk::println!("insurance_pool_balance {}", insurance_pool_balance);
-       
 
         // get the balance of a insurance contract premium pool
         let insurance_premium_balance: Nat =
             get_premium_pool_balance_by_insurance_id(insurance_id, insurance.insurance_asset.clone()).await;
         ic_cdk::println!("insurance_premium_balance {}", insurance_premium_balance);
 
-     
         // check whether the buyers participated in insurance contract
         if insurance_premium_balance < insurance.min_premium_amount.clone() {
             ic_cdk::println!("Insurance Premium Pool Balance is less min_premium_amount");
-     
+
             Self::repay_insurance_amount_to_sellers(insurance_id, insurance.insurance_asset.clone()).await;
 
             // Self::change_insurance_contract_status(&insurance, insurance_id, InsuranceContractStatus::CLOSED);

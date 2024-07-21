@@ -8,9 +8,11 @@ export enum CANISTERS_NAME {
   ICP_LEDGER,
   CKBTC_LEDGER,
   CKETH_LEDGER,
+  AEGIS_LEDGER,
   CKBTC_MINTER,
   CKETH_MINTER,
   KYT,
+  MAIN,
 }
 
 export const CONTRACT_ADDRESS = "0xb44B5e756A894775FC32EDdf3314Bb1B1944dC34";
@@ -26,10 +28,13 @@ export const MINTER_PRINCIPAL = (): Principal => {
   return principal;
 };
 let CANISTER_IDS: (CANISTERS_NAME | Principal)[][] = [
-
   [
     CANISTERS_NAME.ICP_LEDGER,
     Principal.fromText("4fq4b-sqaaa-aaaar-qadna-cai"),
+  ],
+  [
+    CANISTERS_NAME.AEGIS_LEDGER,
+    Principal.fromText("2jymc-fyaaa-aaaar-qad2q-cai"),
   ],
   [
     CANISTERS_NAME.CKBTC_LEDGER,
@@ -48,8 +53,9 @@ let CANISTER_IDS: (CANISTERS_NAME | Principal)[][] = [
     Principal.fromText("55zjc-4qaaa-aaaar-qadja-cai"),
   ],
   [CANISTERS_NAME.ACCOUNTS, Principal.fromText("222qi-2qaaa-aaaao-anesa-cai")],
+  [CANISTERS_NAME.MAIN, Principal.fromText("23633-jiaaa-aaaar-qadzq-cai")],
   [CANISTERS_NAME.KYT, Principal.fromText("3rrzb-lyaaa-aaaar-qad6q-cai")],
-  
+
   // [
   //   CANISTERS_NAME.ICP_LEDGER,
   //   Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai"),
@@ -95,10 +101,8 @@ export const ACCOUNTS_WASM_PATH = resolve(
   __dirname,
   "..",
   "..",
-  ".dfx",
-  "local",
-  "canisters",
-  "accounts",
+  "wasms",
+
   "accounts.wasm"
 );
 
@@ -106,10 +110,7 @@ export const INSURANCE_WASM_PATH = resolve(
   __dirname,
   "..",
   "..",
-  ".dfx",
-  "local",
-  "canisters",
-  "insurance",
+  "wasms",
   "insurance.wasm"
 );
 
@@ -117,11 +118,16 @@ export const ICP_LEDGER_WASM_PATH = resolve(
   __dirname,
   "..",
   "..",
-  ".dfx",
-  "local",
-  "canisters",
-  "icp_ledger",
+  "wasms",
   "icp_ledger.wasm"
+);
+
+export const AEGIS_LEDGER_WASM_PATH = resolve(
+  __dirname,
+  "..",
+  "..",
+  "wasms",
+  "aegis_ledger.wasm"
 );
 
 export const NNS_STATE_PATH = resolve(
@@ -139,10 +145,7 @@ export const CKBTC_LEDGER_WASM_PATH = resolve(
   __dirname,
   "..",
   "..",
-  ".dfx",
-  "local",
-  "canisters",
-  "ckbtc_ledger",
+  "wasms",
   "ckbtc_ledger.wasm"
 );
 
@@ -150,10 +153,7 @@ export const CKETH_LEDGER_WASM_PATH = resolve(
   __dirname,
   "..",
   "..",
-  ".dfx",
-  "local",
-  "canisters",
-  "ckbtc_ledger",
+  "wasms",
   "ckbtc_ledger.wasm"
 );
 
@@ -179,9 +179,14 @@ export const KYT_WASM_PATH = resolve(
   __dirname,
   "..",
   "..",
-  ".dfx",
-  "local",
-  "canisters",
-  "kyt",
-  "kyt.wasm"
+  "wasms",
+   "kyt.wasm"
+);
+
+export const MAIN_WASM_PATH = resolve(
+  __dirname,
+  "..",
+  "..",
+  "wasms",
+  "main.wasm"
 );
