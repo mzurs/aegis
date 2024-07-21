@@ -12,5 +12,5 @@ pub fn f64_to_biguint(f: f64) -> Option<BigUint> {
         return None; // Overflow occurred
     }
 
-    Some(BigUint::from(u128_value)) 
+    Some(BigUint::from(u128_value))
 }

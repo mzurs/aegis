@@ -6,6 +6,12 @@ import {
 } from "../../declarations/accounts/accounts.did";
 
 import {
+  _SERVICE as _MAIN,
+  idlFactory as idlFactoryMain,
+  init as initMain,
+} from "../../declarations/main/main.did";
+
+import {
   _SERVICE as _INSURANCE,
   idlFactory as idlFactoryInsurance,
   init as initInsurance,
@@ -46,15 +52,23 @@ import {
   idlFactory as idlFactoryKYT,
   init as intKYT,
 } from "../../declarations/kyt/kyt.did";
+
+import {
+  _SERVICE as _AEGIS_LEDGER,
+  idlFactory as idlFactoryAegisLedger,
+  init as initAEGISLedger,
+} from "../../declarations/aegis_ledger/aegis_ledger.did";
+
 export {
-  
   _ICP_LEDGER,
   _CKBTC_MINTER,
   _CKETH_LEDGER,
   _CKETH_MINTER,
   _ACCOUNTS,
   _INSURANCE,
+  _MAIN,
   _CKBTC_LEDGER,
+  _AEGIS_LEDGER,
   _KYT,
   idlFactoryKYT,
   idlFactoryAccounts,
@@ -64,9 +78,13 @@ export {
   idlFactoryCkethLedger,
   idlFactoryCkethMinter,
   idlFactoryIcpLedger,
+  idlFactoryAegisLedger,
+  idlFactoryMain,
 };
 
 export type SERVICES =
+  | _MAIN
+  | _AEGIS_LEDGER
   | _ICP_LEDGER
   | _CKBTC_MINTER
   | _CKETH_LEDGER
@@ -84,7 +102,9 @@ export type IDLS =
   | typeof idlFactoryCkethLedger
   | typeof idlFactoryCkethMinter
   | typeof idlFactoryIcpLedger
-  | typeof idlFactoryKYT;
+  | typeof idlFactoryKYT
+  | typeof idlFactoryAegisLedger
+  | typeof idlFactoryMain;
 
 export {
   initAccounts,
@@ -95,6 +115,8 @@ export {
   initCkEthMinter,
   initIcpLedger,
   intKYT,
+  initAEGISLedger,
+  initMain,
 };
 
 export { Account };

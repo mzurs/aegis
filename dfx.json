@@ -5,7 +5,10 @@
       "package": "accounts",
       "type": "rust",
       "declarations": {
-        "bindings": ["js", "ts"],
+        "bindings": [
+          "js",
+          "ts"
+        ],
         "env_override": null,
         "node_compatibility": true,
         "output": "declarations/accounts"
@@ -16,7 +19,10 @@
       "package": "insurance",
       "type": "rust",
       "declarations": {
-        "bindings": ["js", "ts"],
+        "bindings": [
+          "js",
+          "ts"
+        ],
         "env_override": null,
         "node_compatibility": true,
         "output": "declarations/insurance"
@@ -27,7 +33,10 @@
       "candid": "src/minter/minter.did",
       "wasm": "src/minter/minter.wasm.gz",
       "declarations": {
-        "bindings": ["js", "ts"],
+        "bindings": [
+          "js",
+          "ts"
+        ],
         "env_override": null,
         "node_compatibility": true,
         "output": "declarations/ckbtc_minter"
@@ -38,7 +47,10 @@
       "candid": "src/minter/cketh_minter.did",
       "wasm": "src/minter/cketh_minter.wasm",
       "declarations": {
-        "bindings": ["js", "ts"],
+        "bindings": [
+          "js",
+          "ts"
+        ],
         "env_override": null,
         "node_compatibility": true,
         "output": "declarations/cketh_minter"
@@ -49,7 +61,10 @@
       "wasm": "src/ledgers/icp_ledger.wasm",
       "candid": "src/ledgers/icp_ledger.did",
       "declarations": {
-        "bindings": ["js", "ts"],
+        "bindings": [
+          "js",
+          "ts"
+        ],
         "env_override": null,
         "node_compatibility": true,
         "output": "declarations/icp_ledger"
@@ -60,7 +75,10 @@
       "wasm": "src/ledgers/cketh_ledger.wasm",
       "candid": "src/ledgers/cketh_ledger.did",
       "declarations": {
-        "bindings": ["js", "ts"],
+        "bindings": [
+          "js",
+          "ts"
+        ],
         "env_override": null,
         "node_compatibility": true,
         "output": "declarations/cketh_ledger"
@@ -71,7 +89,10 @@
       "candid": "src/ledgers/ckbtc_ledger.did",
       "wasm": "src/ledgers/ckbtc_ledger.wasm",
       "declarations": {
-        "bindings": ["js", "ts"],
+        "bindings": [
+          "js",
+          "ts"
+        ],
         "env_override": null,
         "node_compatibility": true,
         "output": "declarations/ckbtc_ledger"
@@ -82,10 +103,57 @@
       "candid": "src/minter/kyt.did",
       "wasm": "src/minter/kyt.wasm",
       "declarations": {
-        "bindings": ["js", "ts"],
+        "bindings": [
+          "js",
+          "ts"
+        ],
         "env_override": null,
         "node_compatibility": true,
         "output": "declarations/kyt"
+      }
+    },
+    "main": {
+      "candid": "src/canisters/main/main.did",
+      "package": "main",
+      "type": "rust",
+      "declarations": {
+        "bindings": [
+          "js",
+          "ts"
+        ],
+        "env_override": null,
+        "node_compatibility": true,
+        "output": "declarations/main"
+      }
+    },
+    "aegis_ledger": {
+      "type": "custom",
+      "candid": "candid/aegis_ledger.did",
+      "wasm": "wasms/aegis_ledger.wasm",
+      "gzip": true,
+      "declarations": {
+        "bindings": [
+          "js",
+          "ts"
+        ],
+        "env_override": null,
+        "node_compatibility": true,
+        "output": "declarations/aegis_ledger"
+      }
+    },
+    "aegis_index": {
+      "type": "custom",
+      "candid": "candid/aegis_index.did",
+      "wasm": "wasms/aegis_index.wasm",
+      "gzip": true,
+      "declarations": {
+        "bindings": [
+          "js",
+          "ts"
+        ],
+        "env_override": null,
+        "node_compatibility": true,
+        "output": "declarations/aegis_index"
       }
     }
   },
@@ -98,7 +166,9 @@
       }
     },
     "ic": {
-      "providers": ["https://ic0.app/"],
+      "providers": [
+        "https://ic0.app/"
+      ],
       "type": "persistent"
     }
   },

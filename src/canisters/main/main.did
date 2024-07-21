@@ -1,0 +1,74 @@
+type BitcoinNetwork = variant { mainnet; regtest; testnet };
+type ExecuteUnstakeAmountRes = variant {
+  ErrorMessage : text;
+  TransferError : TransferError;
+  Success;
+};
+type IcrcAsset = variant { ICP; AEGIS; CKBTC; CKETH };
+type IcrcTransferFromResult = variant {
+  TransferFromErrorMessage : TransferFromError;
+  TransferFromSuccess : nat;
+  TransferFromErrorString : text;
+};
+type InitArgs = record { bitcoin_network : BitcoinNetwork };
+type Result = variant { Ok : text; Err : text };
+type StakeAsset = variant { BTC; ETH; ICRC : IcrcAsset };
+type StakeExecutionLogsKeys = record {
+  asset_type : StakeAsset;
+  transaction_type : StakeTransactionType;
+  timestamp : nat64;
+};
+type StakeExecutionLogsValue = record { message : text };
+type StakeIcrcArgs = record { use_account : bool; amount : nat };
+type StakeIcrcRes = variant {
+  ErrorMessage : text;
+  TransferError : IcrcTransferFromResult;
+  Success;
+};
+type StakeTransactionType = variant { Stake; ClaimRewards; UnStake };
+type TotalValueLockedRes = variant { BTC : nat64; ETH : nat64; ICRC : nat };
+type TransferError = variant {
+  GenericError : record { message : text; error_code : nat };
+  TemporarilyUnavailable;
+  BadBurn : record { min_burn_amount : nat };
+  Duplicate : record { duplicate_of : nat };
+  BadFee : record { expected_fee : nat };
+  CreatedInFuture : record { ledger_time : nat64 };
+  TooOld;
+  InsufficientFunds : record { balance : nat };
+};
+type TransferFromError = variant {
+  GenericError : record { message : text; error_code : nat };
+  TemporarilyUnavailable;
+  InsufficientAllowance : record { allowance : nat };
+  BadBurn : record { min_burn_amount : nat };
+  Duplicate : record { duplicate_of : nat };
+  BadFee : record { expected_fee : nat };
+  CreatedInFuture : record { ledger_time : nat64 };
+  TooOld;
+  InsufficientFunds : record { balance : nat };
+};
+type UnStakeIcrcArgs = record { to_account : bool; amount : nat };
+service : (InitArgs) -> {
+  convert_u32_to_subaccount : (nat32) -> (blob) query;
+  get_canister_id : (IcrcAsset) -> (principal) query;
+  get_current_timestamp : () -> (nat64) query;
+  get_min_stake_delay_ : () -> (nat64) query;
+  get_min_staking_delay : () -> (nat64) query;
+  get_stake_execution_logs : () -> (
+      vec record { StakeExecutionLogsKeys; StakeExecutionLogsValue },
+    ) query;
+  get_staked_timestamp : (IcrcAsset) -> (nat64) query;
+  get_total_value_locked : (StakeAsset) -> (TotalValueLockedRes) query;
+  get_unstaked_timestamp : (IcrcAsset) -> (nat64) query;
+  icrc_get_staked_amount_by_principal : (IcrcAsset) -> (nat) query;
+  icrc_stake_tokens : (IcrcAsset, StakeIcrcArgs) -> (StakeIcrcRes);
+  icrc_unstake_tokens : (IcrcAsset, UnStakeIcrcArgs) -> (StakeIcrcRes);
+  icrc_unstake_tokens_manual : (IcrcAsset) -> (ExecuteUnstakeAmountRes);
+  if_min_delay_over : (IcrcAsset) -> (Result) query;
+  principal_to_eth_address : (principal) -> (text) query;
+  principal_to_subaccount : (principal) -> (blob) query;
+  set_canister_id : (IcrcAsset, principal) -> ();
+  set_min_staking_delay : (opt nat64) -> (nat64);
+  set_rewards_duration : (StakeAsset, nat64) -> ();
+}

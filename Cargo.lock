@@ -452,6 +452,28 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "97b3888a4aecf77e811145cadf6eef5901f4782c53886191b2f693f24761847c"
 
 [[package]]
+name = "main"
+version = "0.1.0"
+dependencies = [
+ "candid",
+ "canister_state_macro",
+ "ic-cdk",
+ "ic-cdk-timers",
+ "ic-stable-structures",
+ "ic_ledger_utils",
+ "ic_utils",
+ "icrc-ledger-types",
+ "minter_utils",
+ "num-bigint",
+ "rmp-serde",
+ "serde",
+ "serde_bytes",
+ "serializer",
+ "stable_memory",
+ "tracing",
+]
+
+[[package]]
 name = "management_canister"
 version = "0.1.0"
 

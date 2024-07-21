@@ -5,6 +5,7 @@
     "test:unit": "bash scripts/test.sh unit",
     "test:unit:accounts": "bash scripts/test.sh unit accounts",
     "test:unit:insurance": "bash scripts/test.sh unit insurance",
+    "test:unit:main": "bash scripts/test.sh unit main",
     "test:integration": "bash scripts/test.sh integration",
     "test:integration:accounts": "bash scripts/test.sh integration accounts",
     "test:integration:insurance": "bash scripts/test.sh integration insurance",

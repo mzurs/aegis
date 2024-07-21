@@ -17,6 +17,12 @@ if [[ $test_type == "unit" ]]; then
 
         jest --testPathPattern='tests/unit/insurance'
 
+    elif [[ $test_canister_name == "main" ]]; then
+
+        echo "Running Main Uint Tests"
+
+        jest -c ./jest.config.ts --testPathPattern='tests/unit/main'
+
     fi
 
 elif [[ $test_type == "integration" ]]; then
@@ -38,17 +44,16 @@ elif [[ $test_type == "integration" ]]; then
 elif [[ $test_type == "all" ]]; then
 
     echo "Running Accounts Uint Tests"
-
     jest -c ./jest.config.ts --testPathPattern='tests/unit/accounts'
 
     echo "Running Insurance Uint Tests"
-
     jest --testPathPattern='tests/unit/insurance'
 
+    echo "Running Main Uint Tests"
+    jest -c ./jest.config.ts --testPathPattern='tests/unit/main'
+
     echo "Running Insurance Integration Tests"
-
     jest --testPathPattern='tests/integration/insurance/1_insurance.spec.ts'
-
     jest --testPathPattern='tests/integration/insurance/2_insurance.spec.ts'
 
 fi
