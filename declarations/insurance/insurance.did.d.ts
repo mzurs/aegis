@@ -126,6 +126,7 @@ export interface UserInsuranceListHistoryKey {
 }
 export interface _SERVICE {
   'buy_insurance_contract' : ActorMethod<[BuyInsuranceArgs], BuyInsuranceRes>,
+  'calculate_buy_insurance_contract_premium' : ActorMethod<[number], bigint>,
   'convert_u64_to_date' : ActorMethod<[[] | [bigint]], string>,
   'create_insurance_contract' : ActorMethod<
     [InsuranceContractInitArgs],

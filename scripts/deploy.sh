@@ -287,6 +287,11 @@ dfx canister call cketh_ledger icrc1_transfer  '(record {  to = record {owner=pr
 dfx canister call cketh_ledger icrc1_transfer  '(record {  to = record {owner=principal "akm3b-xt34z-vnaos-o667b-jrxjr-3a4ao-juwz5-7qdpz-hxnks-yfh2i-fae";}; amount= 1_000_000_000_000_000_000 })' 
 
 
+dfx canister call aegis_ledger icrc1_transfer  '(record {  to = record {owner=principal "up5qv-6itp6-z5fuj-kfq2a-qohj4-ckibb-lq6tt-34j2c-i2d27-3gqlm-pqe";}; amount= 10_000_000_000 })' 
+                                         
+dfx canister call aegis_ledger icrc1_transfer  '(record {  to = record {owner=principal "akm3b-xt34z-vnaos-o667b-jrxjr-3a4ao-juwz5-7qdpz-hxnks-yfh2i-fae";}; amount= 10_000_000_000 })' 
+
+
 dfx identity use default 
 
 }

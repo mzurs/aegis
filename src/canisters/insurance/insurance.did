@@ -114,6 +114,7 @@ type UserInsuranceListHistoryKey = record {
 };
 service : (record {}) -> {
   buy_insurance_contract : (BuyInsuranceArgs) -> (BuyInsuranceRes);
+  calculate_buy_insurance_contract_premium : (nat32) -> (nat) query;
   convert_u64_to_date : (opt nat64) -> (text) query;
   create_insurance_contract : (InsuranceContractInitArgs) -> (InsuranceInitRes);
   division : (nat, nat) -> (float64) query;

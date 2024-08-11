@@ -145,6 +145,11 @@ export const idlFactory = ({ IDL }) => {
         [BuyInsuranceRes],
         [],
       ),
+    'calculate_buy_insurance_contract_premium' : IDL.Func(
+        [IDL.Nat32],
+        [IDL.Nat],
+        ['query'],
+      ),
     'convert_u64_to_date' : IDL.Func(
         [IDL.Opt(IDL.Nat64)],
         [IDL.Text],
