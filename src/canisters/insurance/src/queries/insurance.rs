@@ -1,3 +1,4 @@
+use candid::Nat;
 use ic_cdk::query;
 
 use crate::api::interface::{
@@ -41,4 +42,14 @@ pub fn get_all_contract_execution_logs() -> Vec<InsuranceContractExecutionLogsKe
 #[query]
 pub fn get_user_insurance_history_by_principal() -> Vec<(UserInsuranceListHistoryKey, u64)> {
     Insurance::get_user_insurance_history_by_principal(ic_cdk::caller())
+}
+
+#[query]
+pub async fn calculate_buy_insurance_contract_premium(insurance_id: u32) -> Nat {
+    let insurance: Insurance = match Insurance::get_insurance_by_id(insurance_id) {
+        Some(res) => res,
+        None => return Nat::from(0 as u32),
+    };
+
+    Insurance::calculate_buy_insurance_contract_premium(insurance_id, &insurance).await
 }

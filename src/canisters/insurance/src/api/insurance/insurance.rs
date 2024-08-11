@@ -1339,7 +1339,7 @@ impl Insurance {
     }
 
     /// Calculate the premium amount for a buyer to purchase the contract
-    async fn calculate_buy_insurance_contract_premium(insurance_id: u32, insurance: &Insurance) -> Nat {
+    pub async fn calculate_buy_insurance_contract_premium(insurance_id: u32, insurance: &Insurance) -> Nat {
         let ledger = ic_ledger_utils::icrc::IcrcLedger::new(get_ledger_canister_id(insurance.insurance_asset));
 
         // get the balance of a insurance contract liquiduty pool

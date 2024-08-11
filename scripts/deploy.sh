@@ -92,10 +92,14 @@ function deploy_ledgers() {
   # Deploy ICP Ledger Canister
   dfx identity use minter
   MINT_ACC=$(dfx ledger account-id)
+  MINTER_PRINCIPAL=$(dfx identity get-principal)
 
   dfx identity use default
   LEDGER_PRINCIPAL=$(dfx identity get-principal)
-
+  
+  PRE_MINTED_CKETH_TOKENS=10_000_000_000_000_000_000
+  PRE_MINTED_CKBTC_TOKENS=1_000_000_000_000
+  
   read -r -d '' icp_argument <<CANDID
     (variant 
         {Init = record {
@@ -125,7 +129,7 @@ CANDID
             token_symbol = "ckBTC";
             token_name = "ckBTC";
             metadata = vec {};
-            initial_balances = vec {};
+            initial_balances = vec {record { record { owner = principal "$MINTER_PRINCIPAL"; }; $PRE_MINTED_CKBTC_TOKENS; };};
             archive_options = record {
                 num_blocks_to_archive = 0 ;
                 trigger_threshold = 0  ;
@@ -154,7 +158,7 @@ CANDID
             token_symbol = "ckSepoliaETH";
             token_name = "ckSepoliaETH";
             metadata = vec {};
-            initial_balances = vec {};
+            initial_balances = vec {record { record { owner = principal "$MINTER_PRINCIPAL"; }; $PRE_MINTED_CKETH_TOKENS; };};
             archive_options = record {
             num_blocks_to_archive = 1000; 
             trigger_threshold = 2000; 
@@ -261,12 +265,44 @@ function deploy() {
 
 }
 
+function topUp(){
+
+dfx identity use minter 
+
+dfx canister call icp_ledger icrc1_transfer  '(record {  to = record {owner=principal "up5qv-6itp6-z5fuj-kfq2a-qohj4-ckibb-lq6tt-34j2c-i2d27-3gqlm-pqe";}; amount= 10_000_000_000 })' 
+                                         
+dfx canister call icp_ledger icrc1_transfer  '(record {  to = record {owner=principal "akm3b-xt34z-vnaos-o667b-jrxjr-3a4ao-juwz5-7qdpz-hxnks-yfh2i-fae";}; amount= 10_000_000_000 })' 
+
+
+
+dfx canister call ckbtc_ledger icrc1_transfer  '(record {  to = record {owner=principal "up5qv-6itp6-z5fuj-kfq2a-qohj4-ckibb-lq6tt-34j2c-i2d27-3gqlm-pqe";}; amount= 10_000_000_000 })' 
+                                         
+dfx canister call ckbtc_ledger icrc1_transfer  '(record {  to = record {owner=principal "akm3b-xt34z-vnaos-o667b-jrxjr-3a4ao-juwz5-7qdpz-hxnks-yfh2i-fae";}; amount= 10_000_000_000 })' 
+
+
+
+
+dfx canister call cketh_ledger icrc1_transfer  '(record {  to = record {owner=principal "up5qv-6itp6-z5fuj-kfq2a-qohj4-ckibb-lq6tt-34j2c-i2d27-3gqlm-pqe";}; amount= 1_000_000_000_000_000_000 })' 
+                                         
+dfx canister call cketh_ledger icrc1_transfer  '(record {  to = record {owner=principal "akm3b-xt34z-vnaos-o667b-jrxjr-3a4ao-juwz5-7qdpz-hxnks-yfh2i-fae";}; amount= 1_000_000_000_000_000_000 })' 
+
+
+dfx canister call aegis_ledger icrc1_transfer  '(record {  to = record {owner=principal "up5qv-6itp6-z5fuj-kfq2a-qohj4-ckibb-lq6tt-34j2c-i2d27-3gqlm-pqe";}; amount= 10_000_000_000 })' 
+                                         
+dfx canister call aegis_ledger icrc1_transfer  '(record {  to = record {owner=principal "akm3b-xt34z-vnaos-o667b-jrxjr-3a4ao-juwz5-7qdpz-hxnks-yfh2i-fae";}; amount= 10_000_000_000 })' 
+
+
+dfx identity use default 
+
+}
 function main() {
 
   case $1 in
 
   "deploy")
     deploy
+    
+    topUp
     ;;
 
   *) echo "Invalid Arguments!" ;;
