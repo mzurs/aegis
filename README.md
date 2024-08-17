@@ -57,3 +57,8 @@ yarn test:accounts
 ### Features
 
 
+- [x] Accounts
+- [x] Insurance Contracts
+- [x] Staking
+- [ ] Options
+ 
