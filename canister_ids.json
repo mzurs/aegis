@@ -1,0 +1,17 @@
+{
+  "accounts": {
+    "ic": "rsrme-dqaaa-aaaam-ac7za-cai"
+  },
+  "aegis_index": {
+    "ic": "rjuqb-ziaaa-aaaam-ac73q-cai"
+  },
+  "aegis_ledger": {
+    "ic": "rovwv-uqaaa-aaaam-ac73a-cai"
+  },
+  "insurance": {
+    "ic": "rvqkq-oiaaa-aaaam-ac7zq-cai"
+  },
+  "main": {
+    "ic": "rax35-paaaa-aaaam-ac72a-cai"
+  }
+}
