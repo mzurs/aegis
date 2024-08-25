@@ -51,7 +51,7 @@ dfx generate
 ```
 
 ```bash
-yarn test:accounts
+yarn test:all
 ```
 
 ### Features
