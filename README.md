@@ -51,14 +51,16 @@ dfx generate
 ```
 
 ```bash
-yarn test:accounts
+yarn test:all
 ```
 
 ### Features
 
 
-- [x] Accounts
-- [x] Insurance Contracts
-- [x] Staking
-- [ ] Options
+- [x] Deposit & Withdraw ICRCs Tokens (ICP, ckBTC, ckETH).
+- [x] Convert BTC <-> ckBTC.
+- [x] Convert ETH <-> ckETH.
+- [x] Insurance Contracts (ICP, ckBTC, ckETH).
+- [x] Stake ICRC tokens (AEGIS).
+- [ ] Options Contracts (ckBTC & ckETH).
  
