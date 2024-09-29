@@ -8,4 +8,4 @@ The infrastructure of Aegis Finance - i.e. the canisters listed in canister_ids.
 
 
 
-Aegis Finance is developed by [Muhammad Zohaib](https://muhammadzohaib.vercel.app/)
+Aegis Finance is developed by [zohaib__29](https://muhammadzohaib.vercel.app/)
