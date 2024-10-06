@@ -1,5 +1,8 @@
 #!/usr/bin/bash
 
+set -e  # Stop execution on the first error
+
+
 test_type=$1
 test_canister_name=$2
 
