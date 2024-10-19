@@ -2,7 +2,8 @@
 members = [
     "src/canisters/accounts",
     "src/canisters/insurance",
-    "src/canisters/main",
+    "src/canisters/main",       
+    "src/canisters/options",
     "src/libraries/canister_state_macro",
     "src/libraries/serializer",
     "src/libraries/*",
