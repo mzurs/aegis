@@ -28,6 +28,20 @@
         "output": "declarations/insurance"
       }
     },
+    "options": {
+      "candid": "src/canisters/options/options.did",
+      "package": "options",
+      "type": "rust",
+      "declarations": {
+        "bindings": [
+          "js",
+          "ts"
+        ],
+        "env_override": null,
+        "node_compatibility": true,
+        "output": "declarations/options"
+      }
+    },
     "ckbtc_minter": {
       "type": "custom",
       "candid": "src/minter/minter.did",

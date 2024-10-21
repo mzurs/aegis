@@ -32,7 +32,7 @@ function move_to_wasm_folder() {
 function main() {
     if [[ $1 == "local" ]]; then
 
-        # Build all canister wasmu
+        # Build all canister wasms
         bash scripts/dev.sh deploy
 
         # Copies the Wasm from .dfx to wasm dir
