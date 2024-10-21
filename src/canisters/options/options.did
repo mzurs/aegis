@@ -1,0 +1,3 @@
+type BitcoinNetwork = variant { mainnet; regtest; testnet };
+type InitArgs = record { bitcoin_network : BitcoinNetwork };
+service : (InitArgs) -> { set_ledger_id : () -> () }

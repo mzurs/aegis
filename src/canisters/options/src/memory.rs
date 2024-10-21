@@ -18,7 +18,7 @@ std::thread_local! {
 
 }
 
-pub(crate) fn get_memory(memory_id: MemoryId) -> Memory {
+pub(crate) fn _get_memory(memory_id: MemoryId) -> Memory {
     MEMORY_MANAGER.with(|m| m.borrow().get(memory_id))
 }
 
