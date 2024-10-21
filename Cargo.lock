@@ -575,6 +575,29 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1261fe7e33c73b354eab43b1273a57c8f967d0391e80353e51f764ac02cf6775"
 
 [[package]]
+name = "options"
+version = "0.1.0"
+dependencies = [
+ "candid",
+ "canister_state_macro",
+ "ic-cdk",
+ "ic-cdk-timers",
+ "ic-stable-structures",
+ "ic_ledger_utils",
+ "ic_utils",
+ "icrc-ledger-types",
+ "minter_utils",
+ "num-bigint",
+ "rmp-serde",
+ "serde",
+ "serde_bytes",
+ "serde_json",
+ "serializer",
+ "stable_memory",
+ "tracing",
+]
+
+[[package]]
 name = "paste"
 version = "1.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
