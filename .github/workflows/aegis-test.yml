@@ -31,15 +31,15 @@ jobs:
         uses: dfinity/setup-dfx@main
       - name: Install candid-extractor
         run: cargo install candid-extractor
+      - name: Install Node Dependencies
+        run: npm install
       - name: Start dfx
         run: |
           dfx cache install
           dfx start --background
-      - name: Deploying Canister
-        run: npm run deploy:all
-      - name: Generate Candid Declarations
-        run: dfx generate
-      - name: Install Node Dependencies
-        run: npm install
-      - name: Run Tests
+      - name: Deploying Canister with Wasms and Declarations
+        run: npm run build_wasms local
+      - name: Run Accounts Unit Tests
         run: npm run test:unit:accounts
+      - name: Run Main Unit Tests
+        run: npm run test:unit:main
