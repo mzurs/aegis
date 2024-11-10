@@ -25,7 +25,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - name: Set up Rust
-        run: rustup target add wasm32-unknown-unknown
+        run: |
+          rustup update stable
+          rustup target add wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@v2
       - name: Install dfx
         uses: dfinity/setup-dfx@main
