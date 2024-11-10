@@ -32,7 +32,7 @@ jobs:
       - name: Install dfx
         uses: dfinity/setup-dfx@main
       - name: Install candid-extractor
-        run: cargo install candid-extractor
+        run: cargo install candid-extractor --locked
       - name: Install Node Dependencies
         run: npm install
       - name: Start dfx
