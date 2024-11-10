@@ -26,7 +26,7 @@ jobs:
           cache: "npm"
       - name: Set up Rust
         run: |
-          rustup update stable
+          rustup update
           rustup target add wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@v2
       - name: Install dfx
