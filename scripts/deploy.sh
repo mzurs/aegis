@@ -252,6 +252,8 @@ function deploy_canisters() {
 
   dfx deploy main --argument='(record { bitcoin_network= variant { regtest }})'  --specified-id 23633-jiaaa-aaaar-qadzq-cai
 
+  dfx deploy options --argument='(record {})'  --specified-id 222iv-iiaaa-aaaak-qdyla-cai
+
   dfx generate
 }
 

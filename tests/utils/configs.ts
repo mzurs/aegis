@@ -21,6 +21,7 @@ import {
   _INSURANCE,
   _KYT,
   _MAIN,
+  _OPTIONS,
   idlFactoryAccounts,
   idlFactoryAegisLedger,
   idlFactoryCkbtcLedger,
@@ -30,6 +31,7 @@ import {
   idlFactoryInsurance,
   idlFactoryKYT,
   idlFactoryMain,
+  idlFactoryOptions,
 } from "./exports";
 import { Identity } from "@dfinity/agent";
 import {
@@ -462,6 +464,7 @@ export async function setupCanister(
       CANISTER_IDS_MAP.set(CANISTERS_NAME.MAIN, fixture.canisterId);
 
       return fixture.actor;
+
     case CANISTERS_NAME.ACCOUNTS:
       fixture = await pic.setupCanister<_ACCOUNTS>({
         sender,
@@ -486,6 +489,32 @@ export async function setupCanister(
         ),
       });
       CANISTER_IDS_MAP.set(CANISTERS_NAME.ACCOUNTS, fixture.canisterId);
+      return fixture.actor;
+
+    case CANISTERS_NAME.OPTIONS:
+      fixture = await pic.setupCanister<_OPTIONS>({
+        sender,
+        idlFactory: idlFactoryOptions,
+        wasm,
+        targetSubnetId: fiduciarySubnetId,
+        arg: IDL.encode(
+          [
+            IDL.Record({
+              // bitcoin_network: IDL.Variant({
+              //   mainnet: IDL.Null,
+              //   regtest: IDL.Null,
+              //   testnet: IDL.Null,
+              // }),
+            }),
+          ],
+          [
+            {
+              // bitcoin_network: { regtest: null },
+            },
+          ]
+        ),
+      });
+      CANISTER_IDS_MAP.set(CANISTERS_NAME.OPTIONS, fixture.canisterId);
       return fixture.actor;
 
     // -------------------------MINTER SETUP

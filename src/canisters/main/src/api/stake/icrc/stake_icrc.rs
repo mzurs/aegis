@@ -203,10 +203,8 @@ impl StakeIcrc {
             icrc_asset: self.ledger.clone(),
         };
 
-      
-
         mutate_state(|s| s.stable_state.icrc.icrc_stake.remove(&key));
-        
+
         mutate_state(|s| {
             s.stable_state.icrc.icrc_stake_ts.remove(&IcrcStakeTimeStampKey {
                 principal: ic_cdk::caller(),

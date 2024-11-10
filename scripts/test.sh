@@ -10,22 +10,28 @@ if [[ $test_type == "unit" ]]; then
 
     if [[ $test_canister_name == "accounts" ]]; then
 
-        echo "Running Accounts Uint Tests"
+        echo "Running Accounts Unit Tests"
 
         jest -c ./jest.config.ts --testPathPattern='tests/unit/accounts'
 
     elif [[ $test_canister_name == "insurance" ]]; then
 
-        echo "Running Insurance Uint Tests"
+        echo "Running Insurance Unit Tests"
 
         jest --testPathPattern='tests/unit/insurance'
 
     elif [[ $test_canister_name == "main" ]]; then
 
-        echo "Running Main Uint Tests"
+        echo "Running Main Unit Tests"
 
         jest -c ./jest.config.ts --testPathPattern='tests/unit/main'
 
+
+    elif [[ $test_canister_name == "options" ]]; then
+
+        echo "Running Options Unit Tests"
+
+        jest -c ./jest.config.ts --testPathPattern='tests/unit/options'
     fi
 
 elif [[ $test_type == "integration" ]]; then
@@ -46,13 +52,13 @@ elif [[ $test_type == "integration" ]]; then
 
 elif [[ $test_type == "all" ]]; then
 
-    echo "Running Accounts Uint Tests"
+    echo "Running Accounts Unit Tests"
     jest -c ./jest.config.ts --testPathPattern='tests/unit/accounts'
 
-    echo "Running Insurance Uint Tests"
+    echo "Running Insurance Unit Tests"
     jest --testPathPattern='tests/unit/insurance'
 
-    echo "Running Main Uint Tests"
+    echo "Running Main Unit Tests"
     jest -c ./jest.config.ts --testPathPattern='tests/unit/main'
 
     echo "Running Insurance Integration Tests"

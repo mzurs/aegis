@@ -13,6 +13,7 @@ export enum CANISTERS_NAME {
   CKETH_MINTER,
   KYT,
   MAIN,
+  OPTIONS,
 }
 
 export const CONTRACT_ADDRESS = "0xb44B5e756A894775FC32EDdf3314Bb1B1944dC34";
@@ -95,14 +96,22 @@ export const CANISTERS: string[] = [
   "ckbtc_minter",
   "cketh_minter",
   "kyt",
+  "options",
 ];
+
+export const OPTIONS_WASM_PATH = resolve(
+  __dirname,
+  "..",
+  "..",
+  "wasms",
+  "options.wasm"
+);
 
 export const ACCOUNTS_WASM_PATH = resolve(
   __dirname,
   "..",
   "..",
   "wasms",
-
   "accounts.wasm"
 );
 
@@ -180,7 +189,7 @@ export const KYT_WASM_PATH = resolve(
   "..",
   "..",
   "wasms",
-   "kyt.wasm"
+  "kyt.wasm"
 );
 
 export const MAIN_WASM_PATH = resolve(

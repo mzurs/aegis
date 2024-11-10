@@ -59,6 +59,12 @@ import {
   init as initAEGISLedger,
 } from "../../declarations/aegis_ledger/aegis_ledger.did";
 
+import {
+  _SERVICE as _OPTIONS,
+  idlFactory as idlFactoryOptions,
+  init as initOptions,
+} from "../../declarations/options/options.did";
+
 export {
   _ICP_LEDGER,
   _CKBTC_MINTER,
@@ -70,6 +76,7 @@ export {
   _CKBTC_LEDGER,
   _AEGIS_LEDGER,
   _KYT,
+  _OPTIONS,
   idlFactoryKYT,
   idlFactoryAccounts,
   idlFactoryInsurance,
@@ -80,6 +87,7 @@ export {
   idlFactoryIcpLedger,
   idlFactoryAegisLedger,
   idlFactoryMain,
+  idlFactoryOptions,
 };
 
 export type SERVICES =
@@ -92,7 +100,8 @@ export type SERVICES =
   | _ACCOUNTS
   | _INSURANCE
   | _CKBTC_LEDGER
-  | _KYT;
+  | _KYT
+  | _OPTIONS;
 
 export type IDLS =
   | typeof idlFactoryAccounts
@@ -104,7 +113,8 @@ export type IDLS =
   | typeof idlFactoryIcpLedger
   | typeof idlFactoryKYT
   | typeof idlFactoryAegisLedger
-  | typeof idlFactoryMain;
+  | typeof idlFactoryMain
+  | typeof idlFactoryOptions;
 
 export {
   initAccounts,
@@ -117,6 +127,7 @@ export {
   intKYT,
   initAEGISLedger,
   initMain,
+  initOptions,
 };
 
 export { Account };

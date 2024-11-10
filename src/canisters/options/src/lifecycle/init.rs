@@ -2,7 +2,8 @@ use ic_cdk::init;
 
 use crate::{
     api::interfaces::{
-         lifecycle::InitArgs, state::{StableStates, State}
+        lifecycle::InitArgs,
+        state::{StableStates, State},
     },
     init_state, mutate_state,
 };
@@ -19,4 +20,10 @@ fn init(_args: InitArgs) {
     });
 
     ic_cdk::println!("Init End ");
+}
+
+impl Default for InitArgs {
+    fn default() -> Self {
+        Self {}
+    }
 }

@@ -1,3 +1,42 @@
-type BitcoinNetwork = variant { mainnet; regtest; testnet };
-type InitArgs = record { bitcoin_network : BitcoinNetwork };
-service : (InitArgs) -> { set_ledger_id : () -> () }
+type CreateOptionArgs = record {
+  asset : OptionsAssets;
+  options_type : OptionsType;
+  contract_state : OptionsContractState;
+  asset_amount : nat;
+  contract_expiry : nat64;
+};
+type Options = record {
+  asset : OptionsAssets;
+  options_type : OptionsType;
+  contract_state : OptionsContractState;
+  seller : principal;
+  asset_amount : nat;
+  timestamp : nat64;
+  contract_expiry : nat64;
+  buyer : opt principal;
+};
+type OptionsActiveListKey = record {
+  id : nat64;
+  options_asset : OptionsAssetsByNames;
+  options_type : OptionsType;
+  timestamp : nat64;
+};
+type OptionsAssets = variant { BTC; ETH; ICRC : OptionsAssetsIcrc };
+type OptionsAssetsByNames = variant { BTC; ETH; ICP; CKBTC; CKETH };
+type OptionsAssetsIcrc = variant { ICP; CKBTC; CKETH };
+type OptionsContractState = variant { EXECUTED; OPEN; EXPIRED; CLOSED };
+type OptionsType = variant { PUT; CALL };
+type Result = variant { Ok : text; Err : text };
+service : (record {}) -> {
+  create_icrc_options : (OptionsAssetsIcrc, CreateOptionArgs) -> (Result);
+  get_all_options : () -> (vec Options) query;
+  get_all_options_ids : () -> (vec nat64) query;
+  get_call_options_by_asset : (OptionsAssetsByNames) -> (
+      vec record { OptionsActiveListKey; null },
+    ) query;
+  get_ledger_canister_id : (OptionsAssetsIcrc) -> (principal);
+  get_put_options_by_asset : (OptionsAssetsByNames) -> (
+      vec record { OptionsActiveListKey; null },
+    ) query;
+  set_ledger_canister_id : (OptionsAssetsIcrc, principal) -> ();
+}
