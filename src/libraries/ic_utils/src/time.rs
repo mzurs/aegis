@@ -38,12 +38,20 @@ pub fn remaining_time_in_years(past_timestamp_ns: u64, current_timestamp_ns: u64
     if current_timestamp_ns - past_timestamp_ns <= 0 {
         return 0.00;
     }
-    const NANOS_IN_A_YEAR: u64 = 31_536_000_000_000_000; // Approximate number of nanoseconds in a year
+    const NANOS_IN_A_YEAR: f64 = 365.25 * 24.0 * 60.0 * 60.0 * 100_000_000_000.0;
+    //31_536_000_000_000_000; // Approximate number of nanoseconds in a year
+
+    ic_cdk::println!("{}", NANOS_IN_A_YEAR);
 
     // Calculate the difference in nanoseconds
-    let duration_ns = current_timestamp_ns.saturating_sub(past_timestamp_ns);
+    let duration_ns: u64 = current_timestamp_ns.saturating_sub(past_timestamp_ns);
+    ic_cdk::println!("{}", current_timestamp_ns);
+    ic_cdk::println!("{}", past_timestamp_ns);
+
+    ic_cdk::println!("{}", duration_ns);
+
     // Convert nanoseconds to years
-    (duration_ns as f64 / NANOS_IN_A_YEAR as f64) as f32
+    (duration_ns as f64 / NANOS_IN_A_YEAR) as f32
 }
 
 #[cfg(test)]
