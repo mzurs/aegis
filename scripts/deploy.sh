@@ -88,6 +88,8 @@ CANDID
 function deploy_ledgers() {
   CKETH_LEDGER_ID="ss2fx-dyaaa-aaaar-qacoq-cai"
   CKSEPOPLIA_ETH_LEDGER_ID="apia6-jaaaa-aaaar-qabma-cai"
+  CKUSDT_LEDGER_ID="cngnf-vqaaa-aaaar-qag4q-cai"
+  CKSEPOPLIA_USDT_LEDGER_ID="yfumr-cyaaa-aaaar-qaela-cai"
 
   # Deploy ICP Ledger Canister
   dfx identity use minter
@@ -173,6 +175,40 @@ CANDID
 
   dfx deploy cketh_ledger --specified-id $CKSEPOPLIA_ETH_LEDGER_ID --argument "$cketh_argument"
 
+
+
+    # Deploy ckUSDT Ledger Canister
+
+  # CKETH_MINTING_ACCOUNT="sv3dd-oaaaa-aaaar-qacoa-cai"
+
+  read -r -d '' ckusdt_argument <<CANDID
+    (variant {
+        Init = record {
+            minting_account = record {
+                owner = principal "$CKETH_MINTING_ACCOUNT"
+            };
+            feature_flags  = opt record { icrc2 = true };
+            decimals = opt 18; 
+            max_memo_length = opt 80;
+            transfer_fee = 10_000_000_000 ;
+            token_symbol = "ckSepoliaETH";
+            token_name = "ckSepoliaETH";
+            metadata = vec {};
+            initial_balances = vec {record { record { owner = principal "$MINTER_PRINCIPAL"; }; $PRE_MINTED_CKETH_TOKENS; };};
+            archive_options = record {
+            num_blocks_to_archive = 1000; 
+            trigger_threshold = 2000; 
+            max_message_size_bytes = null; 
+            cycles_for_archive_creation = opt 1_000_000_000_000; 
+            node_max_memory_size_bytes = opt 3_221_225_472; 
+            controller_id = principal "$CKETH_MINTING_ACCOUNT";
+            }
+        }
+    })
+CANDID
+
+  dfx deploy ckusdt_ledger --specified-id $CKSEPOPLIA_USDT_LEDGER_ID --argument "$ckusdt_argument"
+
 }
 
 function deploy_aegis() {
@@ -253,6 +289,8 @@ function deploy_canisters() {
   dfx deploy main --argument='(record { bitcoin_network= variant { regtest }})'  --specified-id 23633-jiaaa-aaaar-qadzq-cai
 
   dfx deploy options --argument='(record {})'  --specified-id 222iv-iiaaa-aaaak-qdyla-cai
+
+  dfx deploy xrc --specified-id uf6dk-hyaaa-aaaaq-qaaaq-cai
 
   dfx generate
 }
