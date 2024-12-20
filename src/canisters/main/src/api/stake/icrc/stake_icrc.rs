@@ -7,7 +7,9 @@ use ic_ledger_utils::{
     icrc::IcrcLedger,
     types::icrc_types::{IcrcFee, IcrcTransferResult},
 };
-use ic_utils::{convert_u32_to_subaccount, principal_to_subaccount};
+use ic_utils::{
+    biguint_f64::f64_to_biguint, biguint_u128::biguint_to_u128_func, convert_u32_to_subaccount, principal_to_subaccount,
+};
 use icrc_ledger_types::icrc1::{account::Account, transfer::TransferArg};
 
 use crate::{
@@ -24,7 +26,6 @@ use crate::{
         stake::stake::{add_execution_logs, get_min_stake_delay},
     },
     mutate_state, read_state,
-    utils::convert::{biguint_f64::f64_to_biguint, biguint_u128::biguint_to_u128_func},
 };
 
 use super::icrc_balances::get_staking_account_balance;
