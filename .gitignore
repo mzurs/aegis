@@ -5,3 +5,12 @@ bitcoin.tar.gz
 node_modules
 .canbench
 .env
+
+src/libraries/blackscholes-rust-master
+
+
+src/libraries/blackscholes-rust-master/target/
+src/libraries/blackscholes-rust-master/build/
+src/libraries/blackscholes-rust-master/.vscode/
+src/libraries/blackscholes-rust-master/lib/cmake-build-debug
+src/libraries/blackscholes-rust-master/src/lets_be_rational/debug

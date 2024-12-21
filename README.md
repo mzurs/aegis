@@ -62,5 +62,5 @@ yarn test:all
 - [x] Convert ETH <-> ckETH.
 - [x] Insurance Contracts (ICP, ckBTC, ckETH).
 - [x] Stake ICRC tokens (AEGIS).
-- [ ] Options Contracts (ckBTC & ckETH).
+- [x] Options Contracts (ckBTC & ckETH).
  

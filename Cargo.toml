@@ -32,10 +32,15 @@ stable_memory = { path = "src/libraries/stable_memory" }
 minter_utils = { path = "src/libraries/minter_utils" }
 ic_ledger_utils = { path = "src/libraries/ic_ledger_utils" }
 ic_utils = { path = "src/libraries/ic_utils" }
+management_canister = { path = "src/libraries/management_canister" }
 serde_json = "1.0.117"
 num-bigint = "0.4.6"
 time = "0.3.36"
 ethers-core = "2.0.14"
+blackscholes={path = "src/libraries/blackscholes-rust"}
+
+
+
 
 [profile.release]
 lto = true

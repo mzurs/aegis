@@ -98,6 +98,20 @@
         "output": "declarations/cketh_ledger"
       }
     },
+    "ckusdt_ledger": {
+      "type": "custom",
+      "wasm": "src/ledgers/ckusdt_ledger.wasm",
+      "candid": "src/ledgers/ckusdt_ledger.did",
+      "declarations": {
+        "bindings": [
+          "js",
+          "ts"
+        ],
+        "env_override": null,
+        "node_compatibility": true,
+        "output": "declarations/ckusdt_ledger"
+      }
+    },
     "ckbtc_ledger": {
       "type": "custom",
       "candid": "src/ledgers/ckbtc_ledger.did",
@@ -168,6 +182,26 @@
         "env_override": null,
         "node_compatibility": true,
         "output": "declarations/aegis_index"
+      }
+    },
+    "xrc": {
+      "type": "custom",
+      "candid": "candid/xrc.did",
+      "wasm": "wasms/xrc.wasm.gz",
+      "remote": {
+        "candid": "xrc/xrc.did",
+        "id": {
+          "ic": "uf6dk-hyaaa-aaaaq-qaaaq-cai"
+        }
+      },
+      "declarations": {
+        "bindings": [
+          "js",
+          "ts"
+        ],
+        "env_override": null,
+        "node_compatibility": true,
+        "output": "declarations/xrc"
       }
     }
   },
