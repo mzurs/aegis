@@ -22,6 +22,7 @@ import {
   _KYT,
   _MAIN,
   _OPTIONS,
+  _XRC,
   idlFactoryAccounts,
   idlFactoryAegisLedger,
   idlFactoryCkbtcLedger,
@@ -32,6 +33,7 @@ import {
   idlFactoryKYT,
   idlFactoryMain,
   idlFactoryOptions,
+  idlFactoryXrc,
 } from "./exports";
 import { Identity } from "@dfinity/agent";
 import {
@@ -606,6 +608,17 @@ export async function setupCanister(
         arg: IDL.encode([LedgerArgCandid], [ckethArgs]),
       });
       CANISTER_IDS_MAP.set(CANISTERS_NAME.CKETH_LEDGER, fixture.canisterId);
+      return fixture.actor;
+
+    case CANISTERS_NAME.XRC:
+      fixture = await pic.setupCanister<_XRC>({
+        sender,
+        idlFactory: idlFactoryXrc,
+        wasm,
+        targetSubnetId: fiduciarySubnetId,
+        arg: IDL.encode([], []),
+      });
+      CANISTER_IDS_MAP.set(CANISTERS_NAME.XRC, fixture.canisterId);
       return fixture.actor;
 
     default:

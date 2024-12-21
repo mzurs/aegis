@@ -2,6 +2,7 @@ import { ActorSubclass, Identity } from "@dfinity/agent";
 import {
   _CKBTC_LEDGER,
   _CKETH_LEDGER,
+  _CKUSDT_LEDGER,
   _ICP_LEDGER,
   _INSURANCE,
 } from "../../exports";
@@ -12,21 +13,22 @@ import {
 } from "../../non-pic/constants";
 import { ApproveArgs } from "@dfinity/ledger-icp/dist/candid/ledger";
 import { createCanisterActor } from "../../non-pic/setup-canister";
-import { Principal } from "@dfinity/principal";
 
 export async function approveTokens(
   identity: Identity,
   asset:
     | CANISTERS_NAME_NO_PIC.ICP_LEDGER
     | CANISTERS_NAME_NO_PIC.CKBTC_LEDGER
-    | CANISTERS_NAME_NO_PIC.CKETH_LEDGER,
+    | CANISTERS_NAME_NO_PIC.CKETH_LEDGER
+    | CANISTERS_NAME_NO_PIC.CKUSDT_LEDGER,
   amount?: bigint,
   spender?: Account
 ) {
-  let actor: ActorSubclass<_ICP_LEDGER | _CKBTC_LEDGER | _CKETH_LEDGER> =
-    createCanisterActor(asset, identity) as unknown as ActorSubclass<
-      _ICP_LEDGER | _CKBTC_LEDGER | _CKETH_LEDGER
-    >;
+  let actor: ActorSubclass<
+    _ICP_LEDGER | _CKBTC_LEDGER | _CKETH_LEDGER | _CKUSDT_LEDGER
+  > = createCanisterActor(asset, identity) as unknown as ActorSubclass<
+    _ICP_LEDGER | _CKBTC_LEDGER | _CKETH_LEDGER | _CKUSDT_LEDGER
+  >;
 
   let args: ApproveArgs = {
     fee: [],
@@ -42,6 +44,7 @@ export async function approveTokens(
     },
   };
 
+  console.log("Approve Args", args);
+
   actor.icrc2_approve(args);
 }
-

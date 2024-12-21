@@ -13,7 +13,7 @@ import {
 } from "../../utils/non-pic/setup-canister";
 import { CANISTERS_NAME_NO_PIC } from "../../utils/non-pic/constants";
 
-describe("Options Canister Unit Testing", () => {
+describe("Options Canister Integration Testing", () => {
   let minter: Identity;
   let user: Identity;
 
@@ -31,24 +31,6 @@ describe("Options Canister Unit Testing", () => {
   });
 
   describe("Exchange Rate Canister", () => {
-    it("Calculating CALL Premium for ETH", async () => {
-      let actor: ActorSubclass<_OPTIONS> = createCanisterActor(
-        CANISTERS_NAME_NO_PIC.OPTIONS,
-        user
-      ) as unknown as ActorSubclass<_OPTIONS>;
-
-      let premium = await actor.calculate_premium(
-        4000n,
-        { CALL: null },
-        BigInt((Date.now() + 10 * 24 * 60 * 60 * 1_000) * 1_000_000),
-        { ETH: null }
-      );
-      console.log(": ------------------");
-      console.log(": premium", premium);
-      console.log(": ------------------");
-      expect(premium).toBeDefined();
-    });
-
     it("Get the current price of BTC/USDT using XRC", async () => {
       let actor: ActorSubclass<_OPTIONS> = createCanisterActor(
         CANISTERS_NAME_NO_PIC.OPTIONS,
@@ -90,6 +72,24 @@ describe("Options Canister Unit Testing", () => {
         { PUT: null },
         BigInt((Date.now() + 10 * 24 * 60 * 60 * 1_000) * 1_000_000),
         { BTC: null }
+      );
+      console.log(": ------------------");
+      console.log(": premium", premium);
+      console.log(": ------------------");
+      expect(premium).toBeDefined();
+    });
+
+    it("Calculating CALL Premium for ETH", async () => {
+      let actor: ActorSubclass<_OPTIONS> = createCanisterActor(
+        CANISTERS_NAME_NO_PIC.OPTIONS,
+        user
+      ) as unknown as ActorSubclass<_OPTIONS>;
+
+      let premium = await actor.calculate_premium(
+        4000n,
+        { CALL: null },
+        BigInt((Date.now() + 10 * 24 * 60 * 60 * 1_000) * 1_000_000),
+        { ETH: null }
       );
       console.log(": ------------------");
       console.log(": premium", premium);

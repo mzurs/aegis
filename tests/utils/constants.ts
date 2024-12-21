@@ -14,6 +14,7 @@ export enum CANISTERS_NAME {
   KYT,
   MAIN,
   OPTIONS,
+  XRC,
 }
 
 export const CONTRACT_ADDRESS = "0xb44B5e756A894775FC32EDdf3314Bb1B1944dC34";
@@ -28,6 +29,10 @@ export const MINTER_PRINCIPAL = (): Principal => {
 
   return principal;
 };
+
+export const BASE_OF_XRC: bigint = 1_000_000_000n;
+
+
 let CANISTER_IDS: (CANISTERS_NAME | Principal)[][] = [
   [
     CANISTERS_NAME.ICP_LEDGER,
@@ -56,6 +61,7 @@ let CANISTER_IDS: (CANISTERS_NAME | Principal)[][] = [
   [CANISTERS_NAME.ACCOUNTS, Principal.fromText("222qi-2qaaa-aaaao-anesa-cai")],
   [CANISTERS_NAME.MAIN, Principal.fromText("23633-jiaaa-aaaar-qadzq-cai")],
   [CANISTERS_NAME.KYT, Principal.fromText("3rrzb-lyaaa-aaaar-qad6q-cai")],
+  [CANISTERS_NAME.XRC, Principal.fromText("uf6dk-hyaaa-aaaaq-qaaaq-cai")],
 
   // [
   //   CANISTERS_NAME.ICP_LEDGER,
@@ -97,6 +103,7 @@ export const CANISTERS: string[] = [
   "cketh_minter",
   "kyt",
   "options",
+  "xrc",
 ];
 
 export const OPTIONS_WASM_PATH = resolve(
@@ -198,4 +205,12 @@ export const MAIN_WASM_PATH = resolve(
   "..",
   "wasms",
   "main.wasm"
+);
+
+export const XRC_WASM_PATH = resolve(
+  __dirname,
+  "..",
+  "..",
+  "wasms",
+  "xrc.wasm.gz"
 );

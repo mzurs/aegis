@@ -11,12 +11,12 @@ export const e18sToHuman = (bigIntValue: any) => {
 };
 // Convert human readable number to e8s format in BigInt
 export const humanToE8s = (numberValue: number) => {
-  return BigInt(numberValue * baseOfEight);
+  return BigInt(Math.trunc(numberValue * baseOfEight));
 };
 
 // Convert human readable number to e18s format in BigInt
 export const humanToE18s = (numberValue: number) => {
-  return BigInt(numberValue * baseOfEighteen);
+  return BigInt(Math.trunc(numberValue * baseOfEighteen));
 };
 
 function convertNanoToMilli(nanoseconds: bigint): number {

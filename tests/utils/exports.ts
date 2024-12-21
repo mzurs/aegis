@@ -6,6 +6,17 @@ import {
 } from "../../declarations/accounts/accounts.did";
 
 import {
+  _SERVICE as _XRC,
+  idlFactory as idlFactoryXrc,
+  init as initXrc,
+} from "../../declarations/xrc/xrc.did";
+import {
+  _SERVICE as _CKUSDT_LEDGER,
+  idlFactory as idlFactoryCkusdtLedger,
+  init as initCkusdtLedger,
+} from "../../declarations/ckusdt_ledger/ckusdt_ledger.did";
+
+import {
   _SERVICE as _MAIN,
   idlFactory as idlFactoryMain,
   init as initMain,
@@ -66,6 +77,8 @@ import {
 } from "../../declarations/options/options.did";
 
 export {
+  _CKUSDT_LEDGER,
+  _XRC,
   _ICP_LEDGER,
   _CKBTC_MINTER,
   _CKETH_LEDGER,
@@ -77,6 +90,7 @@ export {
   _AEGIS_LEDGER,
   _KYT,
   _OPTIONS,
+  idlFactoryCkusdtLedger,
   idlFactoryKYT,
   idlFactoryAccounts,
   idlFactoryInsurance,
@@ -88,9 +102,12 @@ export {
   idlFactoryAegisLedger,
   idlFactoryMain,
   idlFactoryOptions,
+  idlFactoryXrc,
 };
 
 export type SERVICES =
+  | _CKUSDT_LEDGER
+  | _XRC
   | _MAIN
   | _AEGIS_LEDGER
   | _ICP_LEDGER
@@ -104,6 +121,8 @@ export type SERVICES =
   | _OPTIONS;
 
 export type IDLS =
+  | typeof idlFactoryCkusdtLedger
+  | typeof idlFactoryXrc
   | typeof idlFactoryAccounts
   | typeof idlFactoryInsurance
   | typeof idlFactoryCkbtcLedger
@@ -117,6 +136,7 @@ export type IDLS =
   | typeof idlFactoryOptions;
 
 export {
+  initCkusdtLedger,
   initAccounts,
   initInsurance,
   initCkBtcLedger,
@@ -128,6 +148,7 @@ export {
   initAEGISLedger,
   initMain,
   initOptions,
+  initXrc,
 };
 
 export { Account };
