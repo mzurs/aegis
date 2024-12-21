@@ -11,10 +11,10 @@ pub fn f64_to_biguint(f: f64) -> Option<BigUint> {
 
     ic_cdk::println!("u128_value {}",u128_value);
     
-    // Check for overflow
-    if u128_value as f64 != f {
-        return None; // Overflow occurred
-    }
+    // // Check for overflow
+    // if u128_value as f64 != f {
+    //     return None; // Overflow occurred
+    // }
 
     Some(BigUint::from(u128_value))
 }
