@@ -59,6 +59,16 @@ export interface Burn {
   'amount' : bigint,
   'spender' : [] | [Account],
 }
+export interface ChangeArchiveOptions {
+  'num_blocks_to_archive' : [] | [bigint],
+  'max_transactions_per_response' : [] | [bigint],
+  'trigger_threshold' : [] | [bigint],
+  'more_controller_ids' : [] | [Array<Principal>],
+  'max_message_size_bytes' : [] | [bigint],
+  'cycles_for_archive_creation' : [] | [bigint],
+  'node_max_memory_size_bytes' : [] | [bigint],
+  'controller_id' : [] | [Principal],
+}
 export type ChangeFeeCollector = { 'SetTo' : Account } |
   { 'Unset' : null };
 export interface DataCertificate {
@@ -67,6 +77,10 @@ export interface DataCertificate {
 }
 export type Duration = bigint;
 export interface FeatureFlags { 'icrc2' : boolean }
+export interface GetArchivesArgs { 'from' : [] | [Principal] }
+export type GetArchivesResult = Array<
+  { 'end' : bigint, 'canister_id' : Principal, 'start' : bigint }
+>;
 export interface GetBlocksArgs { 'start' : BlockIndex, 'length' : bigint }
 export interface GetBlocksResponse {
   'certificate' : [] | [Uint8Array | number[]],
@@ -79,6 +93,13 @@ export interface GetBlocksResponse {
       'start' : BlockIndex,
       'length' : bigint,
     }
+  >,
+}
+export interface GetBlocksResult {
+  'log_length' : bigint,
+  'blocks' : Array<{ 'id' : bigint, 'block' : ICRC3Value }>,
+  'archived_blocks' : Array<
+    { 'args' : Array<GetBlocksArgs>, 'callback' : [Principal, string] }
   >,
 }
 export interface GetTransactionsRequest { 'start' : TxIndex, 'length' : bigint }
@@ -101,6 +122,16 @@ export interface HttpResponse {
   'headers' : Array<[string, string]>,
   'status_code' : number,
 }
+export interface ICRC3DataCertificate {
+  'certificate' : Uint8Array | number[],
+  'hash_tree' : Uint8Array | number[],
+}
+export type ICRC3Value = { 'Int' : bigint } |
+  { 'Map' : Array<[string, ICRC3Value]> } |
+  { 'Nat' : bigint } |
+  { 'Blob' : Uint8Array | number[] } |
+  { 'Text' : string } |
+  { 'Array' : Array<ICRC3Value> };
 export interface InitArgs {
   'decimals' : [] | [number],
   'token_symbol' : string,
@@ -209,6 +240,7 @@ export type TransferResult = { 'Ok' : BlockIndex } |
   { 'Err' : TransferError };
 export type TxIndex = bigint;
 export interface UpgradeArgs {
+  'change_archive_options' : [] | [ChangeArchiveOptions],
   'token_symbol' : [] | [string],
   'transfer_fee' : [] | [bigint],
   'metadata' : [] | [Array<[string, MetadataValue]>],
@@ -226,6 +258,41 @@ export type Value = { 'Int' : bigint } |
   { 'Blob' : Uint8Array | number[] } |
   { 'Text' : string } |
   { 'Array' : Array<Value> };
+export interface icrc21_consent_info {
+  'metadata' : icrc21_consent_message_metadata,
+  'consent_message' : icrc21_consent_message,
+}
+export type icrc21_consent_message = {
+    'LineDisplayMessage' : { 'pages' : Array<{ 'lines' : Array<string> }> }
+  } |
+  { 'GenericDisplayMessage' : string };
+export interface icrc21_consent_message_metadata { 'language' : string }
+export interface icrc21_consent_message_request {
+  'arg' : Uint8Array | number[],
+  'method' : string,
+  'user_preferences' : icrc21_consent_message_spec,
+}
+export type icrc21_consent_message_response = { 'Ok' : icrc21_consent_info } |
+  { 'Err' : icrc21_error };
+export interface icrc21_consent_message_spec {
+  'metadata' : icrc21_consent_message_metadata,
+  'device_spec' : [] | [
+    { 'GenericDisplay' : null } |
+      {
+        'LineDisplay' : {
+          'characters_per_line' : number,
+          'lines_per_page' : number,
+        }
+      }
+  ],
+}
+export type icrc21_error = {
+    'GenericError' : { 'description' : string, 'error_code' : bigint }
+  } |
+  { 'InsufficientPayment' : icrc21_error_info } |
+  { 'UnsupportedCanisterCall' : icrc21_error_info } |
+  { 'ConsentMessageUnavailable' : icrc21_error_info };
+export interface icrc21_error_info { 'description' : string }
 export interface _SERVICE {
   'archives' : ActorMethod<[], Array<ArchiveInfo>>,
   'get_blocks' : ActorMethod<[GetBlocksArgs], GetBlocksResponse>,
@@ -233,6 +300,10 @@ export interface _SERVICE {
   'get_transactions' : ActorMethod<
     [GetTransactionsRequest],
     GetTransactionsResponse
+  >,
+  'icrc10_supported_standards' : ActorMethod<
+    [],
+    Array<{ 'url' : string, 'name' : string }>
   >,
   'icrc1_balance_of' : ActorMethod<[Account], Tokens>,
   'icrc1_decimals' : ActorMethod<[], number>,
@@ -244,9 +315,20 @@ export interface _SERVICE {
   'icrc1_symbol' : ActorMethod<[], string>,
   'icrc1_total_supply' : ActorMethod<[], Tokens>,
   'icrc1_transfer' : ActorMethod<[TransferArg], TransferResult>,
+  'icrc21_canister_call_consent_message' : ActorMethod<
+    [icrc21_consent_message_request],
+    icrc21_consent_message_response
+  >,
   'icrc2_allowance' : ActorMethod<[AllowanceArgs], Allowance>,
   'icrc2_approve' : ActorMethod<[ApproveArgs], ApproveResult>,
   'icrc2_transfer_from' : ActorMethod<[TransferFromArgs], TransferFromResult>,
+  'icrc3_get_archives' : ActorMethod<[GetArchivesArgs], GetArchivesResult>,
+  'icrc3_get_blocks' : ActorMethod<[Array<GetBlocksArgs>], GetBlocksResult>,
+  'icrc3_get_tip_certificate' : ActorMethod<[], [] | [ICRC3DataCertificate]>,
+  'icrc3_supported_block_types' : ActorMethod<
+    [],
+    Array<{ 'url' : string, 'block_type' : string }>
+  >,
 }
 export declare const idlFactory: IDL.InterfaceFactory;
 export declare const init: (args: { IDL: typeof IDL }) => IDL.Type[];
