@@ -43,6 +43,7 @@ pub struct Options {
     pub contract_state: OptionsContractState,
     pub asset: OptionsAssets,
     pub asset_amount: Nat,
+    pub strike_price: Nat,
     pub contract_expiry: u64,
     pub buyer: Option<Principal>,
     pub options_type: OptionsType,
@@ -84,6 +85,7 @@ pub struct CreateOptionArgs {
     pub options_type: OptionsType,
     pub contract_state: OptionsContractState,
     pub use_exchange_account: bool,
+    pub strike_price: Nat,
 }
 
 pub type CreateOptionRes = Result<String, String>;

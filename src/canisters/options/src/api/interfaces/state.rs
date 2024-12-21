@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 use crate::{api::state::init_stable_states, memory::Memory};
 
 use super::{
+    constants::CanisterName,
     lifecycle::InitArgs,
     options::{
         CallOptionsActiveListByPrincipalKey, ContractTimestampsKey, ContractTimestampsValue, OfferDurationTimestampsKey,
@@ -123,4 +124,5 @@ pub struct StableStates {
 pub struct HeapStates {
     // pub canister_ids: BTreeMap<CanisterName, Principal>,
     pub icrc_ledger_ids: BTreeMap<OptionsAssetsIcrc, Principal>,
+    pub canister_ids: BTreeMap<CanisterName, Principal>,
 }

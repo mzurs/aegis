@@ -27,3 +27,6 @@ ic_utils.workspace = true
 serde_json.workspace = true
 num-bigint.workspace = true
 ethers-core.workspace = true
+management_canister.workspace = true
+getrandom = { version = "0.2", features = ["custom"] }
+blackscholes.workspace=true

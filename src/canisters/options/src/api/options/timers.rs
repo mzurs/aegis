@@ -41,12 +41,20 @@ impl Options {
         Self: TradeOptions<T>,
         T: Clone + Send + 'static,
     {
+        ic_cdk::println!("set_contract_execute_timer Invoked");
+
         let current_time: u64 = ic_cdk::api::time();
         if contract_expiry <= current_time {
-            return Err("Contract expiry time cannot be in the past".to_owned());
+            ic_cdk::println!("contract_expiry {}", contract_expiry);
+            ic_cdk::println!("current_time {}", current_time);
+
+            return Err(format!(
+                "Contract expiry time cannot be in the past {} {}",
+                contract_expiry, current_time
+            ));
         }
 
-        let duration: Duration = Duration::from_secs(contract_expiry - current_time);
+        let duration: Duration = Duration::from_nanos(contract_expiry - current_time);
 
         // Spawn the timer to call `execute`
         let timer_id: TimerId = set_timer(duration, move || {
@@ -71,12 +79,16 @@ impl Options {
         Self: TradeOptions<T>,
         T: Clone + Send + 'static,
     {
+        ic_cdk::println!("set_contract_offer_duration_timer Invoked");
         let current_time: u64 = ic_cdk::api::time();
         if offer_duration <= current_time {
-            return Err("Contract expiry time cannot be in the past".to_owned());
+            return Err(format!(
+                "Contract offer duration expiry time cannot be in the past {} {}",
+                offer_duration, current_time
+            ));
         }
 
-        let duration: Duration = Duration::from_secs(offer_duration - current_time);
+        let duration: Duration = Duration::from_nanos(offer_duration - current_time);
 
         // Spawn the timer to call `execute`
         let timer_id: TimerId = set_timer(duration, move || {

@@ -1,7 +1,8 @@
+
 use candid::CandidType;
 use serde::{Deserialize, Serialize};
 
-#[derive(PartialEq, Eq, PartialOrd, Ord, Serialize, CandidType, Deserialize, Clone, Debug)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Serialize, CandidType, Deserialize, Clone, Debug, )]
 pub enum OptionsAssetsIcrc {
     ICP,
     CKBTC,

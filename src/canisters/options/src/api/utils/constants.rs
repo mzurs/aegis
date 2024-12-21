@@ -2,7 +2,10 @@ use std::collections::BTreeMap;
 
 use candid::Principal;
 
-use crate::{api::interfaces::options_assets::OptionsAssetsIcrc, mutate_state, read_state};
+use crate::{
+    api::interfaces::{constants::CanisterName, options_assets::OptionsAssetsIcrc},
+    mutate_state, read_state,
+};
 
 pub(crate) fn set_icrc_ledger_canister_id(key: OptionsAssetsIcrc, value: Principal) {
     mutate_state(|s| {
@@ -30,5 +33,31 @@ pub(crate) fn init_icrc_ledger_ids() -> BTreeMap<OptionsAssetsIcrc, Principal> {
         Principal::from_text("ss2fx-dyaaa-aaaar-qacoq-cai").unwrap(),
     );
 
+    map.insert(
+        OptionsAssetsIcrc::CKUSDT,
+        Principal::from_text("cngnf-vqaaa-aaaar-qag4q-cai").unwrap(),
+    );
+
     map
+}
+
+pub(crate) fn init_canister_ids() -> BTreeMap<CanisterName, Principal> {
+    let mut map: BTreeMap<CanisterName, Principal> = BTreeMap::new();
+
+    map.insert(
+        CanisterName::ExchangeRate,
+        Principal::from_text("uf6dk-hyaaa-aaaaq-qaaaq-cai").unwrap(),
+    );
+
+    map
+}
+
+pub(crate) fn set_canister_id(key: CanisterName, value: Principal) {
+    mutate_state(|s| {
+        s.heap_state.canister_ids.insert(key, value);
+    })
+}
+
+pub(crate) fn get_canister_id(key: CanisterName) -> Principal {
+    read_state(|s| *s.heap_state.canister_ids.get(&key).unwrap())
 }

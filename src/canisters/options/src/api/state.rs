@@ -2,7 +2,7 @@ use ic_stable_structures::{StableBTreeMap, StableCell};
 
 use crate::memory::{
     get_memory, CALL_OPTIONS_ACTIVE_LIST_BY_PRINCIPAL_MEMORY, CONTRACT_OFFER_DURATION_MEMORY, CONTRACT_TIMESTAMPS_MEMORY,
-    INIT_MEMORY, OPTIONS_ACTIVE_LIST_MEMORY, OPTIONS_MEMORY, PUT_OPTIONS_ACTIVE_LIST_BY_PRINCIPAL_MEMORY,
+    INIT_MEMORY, OPTIONS_ACTIVE_LIST_MEMORY, OPTIONS_MEMORY, PUT_OPTIONS_ACTIVE_LIST_BY_PRINCIPAL_MEMORY, TRADED_OPTIONS_BY_PRINCIPAL_MEMORY,
 };
 
 use super::{
@@ -10,7 +10,7 @@ use super::{
         lifecycle::InitArgs,
         state::{HeapStates, StableStates, State},
     },
-    utils::constants::init_icrc_ledger_ids,
+    utils::constants::{init_canister_ids, init_icrc_ledger_ids},
 };
 
 impl Default for State {
@@ -31,7 +31,7 @@ pub(crate) fn init_stable_states() -> StableStates {
         call_options_active_list_by_principal: StableBTreeMap::init(get_memory(CALL_OPTIONS_ACTIVE_LIST_BY_PRINCIPAL_MEMORY)),
         contract_timestamps: StableBTreeMap::init(get_memory(CONTRACT_TIMESTAMPS_MEMORY)),
         contract_offer_duration_timestamps: StableBTreeMap::init(get_memory(CONTRACT_OFFER_DURATION_MEMORY)),
-        principal_trade_history: StableBTreeMap::init(get_memory(CONTRACT_TIMESTAMPS_MEMORY)),
+        principal_trade_history: StableBTreeMap::init(get_memory(TRADED_OPTIONS_BY_PRINCIPAL_MEMORY)),
         // insurance_contract_timer: StableVec::init(get_memory(INSURANCE_TIMERS_MEMORY)).unwrap(),
         // insurance_buyers: StableBTreeMap::init(get_memory(INSURANCE_BUYERS_MEMORY)),
         // insurance_sellers: StableBTreeMap::init(get_memory(INSURANCE_SELLERS_MEMORY)),
@@ -44,5 +44,6 @@ pub(crate) fn init_stable_states() -> StableStates {
 pub(crate) fn init_heap_state() -> HeapStates {
     HeapStates {
         icrc_ledger_ids: init_icrc_ledger_ids(),
+        canister_ids: init_canister_ids(),
     }
 }

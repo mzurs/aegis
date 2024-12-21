@@ -1,7 +1,10 @@
 use ic_cdk::query;
 
 use crate::api::interfaces::{
-    options::{Options, OptionsActiveListKey, OptionsType},
+    options::{
+        Options, OptionsActiveListKey, OptionsContractState, OptionsType, TradedOptionsContractsKey,
+        TradedOptionsContractsValue,
+    },
     options_assets::OptionsAssetsByNames,
 };
 
@@ -23,4 +26,11 @@ fn get_all_options() -> Vec<Options> {
 #[query]
 fn get_all_options_ids() -> Vec<u64> {
     Options::get_all_options_ids()
+}
+
+#[query]
+fn get_options_trade_history_by_principal(
+    state: OptionsContractState,
+) -> Vec<(TradedOptionsContractsKey, TradedOptionsContractsValue)> {
+    Options::get_trade_history_of_options_contract_by_principal(ic_cdk::caller(), state)
 }

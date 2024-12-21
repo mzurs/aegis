@@ -107,7 +107,7 @@ impl TradeOptions<OptionsAssetsEth> for Options {
     //     todo!()
     // }
 
-    async fn trade(&self, _args: Self::TradeArgs) -> Self::TradeRes {
+    async fn trade(_ledger: OptionsAssetsEth,_args: Self::TradeArgs) -> Self::TradeRes {
         todo!()
     }
 

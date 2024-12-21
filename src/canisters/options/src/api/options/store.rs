@@ -1,5 +1,5 @@
 use candid::{Nat, Principal};
-use ic_utils::timestamp_to_date::convert_to_date;
+use ic_utils::time::convert_to_date;
 
 use crate::{
     api::{
@@ -16,7 +16,12 @@ use crate::{
 };
 
 impl Options {
-   pub(crate)  fn create_option_name(asset: OptionsAssets, asset_amount: Nat, contract_expiry: u64, options_type: OptionsType) -> String {
+    pub(crate) fn create_option_name(
+        asset: OptionsAssets,
+        asset_amount: Nat,
+        contract_expiry: u64,
+        options_type: OptionsType,
+    ) -> String {
         format!(
             "{}-{}-{}-{}",
             Into::<String>::into(asset.to_owned()),
@@ -37,11 +42,13 @@ impl Options {
         contract_expiry: u64,
         options_type: OptionsType,
         timestamp: u64,
+        strike_price: Nat,
         offer_duration: u64,
     ) {
         let option: Options = Options {
             seller,
             contract_state,
+            strike_price,
             asset: asset.to_owned(),
             asset_amount: asset_amount.to_owned(),
             contract_expiry,
@@ -62,6 +69,7 @@ impl Options {
     pub(super) fn update_options(
         id: OptionsId,
         Options {
+            strike_price,
             name,
             seller,
             contract_state,
@@ -85,6 +93,7 @@ impl Options {
             options_type,
             timestamp,
             offer_duration,
+            strike_price,
         };
 
         mutate_state(|s| s.stable_state.options.insert(id, option));
