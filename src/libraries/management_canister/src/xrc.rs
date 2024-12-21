@@ -11,19 +11,19 @@ mod candid_xrc {
     use candid::{self, CandidType, Decode, Deserialize, Encode, Principal};
     use ic_cdk::api::call::CallResult as Result;
 
-    #[derive(CandidType, Deserialize)]
+    #[derive(CandidType, Deserialize, Debug)]
     pub enum AssetClass {
         Cryptocurrency,
         FiatCurrency,
     }
 
-    #[derive(CandidType, Deserialize)]
+    #[derive(CandidType, Deserialize, Debug)]
     pub struct Asset {
         pub class: AssetClass,
         pub symbol: String,
     }
 
-    #[derive(CandidType, Deserialize)]
+    #[derive(CandidType, Deserialize, Debug)]
     pub struct GetExchangeRateRequest {
         pub timestamp: Option<u64>,
         pub quote_asset: Asset,
@@ -124,6 +124,9 @@ impl ManagementCanister {
                 symbol: base_asset,
             },
         };
+
+        ic_cdk::println!(" xrc_args {:?}", xrc_args);
+
         let (res,): (GetExchangeRateResult,) =
             call_with_payment(xrc_canister_id, "get_exchange_rate", (xrc_args,), xrc_canister_cycles_cost)
                 .await
@@ -135,6 +138,8 @@ impl ManagementCanister {
             // (GetExchangeRateResult::Ok(result),) => result,
             // (GetExchangeRateResult::Err(err),) => return Err(enum_exchange_rate_error(err)),
         };
+
+        ic_cdk::println!("rate {}", rate);
         Ok(rate)
     }
 }
