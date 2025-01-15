@@ -55,12 +55,16 @@ export const idlFactory = ({ IDL }) => {
   const OptionsActiveListKey = IDL.Record({
     'id' : IDL.Nat64,
     'options_asset' : OptionsAssetsByNames,
+    'strike_price' : IDL.Nat,
     'options_type' : OptionsType,
     'offer_duration' : IDL.Nat64,
+    'asset_amount' : IDL.Nat,
     'timestamp' : IDL.Nat64,
+    'contract_expiry' : IDL.Nat64,
   });
   const CanisterName = IDL.Variant({ 'ExchangeRate' : IDL.Null });
   const Result_3 = IDL.Variant({ 'Ok' : IDL.Nat64, 'Err' : IDL.Text });
+  const Result_4 = IDL.Variant({ 'Ok' : Options, 'Err' : IDL.Text });
   const TradedOptionsContractsKey = IDL.Record({
     'id' : IDL.Nat64,
     'principal' : IDL.Principal,
@@ -133,6 +137,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Principal],
         ['query'],
       ),
+    'get_option_by_id' : IDL.Func([IDL.Nat64], [Result_4], ['query']),
     'get_options_trade_history_by_principal' : IDL.Func(
         [OptionsContractState],
         [

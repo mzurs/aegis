@@ -35,9 +35,12 @@ export interface Options {
 export interface OptionsActiveListKey {
   'id' : bigint,
   'options_asset' : OptionsAssetsByNames,
+  'strike_price' : bigint,
   'options_type' : OptionsType,
   'offer_duration' : bigint,
+  'asset_amount' : bigint,
   'timestamp' : bigint,
+  'contract_expiry' : bigint,
 }
 export type OptionsAssets = { 'BTC' : null } |
   { 'ETH' : null } |
@@ -66,6 +69,8 @@ export type Result_1 = { 'Ok' : string } |
 export type Result_2 = { 'Ok' : null } |
   { 'Err' : string };
 export type Result_3 = { 'Ok' : bigint } |
+  { 'Err' : string };
+export type Result_4 = { 'Ok' : Options } |
   { 'Err' : string };
 export interface TradedOptionsContractsKey {
   'id' : bigint,
@@ -115,6 +120,7 @@ export interface _SERVICE {
   'get_canister_id' : ActorMethod<[CanisterName], Principal>,
   'get_exchange_rate' : ActorMethod<[OptionsAssets], Result_3>,
   'get_ledger_canister_id' : ActorMethod<[OptionsAssetsIcrc], Principal>,
+  'get_option_by_id' : ActorMethod<[bigint], Result_4>,
   'get_options_trade_history_by_principal' : ActorMethod<
     [OptionsContractState],
     Array<[TradedOptionsContractsKey, TradedOptionsContractsValue]>
