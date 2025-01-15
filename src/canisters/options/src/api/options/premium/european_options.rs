@@ -7,10 +7,7 @@ use ic_cdk::{
     },
     query,
 };
-use ic_utils::{
-    biguint_u128::{self},
-    time::remaining_time_in_years,
-};
+use ic_utils::time::remaining_time_in_years;
 use management_canister::ManagementCanister;
 
 use crate::api::{
@@ -49,10 +46,11 @@ impl Premium<EuropeanOptionsCalculatePremiumArgs, EuropeanOptionsCalculatePremiu
         let time_to_maturity_in_years = remaining_time_in_years(ic_cdk::api::time(), contract_expiry);
 
         let risk_free_interest_rate = 0.0;
-        let strike_price: f32 = match biguint_u128::biguint_to_u128_func(&strike_price.0.to_owned()) {
-            Ok(value) => value,
-            Err(error) => return Err(error.to_owned()),
-        } as f64 as f32;
+        let strike_price: f32 = strike_price as f32;
+        // match biguint_u128::biguint_to_u128_func(&strike_price.0.to_owned()) {
+        //     Ok(value) => value,
+        //     Err(error) => return Err(error.to_owned()),
+        // } as f64 as f32;
 
         // let option_type: OptionType = match option_type {
         //     crate::api::interfaces::options::OptionsType::PUT => OptionType::Put,
@@ -88,7 +86,15 @@ impl Premium<EuropeanOptionsCalculatePremiumArgs, EuropeanOptionsCalculatePremiu
         ic_cdk::println!("Premium without Condition {}", res);
 
         if res < 1.0 {
-            res = res + 1.0
+            ic_cdk::println!("Options Premium is too low!");
+
+            res = convert_xrc_non_human_to_human(Nat::from(current_price)) * 0.001
+        } else if res > convert_xrc_non_human_to_human(Nat::from(current_price)) {
+            ic_cdk::println!("Options Premium is too high!");
+
+            res = res * 0.010 as f64
+        } else {
+            ic_cdk::println!("Options Premium is neither too high nor too low!");
         }
 
         Ok(res)

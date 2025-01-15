@@ -87,3 +87,32 @@ impl Options {
         })
     }
 }
+
+#[cfg(test)]
+mod test {
+
+    use crate::{api::interfaces::state::State, init_state};
+
+    use super::*;
+
+    #[test]
+    fn add_trade_to_history() {
+        init_state(State::default());
+
+        let principal = Principal::from_text("up5qv-6itp6-z5fuj-kfq2a-qohj4-ckibb-lq6tt-34j2c-i2d27-3gqlm-pqe").unwrap();
+
+        Options::add_option_to_trade_history_by_principal(
+            principal,
+            Into::<String>::into(OptionsContractState::OFFER),
+            1 as u64,
+            1 as u64,
+            "ss".to_owned(),
+            Into::<String>::into(OptionsType::PUT),
+            2 as u64,
+        );
+
+        let list = Options::get_trade_history_of_options_contract_by_principal(principal, OptionsContractState::OFFER);
+
+        assert!(list.len() == 1);
+    }
+}

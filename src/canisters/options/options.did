@@ -31,9 +31,12 @@ type Options = record {
 type OptionsActiveListKey = record {
   id : nat64;
   options_asset : OptionsAssetsByNames;
+  strike_price : nat;
   options_type : OptionsType;
   offer_duration : nat64;
+  asset_amount : nat;
   timestamp : nat64;
+  contract_expiry : nat64;
 };
 type OptionsAssets = variant { BTC; ETH; ICRC : OptionsAssetsIcrc };
 type OptionsAssetsByNames = variant { BTC; ETH; ICP; USDT; CKBTC; CKETH };
@@ -44,6 +47,7 @@ type Result = variant { Ok : float64; Err : text };
 type Result_1 = variant { Ok : text; Err : text };
 type Result_2 = variant { Ok; Err : text };
 type Result_3 = variant { Ok : nat64; Err : text };
+type Result_4 = variant { Ok : Options; Err : text };
 type TradedOptionsContractsKey = record {
   id : nat64;
   "principal" : principal;
@@ -75,6 +79,7 @@ service : (record {}) -> {
   get_canister_id : (CanisterName) -> (principal) query;
   get_exchange_rate : (OptionsAssets) -> (Result_3);
   get_ledger_canister_id : (OptionsAssetsIcrc) -> (principal) query;
+  get_option_by_id : (nat64) -> (Result_4) query;
   get_options_trade_history_by_principal : (OptionsContractState) -> (
       vec record { TradedOptionsContractsKey; TradedOptionsContractsValue },
     ) query;

@@ -34,3 +34,8 @@ fn get_options_trade_history_by_principal(
 ) -> Vec<(TradedOptionsContractsKey, TradedOptionsContractsValue)> {
     Options::get_trade_history_of_options_contract_by_principal(ic_cdk::caller(), state)
 }
+
+#[query]
+fn get_option_by_id(option_id: u64) -> Result<Options, String> {
+    Options::get_options_by_id(option_id)
+}

@@ -108,6 +108,9 @@ impl Options {
         options_asset: OptionsAssetsByNames,
         timestamp: u64,
         offer_duration: u64,
+        strike_price: Nat,
+        contract_expiry: u64,
+        asset_amount: Nat,
     ) {
         let obj: OptionsActiveListKey = OptionsActiveListKey {
             id,
@@ -115,6 +118,9 @@ impl Options {
             options_asset: options_asset.into(),
             timestamp,
             offer_duration,
+            strike_price,
+            contract_expiry,
+            asset_amount,
         };
 
         mutate_state(|s| s.stable_state.options_active_list.insert(obj, ()));
@@ -242,6 +248,9 @@ impl Options {
             options_type,
             timestamp,
             offer_duration,
+            asset_amount,
+            contract_expiry,
+            strike_price,
             ..
         }: Options,
     ) {
@@ -252,7 +261,70 @@ impl Options {
                 timestamp,
                 id,
                 offer_duration,
+                asset_amount,
+                contract_expiry,
+                strike_price,
             })
         });
+    }
+}
+
+#[cfg(test)]
+mod test {
+
+    use crate::{api::interfaces::state::State, init_state};
+
+    use super::*;
+
+    #[test]
+    fn add_and_remove_active_list() {
+        init_state(State::default());
+
+        let principal: Principal =
+            Principal::from_text("fu727-7jdc5-rsfnw-jhdwu-n7ne3-4j4mc-7pvb4-bivf6-emr4q-q4svi-oqe").unwrap();
+        let id: u64 = 600;
+
+        let option: Options = Options {
+            name: "ABC".to_owned(),
+            seller: principal,
+            contract_state: OptionsContractState::OFFER,
+            asset: OptionsAssets::ETH,
+            asset_amount: Nat::from(100 as u64),
+            strike_price: Nat::from(600 as u32),
+            contract_expiry: 5_000_000,
+            buyer: Option::None,
+            options_type: OptionsType::CALL,
+            timestamp: 2_000_000 as u64,
+            offer_duration: 4_000_000 as u64,
+        };
+        Options::add_option_to_active_list(
+            id,
+            option.options_type.to_owned(),
+            option.asset.to_owned().into(),
+            option.timestamp,
+            option.offer_duration,
+            option.strike_price.to_owned(),
+            option.contract_expiry,
+            option.asset_amount.to_owned(),
+        );
+
+        assert!(
+            Options::get_all_active_options_by_options_type_and_asset(
+                option.options_type.to_owned(),
+                Into::<OptionsAssetsByNames>::into(option.asset.to_owned())
+            )
+            .len()
+                == 1
+        );
+        Options::remove_option_from_active_list(id, option.to_owned());
+
+        assert!(
+            Options::get_all_active_options_by_options_type_and_asset(
+                option.options_type.to_owned(),
+                Into::<OptionsAssetsByNames>::into(option.asset.to_owned())
+            )
+            .len()
+                == 0
+        );
     }
 }

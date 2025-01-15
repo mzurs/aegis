@@ -4,7 +4,7 @@ use ic_ledger_utils::{
     icrc::IcrcLedger,
     types::icrc_types::{IcrcFee, IcrcTransferFromResult, IcrcTransferResult},
 };
-use ic_utils::{biguint_f64::f64_to_biguint, convert_u64_to_subaccount, generate_random_number_u64};
+use ic_utils::{convert_u64_to_subaccount, generate_random_number_u64};
 use icrc_ledger_types::{
     icrc1::{account::Account, transfer::TransferArg},
     icrc2::transfer_from::TransferFromArgs,
@@ -91,35 +91,34 @@ impl TradeOptions<OptionsAssetsIcrc> for Options {
 
             amount: match args.options_type.to_owned() {
                 OptionsType::PUT => {
-                    let mgmt: ManagementCanister = ManagementCanister::new();
+                    // let mgmt: ManagementCanister = ManagementCanister::new();
 
-                    match mgmt
-                        .xrc(
-                            Into::<Ticker>::into(args.asset.to_owned()).0,
-                            get_canister_id(CanisterName::ExchangeRate),
-                        )
-                        .await
-                    {
-                        Ok(res) => {
-                            let price_f64: f64 = convert_xrc_non_human_to_human(Nat::from(res));
+                    // match mgmt
+                    //     .xrc(
+                    //         Into::<Ticker>::into(args.asset.to_owned()).0,
+                    //         get_canister_id(CanisterName::ExchangeRate),
+                    //     )
+                    //     .await
+                    // {
+                    // Ok(res) => {
+                    let price_f64: f64 = convert_xrc_non_human_to_human(args.strike_price.to_owned());
 
-                            let amount_f64: f64 =
-                                convert_asset_amount_to_human(OptionsAssets::ETH, args.asset_amount.to_owned()); //biguint_to_u128_func(&args.asset_amount.to_owned().0).unwrap() as f64;
+                    let amount_f64: f64 = convert_asset_amount_to_human(args.asset.to_owned(), args.asset_amount.to_owned()); //biguint_to_u128_func(&args.asset_amount.to_owned().0).unwrap() as f64;
 
-                            ic_cdk::println!("New Option Put price_f64  {}", price_f64.to_owned());
+                    ic_cdk::println!("New Option Put price_f64  {}", price_f64.to_owned());
 
-                            ic_cdk::println!("New Option Put Amount f64 {}", amount_f64.to_owned());
+                    ic_cdk::println!("New Option Put Amount f64 {}", amount_f64.to_owned());
 
-                            ic_cdk::println!("New Option Put Amount f64 x Price_f64 {}", amount_f64.to_owned() * price_f64);
+                    ic_cdk::println!("New Option Put Amount f64 x Price_f64 {}", amount_f64.to_owned() * price_f64);
 
-                            let amount: Nat = convert_asset_amount_to_non_human(OptionsAssets::ETH, amount_f64 * price_f64);
+                    let amount: Nat = convert_asset_amount_to_non_human(OptionsAssets::ETH, amount_f64 * price_f64);
 
-                            ic_cdk::println!("New Option Put Amount {}", amount.to_owned());
+                    ic_cdk::println!("New Option Put Amount {}", amount.to_owned());
 
-                            amount
-                        }
-                        Err(err) => return Err(err),
-                    }
+                    amount
+                    // }
+                    // Err(err) => return Err(err),
+                    // }
                 }
                 OptionsType::CALL => args.asset_amount.to_owned(),
             },
@@ -161,7 +160,7 @@ impl TradeOptions<OptionsAssetsIcrc> for Options {
             args.contract_expiry,
             args.options_type.clone(),
             timestamp,
-            args.strike_price,
+            args.strike_price.to_owned(),
             args.offer_duration,
         );
 
@@ -173,9 +172,13 @@ impl TradeOptions<OptionsAssetsIcrc> for Options {
             args.asset.clone().into(),
             timestamp,
             args.offer_duration,
+            args.strike_price,
+            args.contract_expiry,
+            args.asset_amount.to_owned(),
         );
 
         ic_cdk::println!("add_option_to_trade_history_by_principal");
+
         // Add option to user trade history
         Self::add_option_to_trade_history_by_principal(
             ic_cdk::caller(),
@@ -232,7 +235,7 @@ impl TradeOptions<OptionsAssetsIcrc> for Options {
 
         let premium_: f64 = EuropeanOptions::calculate_premium(EuropeanOptionsCalculatePremiumArgs {
             option_type: option.options_type.clone(),
-            strike_price: Nat::from(f64_to_biguint(convert_xrc_non_human_to_human(option.strike_price.clone())).unwrap()),
+            strike_price: convert_xrc_non_human_to_human(option.strike_price.clone()), //Nat::from(f64_to_biguint(convert_xrc_non_human_to_human(option.strike_price.clone())).unwrap()),
             contract_expiry: option.contract_expiry,
             asset: option.asset.clone(),
         })
@@ -340,11 +343,12 @@ impl TradeOptions<OptionsAssetsIcrc> for Options {
                 {
                     Err(err) => return Err(err),
                     _ => {
+                        Self::remove_option_from_active_list(id, option.to_owned());
+
                         option.contract_state = OptionsContractState::CLOSED;
 
                         Self::update_options(id, option.to_owned());
                         Self::remove_contract_offer_timestamps(id);
-
                         Self::update_option_trade_history_by_principal(
                             option.seller.to_owned(),
                             contract_state.to_owned().into(),
@@ -362,13 +366,6 @@ impl TradeOptions<OptionsAssetsIcrc> for Options {
         };
 
         ic_cdk::println!("Buyer Purchased the Option Contract");
-
-        // changing the option contract state
-        option.contract_state = OptionsContractState::EXECUTED;
-
-        // commiting the state changes
-
-        Self::update_options(id, option.to_owned());
 
         let (ledger_id, if_option_exercise_in_favor_of_buyer, amount): (OptionsAssetsIcrc, bool, Nat) = {
             let mgmt: ManagementCanister = ManagementCanister::new();
@@ -390,16 +387,17 @@ impl TradeOptions<OptionsAssetsIcrc> for Options {
                 option.strike_price.to_owned()
             );
 
-            match option.options_type {
+            match option.options_type.to_owned() {
                 OptionsType::PUT => {
-                    if (current_price) < option.strike_price {
+                    if (current_price) < option.strike_price.to_owned() {
                         let price_difference: f64 =
                             convert_xrc_non_human_to_human(option.strike_price.to_owned() - current_price.to_owned())
                                 / convert_xrc_non_human_to_human(option.strike_price.to_owned());
                         ic_cdk::println!("price_difference {}", price_difference);
 
-                        let amount: f64 = convert_asset_amount_to_human(OptionsAssets::ETH, option.asset_amount.to_owned())
-                            * price_difference;
+                        let amount: f64 =
+                            convert_asset_amount_to_human(option.asset.to_owned(), option.asset_amount.to_owned())
+                                * price_difference;
 
                         ic_cdk::println!("amount {}", amount);
 
@@ -413,9 +411,10 @@ impl TradeOptions<OptionsAssetsIcrc> for Options {
                     }
                 }
                 OptionsType::CALL => {
-                    if current_price > option.strike_price {
-                        let price_difference = convert_xrc_non_human_to_human(current_price.to_owned() - option.strike_price)
-                            / convert_xrc_non_human_to_human(current_price.to_owned());
+                    if current_price > option.strike_price.to_owned() {
+                        let price_difference =
+                            convert_xrc_non_human_to_human(current_price.to_owned() - option.strike_price.to_owned())
+                                / convert_xrc_non_human_to_human(current_price.to_owned());
                         ic_cdk::println!("price_difference {}", price_difference);
 
                         let amount: f64 =
@@ -436,9 +435,18 @@ impl TradeOptions<OptionsAssetsIcrc> for Options {
 
         if if_option_exercise_in_favor_of_buyer {
             ic_cdk::println!("Buyer won the option contract of Amount {}", amount);
-            match Self::transfer_from_contract(ledger_id.to_owned(), id, buyer, Some(amount.to_owned())).await {
+            match Self::transfer_from_contract(ledger_id.to_owned(), id, buyer.to_owned(), Some(amount.to_owned())).await {
                 Err(err) => return Err(err),
                 _ => {
+                    Self::remove_option_from_active_list(id, option.to_owned());
+
+                    // changing the option contract state
+                    option.contract_state = OptionsContractState::EXECUTED;
+
+                    // commiting the state changes
+
+                    Self::update_options(id, option.to_owned());
+
                     Self::update_option_trade_history_by_principal(
                         buyer,
                         contract_state.to_owned().into(),
@@ -458,6 +466,15 @@ impl TradeOptions<OptionsAssetsIcrc> for Options {
         match Self::transfer_from_contract(ledger_id, id, option.seller.to_owned(), None).await {
             Err(err) => return Err(err),
             _ => {
+                Self::remove_option_from_active_list(id, option.to_owned());
+
+                // changing the option contract state
+                option.contract_state = OptionsContractState::EXECUTED;
+
+                // commiting the state changes
+
+                Self::update_options(id, option.to_owned());
+
                 Self::update_option_trade_history_by_principal(
                     option.seller.to_owned(),
                     contract_state.to_owned().into(),
@@ -468,6 +485,22 @@ impl TradeOptions<OptionsAssetsIcrc> for Options {
                     option.name.to_owned(),
                     option.timestamp,
                 );
+
+                match option.buyer.to_owned() {
+                    None => (),
+                    Some(buyer) => {
+                        Self::update_option_trade_history_by_principal(
+                            buyer,
+                            contract_state.to_owned().into(),
+                            option.contract_state.to_owned().into(),
+                            option.timestamp,
+                            id,
+                            option.options_type.to_owned().into(),
+                            option.name.to_owned(),
+                            option.timestamp,
+                        );
+                    }
+                }
             }
         }
 
@@ -489,6 +522,11 @@ impl TradeOptions<OptionsAssetsIcrc> for Options {
             Ok(res) => res,
             Err(err) => return Err(err),
         };
+
+        //
+        // Remove Option from Active List
+        //
+        Self::remove_option_from_active_list(id, option.to_owned());
 
         //
         // check if buyer participated in an option contract
@@ -588,10 +626,14 @@ impl Options {
         let ledger_id: Principal = fetch_icrc_ledger_ids(ledger.to_owned());
 
         ic_cdk::println!("ledger_id {}", ledger_id.to_owned());
-        ic_cdk::println!("Ledger {:?}",ledger.to_owned());
-        ic_cdk::println!("Amount {}",amount.to_owned().unwrap());
-
-
+        ic_cdk::println!("Ledger {:?}", ledger.to_owned());
+        ic_cdk::println!(
+            "Amount {}",
+            match amount.to_owned() {
+                Some(res) => res,
+                None => Nat::from(0 as u64),
+            }
+        );
 
         let icrc: IcrcLedger = IcrcLedger::new(ledger_id);
 
@@ -611,6 +653,7 @@ impl Options {
                 }
             })
             .await;
+
         ic_cdk::println!("option contract balance {}", balance);
 
         if balance.clone()
@@ -633,9 +676,15 @@ impl Options {
                 },
 
                 amount: match amount {
-                    Some(amount) => amount,
-                    None => balance,
-                } - fee,
+                    Some(amount) => {
+                        if amount >= fee {
+                            amount - fee
+                        } else {
+                            amount
+                        }
+                    }
+                    None => balance - fee,
+                },
 
                 fee: Option::None,
 
@@ -688,5 +737,19 @@ impl Options {
                 return Err(err_str);
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    // use candid::Nat;
+
+    #[test]
+    fn subtract() {
+        // let amount = 111 as u64;
+        let fee = 10_000_000_000 as u64;
+        let balance = 3_000_000_000_000_000_000 as u64;
+
+        println!("Subtract, {}", fee - balance);
     }
 }

@@ -1,5 +1,4 @@
 // use blackscholes::OptionType;
-use candid::Nat;
 use serde::Deserialize;
 
 use super::{options::OptionsType, options_assets::OptionsAssets};
@@ -12,7 +11,7 @@ pub struct EuropeanOptions;
 
 pub struct EuropeanOptionsCalculatePremiumArgs {
     pub option_type: OptionsType,
-    pub strike_price: Nat,
+    pub strike_price: f64,
     pub contract_expiry: u64,
     pub asset: OptionsAssets,
 }

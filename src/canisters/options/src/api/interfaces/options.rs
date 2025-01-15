@@ -59,6 +59,9 @@ pub struct OptionsActiveListKey {
     pub timestamp: u64,
     pub id: OptionsId,
     pub offer_duration: u64,
+    pub strike_price: Nat,
+    pub contract_expiry: u64,
+    pub asset_amount: Nat,
 }
 
 /// Keys of Active Put Options contracts list by principal
