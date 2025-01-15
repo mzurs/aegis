@@ -193,8 +193,8 @@ CANDID
             decimals = opt 18;
             max_memo_length = opt 80;
             transfer_fee = 10_000_000_000 ;
-            token_symbol = "ckSepoliaETH";
-            token_name = "ckSepoliaETH";
+            token_symbol = "ckUSDT";
+            token_name = "ckUSDT";
             metadata = vec {};
             initial_balances = vec { };
             archive_options = record {
@@ -328,9 +328,9 @@ function topUp(){
     
     dfx canister call cketh_ledger icrc1_transfer  '(record {  to = record {owner=principal "akm3b-xt34z-vnaos-o667b-jrxjr-3a4ao-juwz5-7qdpz-hxnks-yfh2i-fae";}; amount= 1_000_000_000_000_000_000 })'
     
-    # dfx canister call ckusdt_ledger icrc1_transfer  '(record {  to = record {owner=principal "up5qv-6itp6-z5fuj-kfq2a-qohj4-ckibb-lq6tt-34j2c-i2d27-3gqlm-pqe";}; amount= 1_000_000_000_000_000_000 })'
+    dfx canister call ckusdt_ledger icrc1_transfer  '(record {  to = record {owner=principal "up5qv-6itp6-z5fuj-kfq2a-qohj4-ckibb-lq6tt-34j2c-i2d27-3gqlm-pqe";}; amount= 8_000_000_000_000_000_000 })'
     
-    # dfx canister call ckusdt_ledger icrc1_transfer  '(record {  to = record {owner=principal "akm3b-xt34z-vnaos-o667b-jrxjr-3a4ao-juwz5-7qdpz-hxnks-yfh2i-fae";}; amount= 1_000_000_000_000_000_000 })'
+    dfx canister call ckusdt_ledger icrc1_transfer  '(record {  to = record {owner=principal "akm3b-xt34z-vnaos-o667b-jrxjr-3a4ao-juwz5-7qdpz-hxnks-yfh2i-fae";}; amount= 4_000_000_000_000_000_000 })'
     
     
     

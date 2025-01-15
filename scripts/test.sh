@@ -54,7 +54,7 @@ if [[ $test_type == "unit" ]]; then
         echo "Running Options Integration Tests"
         
         jest --testPathPattern='tests/integration/options/1_options.spec.ts'
-        # 
+        
         jest --testPathPattern='tests/integration/options/2_options.spec.ts'
         
         jest --testPathPattern='tests/integration/options/3_options.spec.ts'
