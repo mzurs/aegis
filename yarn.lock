@@ -352,10 +352,10 @@
   resolved "https://registry.npmjs.org/@dfinity/utils/-/utils-2.1.3.tgz"
   integrity sha512-czFTjrohgDY+vNi0MidYYbYvHzU0ukgWNRXcBDxXMS5vAe0KU+PuFkkt2EQ5w1nczmHxzjZ2A6TqTUU4aILi+A==
 
-"@hadronous/pic@^0.8.1":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/@hadronous/pic/-/pic-0.8.1.tgz#a0663998391b366b9769eb0633237caf20088998"
-  integrity sha512-f7udej5rsmiqQ4Yq8P8+mOqOQe5boVk8UhYAyZcRHvcxChC9x2jKeEYjdM3+w2vmbmCp9a/Ze/iHxFbIK8Jvrw==
+"@hadronous/pic@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@hadronous/pic/-/pic-0.10.0.tgz#d8aa2d003b4e0cd0d0254ba3084afc4a534782ac"
+  integrity sha512-e78avvyRhdly67f+zj+tnlcB5+NDwpT4MR7lWFvPqTNixzVapLWdtCSfrxc8//CDI3njN+W1BjRWi9s74tK/VQ==
   dependencies:
     bip39 "^3.1.0"
 

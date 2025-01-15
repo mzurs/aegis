@@ -12,7 +12,8 @@ use super::{
         IcrcUnStakeTimeStampKey, IcrcUnStakeTimeStampValue,
     },
     lifecycle::InitArgs,
-    metrics::MetricsType, stake::{StakeExecutionLogsKeys, StakeExecutionLogsValue, StakeType},
+    metrics::MetricsType,
+    stake::{StakeExecutionLogsKeys, StakeExecutionLogsValue, StakeType},
 };
 
 /// Init Type of Main Canister
@@ -30,8 +31,7 @@ pub type IcrcUnStakeTimeStampType = StableBTreeMap<IcrcUnStakeTimeStampKey, Icrc
 /// icrc Tokens TVL metrics
 pub type IcrcTotalValueLockedType = StableBTreeMap<IcrcAsset, IcrcAssetValue, Memory>;
 
-pub type StakeExecutionLogs = StableBTreeMap<StakeExecutionLogsKeys,StakeExecutionLogsValue, Memory>;
-
+pub type StakeExecutionLogs = StableBTreeMap<StakeExecutionLogsKeys, StakeExecutionLogsValue, Memory>;
 
 #[derive(Serialize, Deserialize)]
 pub struct State {
@@ -43,7 +43,7 @@ pub struct State {
 pub struct StableStates {
     pub init: InitType,
     pub icrc: IcrcStakeStableStateType,
-    pub stake:StakeType,
+    pub stake: StakeType,
     pub metrics: MetricsType,
 }
 

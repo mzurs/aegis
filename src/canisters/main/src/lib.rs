@@ -21,5 +21,4 @@ use canister_state_macro::canister_state;
 
 canister_state!(State);
 
-// type  a=ExecuteUnstakeAmountRes;
 export_candid!();

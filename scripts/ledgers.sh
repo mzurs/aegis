@@ -20,9 +20,15 @@ function fetch_ledgers() {
     curl -o cketh_ledger.wasm.gz "https://download.dfinity.systems/ic/$IC_VERSION/canisters/ic-icrc1-ledger.wasm.gz"
     curl -o cketh_ledger.did "https://raw.githubusercontent.com/dfinity/ic/$IC_VERSION/rs/rosetta-api/icrc1/ledger/ledger.did"
 
+
+    echo -e "\nFetching ckUSDT ledger wasm..."
+    curl -o ckusdt_ledger.wasm.gz "https://download.dfinity.systems/ic/$IC_VERSION/canisters/ic-icrc1-ledger.wasm.gz"
+    curl -o ckusdt_ledger.did "https://raw.githubusercontent.com/dfinity/ic/$IC_VERSION/rs/rosetta-api/icrc1/ledger/ledger.did"
+
     gunzip icp_ledger.wasm.gz
     gunzip ckbtc_ledger.wasm.gz
     gunzip cketh_ledger.wasm.gz
+    gunzip ckusdt_ledger.wasm.gz
 
     cd ../..
 

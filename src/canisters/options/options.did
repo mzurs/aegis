@@ -1,0 +1,94 @@
+type CanisterName = variant { ExchangeRate };
+type CreateOptionArgs = record {
+  asset : OptionsAssets;
+  strike_price : nat;
+  options_type : OptionsType;
+  contract_state : OptionsContractState;
+  offer_duration : nat64;
+  asset_amount : nat;
+  use_exchange_account : bool;
+  contract_expiry : nat64;
+};
+type HttpHeader = record { value : text; name : text };
+type HttpResponse = record {
+  status : nat;
+  body : blob;
+  headers : vec HttpHeader;
+};
+type Options = record {
+  asset : OptionsAssets;
+  strike_price : nat;
+  options_type : OptionsType;
+  contract_state : OptionsContractState;
+  offer_duration : nat64;
+  name : text;
+  seller : principal;
+  asset_amount : nat;
+  timestamp : nat64;
+  contract_expiry : nat64;
+  buyer : opt principal;
+};
+type OptionsActiveListKey = record {
+  id : nat64;
+  options_asset : OptionsAssetsByNames;
+  strike_price : nat;
+  options_type : OptionsType;
+  offer_duration : nat64;
+  asset_amount : nat;
+  timestamp : nat64;
+  contract_expiry : nat64;
+};
+type OptionsAssets = variant { BTC; ETH; ICRC : OptionsAssetsIcrc };
+type OptionsAssetsByNames = variant { BTC; ETH; ICP; USDT; CKBTC; CKETH };
+type OptionsAssetsIcrc = variant { ICP; CKUSDT; CKBTC; CKETH };
+type OptionsContractState = variant { EXECUTED; OPEN; EXPIRED; OFFER; CLOSED };
+type OptionsType = variant { PUT; CALL };
+type Result = variant { Ok : float64; Err : text };
+type Result_1 = variant { Ok : text; Err : text };
+type Result_2 = variant { Ok; Err : text };
+type Result_3 = variant { Ok : nat64; Err : text };
+type Result_4 = variant { Ok : Options; Err : text };
+type TradedOptionsContractsKey = record {
+  id : nat64;
+  "principal" : principal;
+  contract_state : text;
+  timestamp : nat64;
+};
+type TradedOptionsContractsValue = record {
+  trade_timestamp : nat64;
+  options_name : text;
+  options_type : text;
+};
+type TransformArgs = record { context : blob; response : HttpResponse };
+service : (record {}) -> {
+  calculate_premium : (nat, OptionsType, nat64, OptionsAssets) -> (Result);
+  convert_asset_amount_to_human : (OptionsAssets, nat) -> (float64) query;
+  convert_asset_amount_to_non_human : (OptionsAssets, float64) -> (nat) query;
+  convert_premium_amount_to_non_humans : (OptionsAssets, float64) -> (
+      nat,
+    ) query;
+  convert_xrc_human_to_non_humans : (float64) -> (nat) query;
+  convert_xrc_non_human_to_human : (nat) -> (float64) query;
+  create_icrc_options : (OptionsAssetsIcrc, CreateOptionArgs) -> (Result_1);
+  execute_manual : (OptionsAssetsIcrc, nat64) -> (Result_2);
+  get_all_options : () -> (vec Options) query;
+  get_all_options_ids : () -> (vec nat64) query;
+  get_call_options_by_asset : (OptionsAssetsByNames) -> (
+      vec record { OptionsActiveListKey; null },
+    ) query;
+  get_canister_id : (CanisterName) -> (principal) query;
+  get_exchange_rate : (OptionsAssets) -> (Result_3);
+  get_ledger_canister_id : (OptionsAssetsIcrc) -> (principal) query;
+  get_option_by_id : (nat64) -> (Result_4) query;
+  get_options_trade_history_by_principal : (OptionsContractState) -> (
+      vec record { TradedOptionsContractsKey; TradedOptionsContractsValue },
+    ) query;
+  get_put_options_by_asset : (OptionsAssetsByNames) -> (
+      vec record { OptionsActiveListKey; null },
+    ) query;
+  remaining_time_in_years : (nat64) -> (float32) query;
+  set_canister_id : (CanisterName, principal) -> ();
+  set_ledger_canister_id : (OptionsAssetsIcrc, principal) -> ();
+  trade_icrc_options : (OptionsAssetsIcrc, nat64) -> (Result_1);
+  transform_fred : (TransformArgs) -> (HttpResponse) query;
+}

@@ -2,8 +2,10 @@ import { execSync } from "child_process";
 import { CANISTER_IDS_MAP_NO_PIC, CANISTERS_NAME_NO_PIC } from "./constants";
 import {
   _INSURANCE,
+  idlFactoryCkethLedger,
   idlFactoryIcpLedger,
   idlFactoryInsurance,
+  idlFactoryOptions,
   SERVICES,
 } from "../exports";
 import { Actor, ActorSubclass, HttpAgent, Identity } from "@dfinity/agent";
@@ -40,6 +42,15 @@ export async function delete_canisters(args: CANISTERS_NAME_NO_PIC[]) {
 }
 
 export async function delete_all_canisters() {
+  // console.log("Deleting all canisters");
+  // execSync(`dfx  stop || true`, {
+  //   stdio: "inherit",
+  // });
+
+  // execSync(`dfx start --clean --artificial-delay 0 || true`, {
+  //   stdio: "inherit",
+  // });
+  
   execSync(`yarn uninstall:all || true`, {
     stdio: "inherit",
   });
@@ -71,6 +82,26 @@ export function createCanisterActor(
 
     case CANISTERS_NAME_NO_PIC.ICP_LEDGER:
       return Actor.createActor(idlFactoryIcpLedger, {
+        agent,
+        canisterId,
+      });
+    case CANISTERS_NAME_NO_PIC.CKBTC_LEDGER:
+      return Actor.createActor(idlFactoryCkethLedger, {
+        agent,
+        canisterId,
+      });
+    case CANISTERS_NAME_NO_PIC.CKETH_LEDGER:
+      return Actor.createActor(idlFactoryCkethLedger, {
+        agent,
+        canisterId,
+      });
+    case CANISTERS_NAME_NO_PIC.CKUSDT_LEDGER:
+      return Actor.createActor(idlFactoryCkethLedger, {
+        agent,
+        canisterId,
+      });
+    case CANISTERS_NAME_NO_PIC.OPTIONS:
+      return Actor.createActor(idlFactoryOptions, {
         agent,
         canisterId,
       });

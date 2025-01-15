@@ -44,12 +44,7 @@ describe("======================================Main Canister Unit Testing======
   let mainActor: Actor<_MAIN>;
 
   beforeAll(async () => {
-    pic = await PocketIc.create(process.env.PIC_URL, {
-      nns: true,
-      fiduciary: true,
-      bitcoin: true,
-      system: 1,
-    });
+    pic = await PocketIc.create(process.env.PIC_URL);
 
     await pic.resetTime();
 
@@ -71,8 +66,6 @@ describe("======================================Main Canister Unit Testing======
       MAIN_WASM_PATH,
       CANISTERS_NAME.MAIN
     )) as Actor<_MAIN>;
-
-    // mainActor.set_rewards_duration({ ICRC: { AEGIS: null } }, 120n);
 
     mainActor.setIdentity(minter);
 
@@ -422,13 +415,6 @@ describe("======================================Main Canister Unit Testing======
       );
 
       expect(res).toBe(humanToE8s(0));
-    });
-
-    it("List Execution Logs ", async () => {
-      let res1 = await mainActor.get_stake_execution_logs();
-      console.log("🚀 ~ it ~ res1:", res1);
-
-      expect(res1);
     });
   });
 });

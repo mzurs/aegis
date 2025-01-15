@@ -1,4 +1,7 @@
 pub mod principal_conversion;
+pub mod time;
+pub mod biguint_f64;
+pub mod biguint_u128;
 
 use byteorder::{BigEndian, ByteOrder};
 use candid::Principal;
@@ -51,6 +54,7 @@ pub async fn generate_random_number_u32() -> Result<u32, String> {
 
     Ok(random_number)
 }
+
 pub fn convert_u64_to_subaccount(num: u64) -> [u8; 32] {
     let mut network_bytes: [u8; 32] = [0; 32];
     network_bytes[..8].copy_from_slice(&num.to_ne_bytes());

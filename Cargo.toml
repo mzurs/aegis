@@ -3,6 +3,7 @@ members = [
     "src/canisters/accounts",
     "src/canisters/insurance",
     "src/canisters/main",
+    "src/canisters/options",
     "src/libraries/canister_state_macro",
     "src/libraries/serializer",
     "src/libraries/*",
@@ -11,15 +12,13 @@ members = [
 
 resolver = "2"
 
-[workspace.lints.rust]
-unused = "allow"
 
 [workspace.dependencies]
-candid = "0.10"
-ic-cdk = "0.15.0"
-ic-cdk-timers = "0.9.0"
+candid = "0.10.10"
+ic-cdk = "0.16.0"
+ic-cdk-timers = "0.10.0"
 serde = { version = "1.0.193", features = ["derive"] }
-ic-stable-structures = "0.6.4"
+ic-stable-structures = "0.6.5"
 byteorder = "1.5.0"
 icrc-ledger-types = "0.1.5"
 serde_bytes = "0.11.14"
@@ -33,8 +32,15 @@ stable_memory = { path = "src/libraries/stable_memory" }
 minter_utils = { path = "src/libraries/minter_utils" }
 ic_ledger_utils = { path = "src/libraries/ic_ledger_utils" }
 ic_utils = { path = "src/libraries/ic_utils" }
+management_canister = { path = "src/libraries/management_canister" }
 serde_json = "1.0.117"
 num-bigint = "0.4.6"
+time = "0.3.36"
+ethers-core = "2.0.14"
+blackscholes={path = "src/libraries/blackscholes-rust"}
+
+
+
 
 [profile.release]
 lto = true

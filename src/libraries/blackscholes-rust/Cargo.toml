@@ -1,0 +1,48 @@
+[package]
+name = "blackscholes"
+version = "0.24.0"
+edition = "2021"
+license = "MIT"
+description = "Black-Scholes option pricing model calculator"
+repository = "https://github.com/hayden4r4/blackscholes-rust"
+documentation = "https://docs.rs/blackscholes"
+readme = "README.md"
+authors = ["Hayden Rose"]
+keywords = ["finance", "option", "pricing", "blackscholes", "option-pricing"]
+
+[profile.release]
+codegen-units = 1
+lto = "fat"
+
+[dev-dependencies]
+approx = "0.5.1"
+assert_approx_eq = "1.1.0"
+criterion = "0.5.1"
+proptest = "1.5.0"
+rand = { version = "0.8.5", default-features = false }
+
+[dependencies]
+num-traits = "0.2.19"
+statrs = "0.17.1"
+
+# [target.wasm32-unknown-unknown.dependencies]
+# getrandom = { version = "0.2", features = ["js"] }
+
+
+#[[bench]]
+#name = "black"
+#harness = false
+
+# Benchmarks
+[[bench]]
+name = "pricing"
+harness = false
+
+[[bench]]
+name = "implied_volatility"
+harness = false
+
+# enable this to run additional benches
+# [[bench]]
+# name = "additional_benches_to_verify"
+# harness = false

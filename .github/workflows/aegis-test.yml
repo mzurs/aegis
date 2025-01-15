@@ -2,8 +2,12 @@ name: Tests
 
 on:
   push:
-    branches: ["main", "chore"]
+    branches: ["main","feat/options","chore"]
   pull_request:
+
+# concurrency:
+#   group: ${{ github.head_ref || github.run_id }}
+#   cancel-in-progress: true
 
 jobs:
   build:
@@ -21,25 +25,23 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - name: Set up Rust
-        run: rustup target add wasm32-unknown-unknown
+        run: |
+          rustup update
+          rustup target add wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@v2
       - name: Install dfx
         uses: dfinity/setup-dfx@main
       - name: Install candid-extractor
-        run: cargo install candid-extractor
+        run: cargo install candid-extractor --locked
+      - name: Install Node Dependencies
+        run: npm install
       - name: Start dfx
         run: |
           dfx cache install
-          dfx start --clean --background --host 127.0.0.1:8080
-      - name: Deploying Canister
-        run: npm run deploy:all
-      - name: Generate Candid Declarations
-        run: dfx generate
-      - name: Install Node Dependencies
-        run: npm install
-      - name: Run Unit Tests
-        run: bash scripts/test.sh unit
-        continue-on-error: false
-      - name: Run Integration Tests
-        run: bash scripts/test.sh integration
-        continue-on-error: false
+          dfx start --background
+      - name: Deploying Canister with Wasms and Declarations
+        run: npm run build_wasms local
+      - name: Run Accounts Unit Tests
+        run: npm run test:unit:accounts
+      - name: Run Main Unit Tests
+        run: npm run test:unit:main

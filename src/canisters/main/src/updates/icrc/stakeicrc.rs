@@ -3,7 +3,9 @@ use ic_cdk::update;
 use crate::{
     api::interfaces::{
         constants::IcrcAsset,
-        icrc_stake::{ExecuteUnstakeAmountRes, StakeIcrc, StakeIcrcArgs, StakeIcrcInitArgs, StakeIcrcRes, UnStakeIcrcArgs, UnStakeIcrcRes},
+        icrc_stake::{
+            ExecuteUnstakeAmountRes, StakeIcrc, StakeIcrcArgs, StakeIcrcInitArgs, StakeIcrcRes, UnStakeIcrcArgs, UnStakeIcrcRes,
+        },
         stake::Stake,
     },
     guard::restrict_anonymous_identity,

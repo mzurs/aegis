@@ -8,6 +8,12 @@ export async function mintTokens(
   amount: bigint,
   subaccount?: Uint8Array
 ) {
+  console.log(
+    `Minting ${amount} amount of ${args.toString()} to Principal ${to} with Ledger ID ${CANISTER_IDS_MAP_NO_PIC.get(
+      args
+    )} `
+  );
+
   execSync(`   dfx identity use minter  `, {
     stdio: "inherit",
   });

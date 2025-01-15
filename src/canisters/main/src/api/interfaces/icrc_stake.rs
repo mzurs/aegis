@@ -18,7 +18,7 @@ pub struct IcrcStakeKey {
 pub struct IcrcStakeValue {
     pub amount: Nat,
     pub remaining_time_unstake: u64,
-    pub stake_recent_timestamp:u64
+    pub stake_recent_timestamp: u64,
 }
 
 #[derive(Debug, PartialEq, PartialOrd, Clone, Ord, Eq, Deserialize, CandidType)]
