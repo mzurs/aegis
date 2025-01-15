@@ -1,37 +1,23 @@
-import { ActorSubclass, Identity } from "@dfinity/agent";
+import { Identity } from "@dfinity/agent";
 import { createIdentityFromSeed } from "../../utils/configs";
+import { buyInsuranceContract } from "../../utils/methods/insurance/buy_insurance";
+import { createInsuranceContract } from "../../utils/methods/insurance/create_insurance";
+import { sellInsuranceContract } from "../../utils/methods/insurance/sell_insurance_contract";
+import { set_ledger_ids } from "../../utils/methods/insurance/set_ledger_ids";
+import { approveTokens } from "../../utils/methods/ledgers/approve";
+import { CANISTERS_NAME_NO_PIC } from "../../utils/non-pic/constants";
+import { mintTokens } from "../../utils/non-pic/mint_to_account";
 import {
-  _CKBTC_LEDGER,
-  _CKBTC_MINTER,
-  _CKETH_LEDGER,
-  _ICP_LEDGER,
-  _INSURANCE,
-} from "../../utils/exports";
-import {
-  CANISTER_IDS_MAP_NO_PIC,
-  CANISTERS_NAME_NO_PIC,
-} from "../../utils/non-pic/constants";
-import {
-  createCanisterActor,
   delete_all_canisters,
   install_all_canisters,
 } from "../../utils/non-pic/setup-canister";
-import { createInsuranceContract } from "../../utils/methods/insurance/create_insurance";
-import { set_ledger_ids } from "../../utils/methods/insurance/set_ledger_ids";
-import { mintTokens } from "../../utils/non-pic/mint_to_account";
-import { getFormattedTime } from "../../utils/helpers";
-import { sellInsuranceContract } from "../../utils/methods/insurance/sell_insurance_contract";
-import { approveTokens } from "../../utils/methods/ledgers/approve";
-import { error } from "console";
-import { buyInsuranceContract } from "../../utils/methods/insurance/buy_insurance";
-import { currentTimePlusExtraMinutesInNanoseconds } from "../../utils/non-pic/utils";
 
 describe("\n================================= Insurance Canister Integration Testing =================================\n", () => {
   let minter: Identity;
   let user: Identity;
   let buyer: Identity;
   let seller: Identity;
- 
+
   beforeAll(async () => {
     // await delete_all_canisters();
     await install_all_canisters();

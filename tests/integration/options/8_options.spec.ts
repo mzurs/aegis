@@ -1,8 +1,11 @@
 import { ActorSubclass } from "@dfinity/agent";
 import { parseEther } from "ethers";
 import { createIdentityFromSeed, wait } from "../../utils/configs";
+import { BASE_OF_XRC } from "../../utils/constants";
 import { _OPTIONS } from "../../utils/exports";
+import { humanToE8s } from "../../utils/helpers";
 import { approveTokens } from "../../utils/methods/ledgers/approve";
+import { balance } from "../../utils/methods/ledgers/balance";
 import {
   CANISTERS_NAME_NO_PIC,
   CANISTER_IDS_MAP_NO_PIC,
@@ -13,9 +16,6 @@ import {
   delete_all_canisters,
   install_all_canisters,
 } from "../../utils/non-pic/setup-canister";
-import { balance } from "../../utils/methods/ledgers/balance";
-import { BASE_OF_XRC } from "../../utils/constants";
-import { humanToE8s } from "../../utils/helpers";
 
 describe("Options Canister Integration Testing", () => {
   let user1 = createIdentityFromSeed(
@@ -186,7 +186,7 @@ describe("Options Canister Integration Testing", () => {
         console.log("No number found in the string.");
       }
     });
-    it("Create CALL Option Contract of 0.00001 CkETH and 0.00002 CKBTC from user1 ", async () => {
+    it("Create CALL Option Contract of 0.00001 CkETH from user2 ", async () => {
       let actor2 = createCanisterActor(
         CANISTERS_NAME_NO_PIC.OPTIONS,
         user2
@@ -315,7 +315,7 @@ describe("Options Canister Integration Testing", () => {
       });
     });
 
-    it("Trade History of User 1, 2 and 3 should be in correct  contract state", async () => {
+    describe("Trade History of User 1, 2 and 3 should be in correct  contract state", () => {
       let actor1 = createCanisterActor(
         CANISTERS_NAME_NO_PIC.OPTIONS,
         user1
@@ -328,78 +328,87 @@ describe("Options Canister Integration Testing", () => {
         CANISTERS_NAME_NO_PIC.OPTIONS,
         user3
       ) as unknown as ActorSubclass<_OPTIONS>;
+      test("Actor 1 OPEN trade history length is 1", async () => {
+        const result = (
+          await actor1.get_options_trade_history_by_principal({ OPEN: null })
+        ).length;
+        expect(result).toBe(1);
+      });
 
-      // expect(
-      //   (await actor1.get_options_trade_history_by_principal({ OPEN: null }))
-      //     .length
-      // ).toBe(1);
+      test("Actor 2 OPEN trade history length is 1", async () => {
+        const result = (
+          await actor2.get_options_trade_history_by_principal({ OPEN: null })
+        ).length;
+        expect(result).toBe(1);
+      });
 
-      // expect(
-      //   (await actor2.get_options_trade_history_by_principal({ OPEN: null }))
-      //     .length
-      // ).toBe(1);
+      test("Actor 3 OFFER trade history length is 2", async () => {
+        const result = (
+          await actor3.get_options_trade_history_by_principal({ OFFER: null })
+        ).length;
+        expect(result).toBe(2);
+      });
 
-      //     expect(
-      //       (await actor3.get_options_trade_history_by_principal({ OFFER: null }))
-      //         .length
-      //     ).toBe(2);
+      test("Actor 1 OFFER trade history length is 2", async () => {
+        const result = (
+          await actor1.get_options_trade_history_by_principal({ OFFER: null })
+        ).length;
+        expect(result).toBe(2);
+      });
 
-      //     expect(
-      //       (await actor1.get_options_trade_history_by_principal({ OFFER: null }))
-      //         .length
-      //     ).toBe(2);
+      test("After waiting, Actor 1 OPEN trade history length is 0", async () => {
+        await wait(1.3);
+        const result = (
+          await actor1.get_options_trade_history_by_principal({ OPEN: null })
+        ).length;
+        expect(result).toBe(0);
+      }, 120000);
 
-      //     await wait(1.3);
+      test("After waiting, Actor 2 OPEN trade history length is 0", async () => {
+        const result = (
+          await actor2.get_options_trade_history_by_principal({ OPEN: null })
+        ).length;
+        expect(result).toBe(0);
+      });
 
-      //     expect(
-      //       (await actor1.get_options_trade_history_by_principal({ OPEN: null }))
-      //         .length
-      //     ).toBe(0);
-      //     expect(
-      //       (await actor2.get_options_trade_history_by_principal({ OPEN: null }))
-      //         .length
-      //     ).toBe(0);
-      //     expect(
-      //       (await actor3.get_options_trade_history_by_principal({ OPEN: null }))
-      //         .length
-      //     ).toBe(0);
+      test("After waiting, Actor 3 CLOSED trade history length is 0", async () => {
+        const result = (
+          await actor3.get_options_trade_history_by_principal({ CLOSED: null })
+        ).length;
+        expect(result).toBe(2);
+      });
 
-      //     expect(
-      //       (
-      //         await actor1.get_options_trade_history_by_principal({
-      //           EXECUTED: null,
-      //         })
-      //       ).length
-      //     ).toBe(1);
-      //     expect(
-      //       (
-      //         await actor2.get_options_trade_history_by_principal({
-      //           EXECUTED: null,
-      //         })
-      //       ).length
-      //     ).toBe(1);
+      test("Actor 1 EXECUTED trade history length is 1", async () => {
+        const result = (
+          await actor1.get_options_trade_history_by_principal({
+            EXECUTED: null,
+          })
+        ).length;
+        expect(result).toBe(1);
+      });
 
-      //     expect(
-      //       (
-      //         await actor1.get_options_trade_history_by_principal({
-      //           CLOSED: null,
-      //         })
-      //       ).length
-      //     ).toBe(2);
-      //     expect(
-      //       (
-      //         await actor2.get_options_trade_history_by_principal({
-      //           CLOSED: null,
-      //         })
-      //       ).length
-      //     ).toBe(0);
-      //     expect(
-      //       (
-      //         await actor3.get_options_trade_history_by_principal({
-      //           CLOSED: null,
-      //         })
-      //       ).length
-      //     ).toBe(2);
+      test("Actor 2 EXECUTED trade history length is 1", async () => {
+        const result = (
+          await actor2.get_options_trade_history_by_principal({
+            EXECUTED: null,
+          })
+        ).length;
+        expect(result).toBe(1);
+      });
+
+      test("Actor 1 CLOSED trade history length is 2", async () => {
+        const result = (
+          await actor1.get_options_trade_history_by_principal({ CLOSED: null })
+        ).length;
+        expect(result).toBe(2);
+      });
+
+      test("Actor 2 CLOSED trade history length is 1", async () => {
+        const result = (
+          await actor2.get_options_trade_history_by_principal({ CLOSED: null })
+        ).length;
+        expect(result).toBe(1);
+      });
     });
   });
 });

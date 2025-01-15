@@ -42,16 +42,18 @@ export async function delete_canisters(args: CANISTERS_NAME_NO_PIC[]) {
 }
 
 export async function delete_all_canisters() {
-  console.log("Deleting all canisters");
-  execSync(`dfx  stop || true`, {
-    stdio: "inherit",
-  });
-  execSync(`dfx start --clean --artificial-delay 0 || true`, {
-    stdio: "inherit",
-  });
-  // execSync(`yarn uninstall:all || true`, {
+  // console.log("Deleting all canisters");
+  // execSync(`dfx  stop || true`, {
   //   stdio: "inherit",
   // });
+
+  // execSync(`dfx start --clean --artificial-delay 0 || true`, {
+  //   stdio: "inherit",
+  // });
+  
+  execSync(`yarn uninstall:all || true`, {
+    stdio: "inherit",
+  });
 }
 
 /// Create Actor with an option to Actor with Identity

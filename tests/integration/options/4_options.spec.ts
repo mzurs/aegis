@@ -8,7 +8,7 @@ import {
   CANISTER_IDS_MAP_NO_PIC,
 } from "../../utils/non-pic/constants";
 import { mintTokens } from "../../utils/non-pic/mint_to_account";
-import { createCanisterActor } from "../../utils/non-pic/setup-canister";
+import { createCanisterActor, delete_all_canisters, install_all_canisters } from "../../utils/non-pic/setup-canister";
 import { balance } from "../../utils/methods/ledgers/balance";
 import { BASE_OF_XRC } from "../../utils/constants";
 
@@ -21,7 +21,7 @@ describe("Options Canister Integration Testing", () => {
   );
 
   beforeAll(async () => {
-    // await install_all_canisters();
+    await install_all_canisters();
 
     await mintTokens(
       CANISTERS_NAME_NO_PIC.CKETH_LEDGER,
@@ -85,7 +85,7 @@ describe("Options Canister Integration Testing", () => {
   });
 
   afterAll(async () => {
-    // await delete_all_canisters();
+    await delete_all_canisters();
   });
 
   describe("Options Main Methods 3", () => {

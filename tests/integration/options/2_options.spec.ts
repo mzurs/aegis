@@ -1,22 +1,19 @@
 import { ActorSubclass, Identity } from "@dfinity/agent";
+import { parseEther } from "ethers";
+import { CreateOptionArgs } from "../../../declarations/options/options.did";
 import { createIdentityFromSeed } from "../../utils/configs";
 import {
-  _OPTIONS,
-  _CKBTC_LEDGER,
-  _CKETH_LEDGER,
-  _XRC,
+  _OPTIONS
 } from "../../utils/exports";
-import { createCanisterActor } from "../../utils/non-pic/setup-canister";
+import { humanToE8s } from "../../utils/helpers";
+import { approveTokens } from "../../utils/methods/ledgers/approve";
+import { balance } from "../../utils/methods/ledgers/balance";
 import {
   CANISTER_IDS_MAP_NO_PIC,
   CANISTERS_NAME_NO_PIC,
 } from "../../utils/non-pic/constants";
-import { CreateOptionArgs } from "../../../declarations/options/options.did";
-import { humanToE8s } from "../../utils/helpers";
 import { mintTokens } from "../../utils/non-pic/mint_to_account";
-import { approveTokens } from "../../utils/methods/ledgers/approve";
-import { balance } from "../../utils/methods/ledgers/balance";
-import { parseEther } from "ethers";
+import { createCanisterActor, delete_all_canisters, install_all_canisters } from "../../utils/non-pic/setup-canister";
 
 describe("Options Canister Integration Testing", () => {
   let user: Identity;
@@ -26,7 +23,7 @@ describe("Options Canister Integration Testing", () => {
   );
 
   beforeAll(async () => {
-    // await install_all_canisters();
+    await install_all_canisters();
 
     await mintTokens(
       CANISTERS_NAME_NO_PIC.CKBTC_LEDGER,
@@ -54,10 +51,10 @@ describe("Options Canister Integration Testing", () => {
     console.log(": ----------");
     console.log(": bal", bal);
     console.log(": ----------");
-  });
+  },60000);
 
   afterAll(async () => {
-    // await delete_all_canisters();
+    await delete_all_canisters();
   });
 
   describe("Options Main Methods 1", () => {
