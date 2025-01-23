@@ -79,4 +79,3 @@ impl Storable for TradedOptionsContractsValue {
 
     const BOUND: Bound = Bound::Unbounded;
 }
-

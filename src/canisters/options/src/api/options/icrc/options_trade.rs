@@ -136,7 +136,7 @@ impl TradeOptions<OptionsAssetsIcrc> for Options {
                 clear_timer(execute_contract_timer_id);
                 clear_timer(execute_offer_timer_id);
 
-                return Err(transfer_from_error.to_string());
+                return Err(format!("Transfer Error: {:?}", transfer_from_error));
             }
             IcrcTransferFromResult::TransferFromErrorString(err_str) => {
                 clear_timer(execute_contract_timer_id);
@@ -731,7 +731,7 @@ impl Options {
         {
             IcrcTransferFromResult::TransferFromSuccess(_) => return Ok(format!("Premium Amount Sent to Seller {}", seller)),
             IcrcTransferFromResult::TransferFromErrorMessage(transfer_from_error) => {
-                return Err(transfer_from_error.to_string());
+                return Err(format!("Transfer Error: {:?}", transfer_from_error));
             }
             IcrcTransferFromResult::TransferFromErrorString(err_str) => {
                 return Err(err_str);
