@@ -4,7 +4,6 @@ pub mod lifecycle;
 pub mod memory;
 pub mod queries;
 pub mod updates;
-pub mod utils;
 
 use candid::{Nat, Principal};
 use ic_cdk::export_candid;
