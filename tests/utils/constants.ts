@@ -32,7 +32,6 @@ export const MINTER_PRINCIPAL = (): Principal => {
 
 export const BASE_OF_XRC: bigint = 1_000_000_000n;
 
-
 let CANISTER_IDS: (CANISTERS_NAME | Principal)[][] = [
   [
     CANISTERS_NAME.ICP_LEDGER,

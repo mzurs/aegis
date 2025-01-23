@@ -1,5 +1,25 @@
+import { Identity } from "@dfinity/agent";
+import { Account } from "@dfinity/ledger-icp";
+import { principalToSubAccount } from "@dfinity/utils";
 import { Actor, PocketIc } from "@hadronous/pic";
+import { parseEther } from "ethers/utils";
+import {
+  AegisAccountInfo,
+  IcrcTransferResult,
+} from "../../../declarations/accounts/accounts.did";
+import { Icrc1TransferResult } from "../../../declarations/icp_ledger/icp_ledger.did";
 import { createIdentityFromSeed, setupCanister } from "../../utils/configs";
+import {
+  ACCOUNTS_WASM_PATH,
+  CANISTER_IDS_MAP,
+  CANISTERS_NAME,
+  CKBTC_LEDGER_WASM_PATH,
+  CKBTC_MINTER_WASM_PATH,
+  CKETH_LEDGER_WASM_PATH,
+  CKETH_MINTER_WASM_PATH,
+  ICP_LEDGER_WASM_PATH,
+  KYT_WASM_PATH,
+} from "../../utils/constants";
 import {
   _ACCOUNTS,
   _CKBTC_LEDGER,
@@ -9,27 +29,7 @@ import {
   _ICP_LEDGER,
   _KYT,
 } from "../../utils/exports";
-import { Identity } from "@dfinity/agent";
-import {
-  ACCOUNTS_WASM_PATH,
-  CANISTER_IDS_MAP,
-  CANISTERS_NAME,
-  CKBTC_LEDGER_WASM_PATH,
-  CKBTC_MINTER_WASM_PATH,
-  CKETH_LEDGER_WASM_PATH,
-  CKETH_MINTER_WASM_PATH,
-   ICP_LEDGER_WASM_PATH,
-  KYT_WASM_PATH,
-} from "../../utils/constants";
 import { humanToE8s } from "../../utils/helpers";
-import { principalToSubAccount } from "@dfinity/utils";
-import { Account } from "@dfinity/ledger-icp";
-import { Icrc1TransferResult } from "../../../declarations/icp_ledger/icp_ledger.did";
-import {
-  AegisAccountInfo,
-  IcrcTransferResult,
-} from "../../../declarations/accounts/accounts.did";
-import { parseEther } from "ethers/utils";
 
 describe("Account Canister", () => {
   let pic: PocketIc;
@@ -47,8 +47,9 @@ describe("Account Canister", () => {
       nns: true,
       fiduciary: true,
       bitcoin: true,
-      system:1
     });
+
+    await pic.resetTime();
 
     // Generate new Identities
     minter = createIdentityFromSeed("minter");
