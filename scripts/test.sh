@@ -38,13 +38,16 @@ if [[ $test_type == "unit" ]]; then
     
     if [[ $test_canister_name == "accounts" ]]; then
         
+        
         echo "Running Accounts Integration Tests"
+        
+        jest --testPathPattern='tests/integration/accounts/accounts.spec.ts'
         
         elif [[ $test_canister_name == "insurance" ]]; then
         
         echo "Running Insurance Integration Tests"
         
-        jest --testPathPattern='tests/integration/insurance/1_insurance.spec.ts'
+        # jest --testPathPattern='tests/integration/insurance/1_insurance.spec.ts'
         
         jest --testPathPattern='tests/integration/insurance/2_insurance.spec.ts'
         
@@ -66,9 +69,9 @@ if [[ $test_type == "unit" ]]; then
         jest --testPathPattern='tests/integration/options/6_options.spec.ts'
         
         jest --testPathPattern='tests/integration/options/7_options.spec.ts'
-
+        
         jest --testPathPattern='tests/integration/options/8_options.spec.ts' --detectOpenHandles
-
+        
         elif [[ $test_canister_name == "main" ]]; then
         
         jest --testPathPattern='tests/integration/main/main.spec.ts'

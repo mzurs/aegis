@@ -21,8 +21,10 @@ function deploy_aegis_ledger(){
       read -r -d '' aegis_ledger_argument <<CANDID
     (variant {
         Init = record {
-            fee_collector_account =opt {
-                owner = principal "$MAIN_MAINNET_ID"
+            fee_collector_account =opt  record{
+                owner = principal "$MAIN_MAINNET_ID";
+                subaccount = opt blob "\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00";
+
             };
             minting_account = record {
                 owner = principal "$MINTING_PRINCIPAL"

@@ -229,10 +229,15 @@ function deploy_aegis() {
     
     # echo "Fetching Aegis Ledger Canister Candid..."
     # curl -o aegis_ledger.did "https://raw.githubusercontent.com/dfinity/ic/$IC_VERSION/rs/rosetta-api/icrc1/ledger/ledger.did",
-    
+    MAIN_ID="23633-jiaaa-aaaar-qadzq-cai"
+
   read -r -d '' aegis_ledger_argument <<CANDID
     (variant {
         Init = record {
+            fee_collector_account =opt record {
+                owner = principal "$MAIN_ID";
+                subaccount = opt blob "\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00";
+            };
             minting_account = record {
                 owner = principal "$MINTING_PRINCIPAL"
             };
@@ -301,8 +306,8 @@ function deploy() {
     
     deploy_aegis
     deploy_ledgers
-    # deploy_minters
-    # deploy_kyt
+    deploy_minters
+    deploy_kyt
     deploy_canisters
     
 }

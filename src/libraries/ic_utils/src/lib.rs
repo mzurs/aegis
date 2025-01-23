@@ -1,13 +1,16 @@
-pub mod principal_conversion;
-pub mod time;
 pub mod biguint_f64;
 pub mod biguint_u128;
+pub mod principal_conversion;
+pub mod time;
 
 use byteorder::{BigEndian, ByteOrder};
 use candid::Principal;
 use ic_cdk::api::{call::RejectionCode, management_canister::main::raw_rand};
 use icrc_ledger_types::icrc1::account::Subaccount;
 
+///
+/// Convert a Principal to a Subaccount
+///
 pub fn principal_to_subaccount(principal_id: &Principal) -> [u8; 32] {
     let mut subaccount: [u8; 32] = [0; std::mem::size_of::<Subaccount>()];
     let principal_id = principal_id.as_slice();
@@ -17,7 +20,9 @@ pub fn principal_to_subaccount(principal_id: &Principal) -> [u8; 32] {
     subaccount
 }
 
-/// Convert the principal an Ethereum Address
+///
+///  Convert the principal an Ethereum Address
+///
 pub fn principal_to_eth_address(principal: Principal) -> String {
     let n = principal.as_slice().len();
     assert!(n <= 29);
@@ -55,6 +60,9 @@ pub async fn generate_random_number_u32() -> Result<u32, String> {
     Ok(random_number)
 }
 
+///
+/// Convert a u64 to a Subaccount
+///
 pub fn convert_u64_to_subaccount(num: u64) -> [u8; 32] {
     let mut network_bytes: [u8; 32] = [0; 32];
     network_bytes[..8].copy_from_slice(&num.to_ne_bytes());
