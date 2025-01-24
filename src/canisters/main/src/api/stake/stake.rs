@@ -6,10 +6,16 @@ use crate::{
     mutate_state, read_state,
 };
 
+///
+/// Get the Minimum Staking Delay
+///
 pub fn get_min_stake_delay() -> u64 {
     read_state(|s| s.heap_state.min_staking_delay)
 }
 
+///
+/// Set the Minimum Staking Delay
+///
 pub(crate) fn set_min_staking_delay(delay_in_secs: Option<u64>) -> u64 {
     let one_day: u64 = 24;
     let one_hour: u64 = 60;
@@ -30,6 +36,9 @@ pub(crate) fn set_min_staking_delay(delay_in_secs: Option<u64>) -> u64 {
     read_state(|s| s.heap_state.min_staking_delay)
 }
 
+///
+/// Add execution logs for Stake Transactions
+///
 pub fn add_execution_logs(asset_type: StakeAsset, transaction_type: StakeTransactionType, message: String) {
     let key: StakeExecutionLogsKeys = StakeExecutionLogsKeys {
         asset_type,
@@ -41,7 +50,9 @@ pub fn add_execution_logs(asset_type: StakeAsset, transaction_type: StakeTransac
     mutate_state(|s| s.stable_state.stake.stake_execution_logs.insert(key, value));
 }
 
+///
 /// Return the List of Stake Execution Operations
+///
 pub fn get_execution_logs() -> Vec<(StakeExecutionLogsKeys, StakeExecutionLogsValue)> {
     read_state(|s| s.stable_state.stake.stake_execution_logs.iter().collect::<Vec<_>>())
 }

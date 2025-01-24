@@ -44,8 +44,12 @@ describe("======================================Main Canister Unit Testing======
   let mainActor: Actor<_MAIN>;
 
   beforeAll(async () => {
-    pic = await PocketIc.create(process.env.PIC_URL);
-
+    pic = await PocketIc.create(process.env.PIC_URL, {
+      nns: true,
+      fiduciary: true,
+      bitcoin: true,
+    });
+    
     await pic.resetTime();
 
     minter = createIdentityFromSeed("minter");

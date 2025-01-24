@@ -30,3 +30,5 @@ ethers-core.workspace = true
 management_canister.workspace = true
 getrandom = { version = "0.2", features = ["custom"] }
 blackscholes.workspace=true
+url = "2.3"
+urlencoding = "2.1"

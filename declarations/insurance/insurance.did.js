@@ -129,6 +129,7 @@ export const idlFactory = ({ IDL }) => {
     'insurance_id' : IDL.Nat32,
     'amount' : IDL.Nat,
   });
+  const Result_1 = IDL.Variant({ 'Ok' : IDL.Text, 'Err' : IDL.Text });
   const HttpHeader = IDL.Record({ 'value' : IDL.Text, 'name' : IDL.Text });
   const HttpResponse = IDL.Record({
     'status' : IDL.Nat,
@@ -230,6 +231,7 @@ export const idlFactory = ({ IDL }) => {
         [],
         [],
       ),
+    'test_https_outcalls' : IDL.Func([IDL.Text, IDL.Text], [Result_1], []),
     'transform_fred' : IDL.Func([TransformArgs], [HttpResponse], ['query']),
   });
 };

@@ -529,6 +529,9 @@ impl StakeIcrc {
         println!("TVL {}  is less than amount {}", tvl.clone(), amount.clone())
     }
 
+    ///
+    /// This method destribute the rewards to the stakers based on the TVL if supported tokens are locked
+    ///
     pub async fn icrc_distribute_rewards(args: IcrcDistributeRewardsArgs) {
         ic_cdk::println!(" icrc_distribute_rewards start");
 

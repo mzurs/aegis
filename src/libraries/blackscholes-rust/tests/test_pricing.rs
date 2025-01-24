@@ -8,7 +8,7 @@ const INPUTS_CALL_OTM: Inputs = Inputs {
     p: None,
     r: 0.00,
     q: 0.00,
-    t: 0.00040730354,//20.0 / 365.25,
+    t: 0.00040730354, //20.0 / 365.25,
     sigma: Some(0.7260000109672546),
 };
 const INPUTS_CALL_ITM: Inputs = Inputs {
@@ -55,8 +55,7 @@ const INPUTS_BRANCH_CUT: Inputs = Inputs {
 
 #[test]
 fn price_call_otm() {
-    
-    println!("Price: {}",INPUTS_CALL_OTM.calc_price().unwrap());
+    println!("Price: {}", INPUTS_CALL_OTM.calc_price().unwrap());
 
     // assert_approx_eq!(INPUTS_CALL_OTM.calc_price().unwrap(), 0.0376, 0.001);
 }

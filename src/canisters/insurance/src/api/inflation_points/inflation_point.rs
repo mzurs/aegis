@@ -6,7 +6,10 @@ use ic_cdk::{
     query,
 };
 
-use crate::api::interface::inflation_points::{Country, FredInflationData, InfationData};
+use crate::api::{
+    interface::inflation_points::{Country, FredInflationData, InfationData},
+    utils::convert::encode_url,
+};
 
 impl InfationData {
     pub fn new(country: Country, date: Option<String>) -> Self {
@@ -38,7 +41,7 @@ impl InfationData {
         let limit: &str = "1";
         let frequency: &str = "m";
 
-        let url: String = match &self.date {
+        let query_params: String = match &self.date {
             Some(vintage_dates) => format!(
                 "https://{}/fred/series/observations?series_id={}&api_key={}&file_type={}&units={}&sort_order={}&limit={}&frequency={}&vintage_dates={}",
                 host, series_id, api_key, file_type, units, sort_order, limit, frequency, vintage_dates
@@ -50,15 +53,22 @@ impl InfationData {
         };
 
         let request_headers = vec![];
+        let base_url = "https://74dvalxfnhjxsuoxnvbqavqm7y0pcxah.lambda-url.us-east-2.on.aws/";
 
         let request = CanisterHttpRequestArgument {
-            url: url.to_string(),
+            // url: url.to_string(),
+            url: match encode_url(base_url, &query_params) {
+                Ok(res) => res,
+                Err(err) => return Err(err.to_string()),
+            },
             method: HttpMethod::GET,
             body: None,               //optional for request
             max_response_bytes: None, //optional for request
             transform: Some(TransformContext::from_name("transform_fred".to_string(), vec![])),
             headers: request_headers,
         };
+
+        // ic_cdk::println!("PARAMS: {}", request.to_owned());
 
         match http_request(request, 50_000_000_000).await {
             Ok((response,)) => {

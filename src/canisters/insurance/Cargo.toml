@@ -26,3 +26,5 @@ ic_ledger_utils.workspace = true
 ic_utils.workspace = true
 serde_json.workspace = true
 num-bigint.workspace = true
+url = "2.3"
+urlencoding = "2.1"

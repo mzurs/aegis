@@ -3,11 +3,11 @@ use blackscholes::{Inputs, OptionType, Pricing};
 use candid::Nat;
 use ic_cdk::{
     api::management_canister::http_request::{
-        http_request, CanisterHttpRequestArgument, HttpMethod, HttpResponse, TransformArgs, TransformContext,
+        http_request, CanisterHttpRequestArgument, HttpHeader, HttpMethod, HttpResponse, TransformArgs, TransformContext,
     },
     query,
 };
-use ic_utils::time::remaining_time_in_years;
+use ic_utils::{generate_random_number_u64, time::remaining_time_in_years};
 use management_canister::ManagementCanister;
 
 use crate::api::{
@@ -22,6 +22,8 @@ use crate::api::{
     },
     utils::{amount_conversion::convert_xrc_non_human_to_human, constants::get_canister_id},
 };
+
+use super::encode_url;
 
 // use super::model::black_scholes_merton::black_scholes_merton;
 
@@ -129,15 +131,36 @@ impl EuropeanOptions {
 
         let resolution: String = "1".to_owned();
 
-        let url: String = format!(
+        let query_params: String = format!(
             "{}{}?currency={}&end_timestamp={}&resolution={}&start_timestamp={}",
             test_host_url, method, currency, end_timestamp, resolution, start_timestamp
         );
 
-        let request_headers: Vec<ic_cdk::api::management_canister::http_request::HttpHeader> = vec![];
+        let request_headers: Vec<ic_cdk::api::management_canister::http_request::HttpHeader> = vec![
+            HttpHeader {
+                name: "Idempotency-Key".to_string(),
+                value: format!(
+                    "{}{}",
+                    "UUID-".to_string(),
+                    match generate_random_number_u64().await {
+                        Ok(res) => res.to_string(),
+                        Err(err) => return Err(err.to_owned()),
+                    }
+                ),
+            },
+            HttpHeader {
+                name: "Content-Type".to_string(),
+                value: "application/json".to_string(),
+            },
+        ];
+        let base_url = "https://74dvalxfnhjxsuoxnvbqavqm7y0pcxah.lambda-url.us-east-2.on.aws/";
 
         let request: CanisterHttpRequestArgument = CanisterHttpRequestArgument {
-            url: url.to_string(),
+            url: match encode_url(base_url, &query_params) {
+                Ok(res) => res,
+                Err(err) => return Err(err.to_string()),
+            },
+            // url: url.to_string(),
             method: HttpMethod::GET,
             body: None,               //optional for request
             max_response_bytes: None, //optional for request
@@ -236,6 +259,38 @@ impl EuropeanOptions {
 // } as f64;
 
 // Strips all data that is not needed from the original response.
+// #[query]
+// pub fn transform_fred(raw: TransformArgs) -> HttpResponse {
+//     let headers = vec![];
+
+//     let mut res: HttpResponse = HttpResponse {
+//         status: raw.response.status.clone(),
+//         body: raw.response.body.clone(),
+//         headers,
+//         ..Default::default()
+//     };
+
+//     let success_status: Nat = Nat::try_from(200 as u64).unwrap();
+
+//     if res.status == success_status {
+//         let str_body: String = String::from_utf8(res.body).expect("Transformed response is not UTF-8 encoded.");
+
+//         let json_body: DerbitVolatilityIndex = match serde_json::from_str(&str_body) {
+//             Ok(res) => res,
+//             Err(err) => ic_cdk::trap(&err.to_string()),
+//         };
+//         res.body = match serde_json::to_vec(serde_json::to_string(&json_body.result.data[0])) {
+//             Ok(vec) => vec,
+//             Err(err) => ic_cdk::trap(&err.to_string()),
+//         };
+
+//         res.body = raw.response.body;
+//     } else {
+//         ic_cdk::api::print(format!("Received an error: err = {:?}", raw));
+//     }
+//     res
+// }
+
 #[query]
 pub fn transform_fred(raw: TransformArgs) -> HttpResponse {
     let headers = vec![];

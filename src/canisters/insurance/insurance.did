@@ -85,6 +85,7 @@ type InsuranceInitRes = variant {
 };
 type InsuranceRewardsMultiplier = variant { M2X; M3X; M4X };
 type Result = variant { Ok : float32; Err : text };
+type Result_1 = variant { Ok : text; Err : text };
 type SellInsuranceArgs = record { insurance_id : nat32; amount : nat };
 type TransferError = variant {
   GenericError : record { message : text; error_code : nat };
@@ -147,5 +148,6 @@ service : (record {}) -> {
   nat_to_f64 : (nat) -> (float64) query;
   sell_insurance_contract : (SellInsuranceArgs) -> (BuyInsuranceRes);
   set_ledger_canister_id : (InsuranceAssets, principal) -> ();
+  test_https_outcalls : (text, text) -> (Result_1);
   transform_fred : (TransformArgs) -> (HttpResponse) query;
 }

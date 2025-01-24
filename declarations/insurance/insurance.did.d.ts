@@ -91,6 +91,8 @@ export type InsuranceRewardsMultiplier = { 'M2X' : null } |
   { 'M4X' : null };
 export type Result = { 'Ok' : number } |
   { 'Err' : string };
+export type Result_1 = { 'Ok' : string } |
+  { 'Err' : string };
 export interface SellInsuranceArgs {
   'insurance_id' : number,
   'amount' : bigint,
@@ -174,6 +176,7 @@ export interface _SERVICE {
     [InsuranceAssets, Principal],
     undefined
   >,
+  'test_https_outcalls' : ActorMethod<[string, string], Result_1>,
   'transform_fred' : ActorMethod<[TransformArgs], HttpResponse>,
 }
 export declare const idlFactory: IDL.InterfaceFactory;

@@ -1,4 +1,5 @@
 pub mod icrc_types {
+
     use candid::{CandidType, Nat};
     use icrc_ledger_types::{icrc1::transfer::TransferError, icrc2::transfer_from::TransferFromError};
     use serde::Deserialize;

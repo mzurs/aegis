@@ -1,3 +1,3 @@
+pub mod checkers;
 pub mod constants;
 pub mod options;
-pub mod checkers;

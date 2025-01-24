@@ -61,6 +61,9 @@ pub struct StakeIcrcArgs {
     pub amount: Nat,
 }
 
+///
+/// Asset that are supported by the ICRC Main Canister
+///
 #[derive(Debug, CandidType, Deserialize)]
 pub enum StakeIcrcRes {
     Success,
