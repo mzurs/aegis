@@ -12,6 +12,13 @@ Aegis Finance leverages the IC blockchain to power its decentralized exchange pl
 
 This repo contains Backend Canisters code, for Frontend Canister code, please visit [Aegis-Dapp](https://github.com/AegisFinance/aegis-dapp)
 
+#### Aegis Finance Canisters
+
+- accounts (It manages user tokens such as ICP, ckBTC, ckETH.)
+- main (It supports the staking of $AEGIS tokens.)
+- insurance (It supports the buying/selling of insurance contracts.)
+- options (It supports the buying/selling of options contracts.)
+
 ## Start IC Replica
 
 ```bash
@@ -40,8 +47,6 @@ yarn  deploy:all
 
 ## Testing
 
-[PocketIC](https://github.com/dfinity/pocketic) is being used for testing Aegis Canisters, [tests](tests/accounts.spec.ts)
-
 ```bash
 yarn deploy:all
 ```
@@ -50,12 +55,16 @@ yarn deploy:all
 dfx generate
 ```
 
-```bash
-yarn test:all
-```
+- <b>Unit Testing</b>
+  ```bash
+  yarn test:unit:(canister-name)
+  ```
+- <b>Integration Testing</b>
+  ```bash
+  yarn test:integration:(canister-name)
+  ```
 
 ### Features
-
 
 - [x] Deposit & Withdraw ICRCs Tokens (ICP, ckBTC, ckETH).
 - [x] Convert BTC <-> ckBTC.
@@ -63,4 +72,3 @@ yarn test:all
 - [x] Insurance Contracts (ICP, ckBTC, ckETH).
 - [x] Stake ICRC tokens (AEGIS).
 - [x] Options Contracts (ckBTC & ckETH).
- 
