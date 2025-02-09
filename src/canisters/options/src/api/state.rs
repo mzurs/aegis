@@ -33,12 +33,6 @@ pub(crate) fn init_stable_states() -> StableStates {
         contract_timestamps: StableBTreeMap::init(get_memory(CONTRACT_TIMESTAMPS_MEMORY)),
         contract_offer_duration_timestamps: StableBTreeMap::init(get_memory(CONTRACT_OFFER_DURATION_MEMORY)),
         principal_trade_history: StableBTreeMap::init(get_memory(TRADED_OPTIONS_BY_PRINCIPAL_MEMORY)),
-        // insurance_contract_timer: StableVec::init(get_memory(INSURANCE_TIMERS_MEMORY)).unwrap(),
-        // insurance_buyers: StableBTreeMap::init(get_memory(INSURANCE_BUYERS_MEMORY)),
-        // insurance_sellers: StableBTreeMap::init(get_memory(INSURANCE_SELLERS_MEMORY)),
-        // insurance_contract_execution_logs: StableBTreeMap::init(get_memory(INSURANCE_CONTRACT_EXECUTION_LOGS)),
-        // user_trade_history: StableBTreeMap::init(get_memory(USER_INSURANCE_LIST_HISTORY)),
-        // insurance_active_list: StableBTreeMap::init(get_memory(INSURANCE_ACTIVE_CONTRACT_LIST)),
     }
 }
 

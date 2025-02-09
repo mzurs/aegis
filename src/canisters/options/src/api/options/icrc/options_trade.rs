@@ -91,16 +91,6 @@ impl TradeOptions<OptionsAssetsIcrc> for Options {
 
             amount: match args.options_type.to_owned() {
                 OptionsType::PUT => {
-                    // let mgmt: ManagementCanister = ManagementCanister::new();
-
-                    // match mgmt
-                    //     .xrc(
-                    //         Into::<Ticker>::into(args.asset.to_owned()).0,
-                    //         get_canister_id(CanisterName::ExchangeRate),
-                    //     )
-                    //     .await
-                    // {
-                    // Ok(res) => {
                     let price_f64: f64 = convert_xrc_non_human_to_human(args.strike_price.to_owned());
 
                     let amount_f64: f64 = convert_asset_amount_to_human(args.asset.to_owned(), args.asset_amount.to_owned()); //biguint_to_u128_func(&args.asset_amount.to_owned().0).unwrap() as f64;
@@ -116,9 +106,6 @@ impl TradeOptions<OptionsAssetsIcrc> for Options {
                     ic_cdk::println!("New Option Put Amount {}", amount.to_owned());
 
                     amount
-                    // }
-                    // Err(err) => return Err(err),
-                    // }
                 }
                 OptionsType::CALL => args.asset_amount.to_owned(),
             },
@@ -737,19 +724,5 @@ impl Options {
                 return Err(err_str);
             }
         }
-    }
-}
-
-#[cfg(test)]
-mod test {
-    // use candid::Nat;
-
-    #[test]
-    fn subtract() {
-        // let amount = 111 as u64;
-        let fee = 10_000_000_000 as u64;
-        let balance = 3_000_000_000_000_000_000 as u64;
-
-        println!("Subtract, {}", fee - balance);
     }
 }

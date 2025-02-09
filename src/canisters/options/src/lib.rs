@@ -35,5 +35,3 @@ getrandom::register_custom_getrandom!(always_fail);
 canister_state!(State);
 
 export_candid!();
-
-type _A = TradedOptionsContractsKey;

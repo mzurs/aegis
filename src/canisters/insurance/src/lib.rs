@@ -26,5 +26,4 @@ pub mod updates;
 
 canister_state!(State);
 
-// type  a=Nat
 export_candid!();

@@ -4,7 +4,6 @@ use stable_memory::get_reader;
 use crate::{api::interfaces::state::State, init_state, memory::get_memory_upgrades};
 
 #[post_upgrade]
-// #[trace]
 fn post_upgrade() {
     ic_cdk::println!("uogrding");
 
@@ -14,6 +13,4 @@ fn post_upgrade() {
     let data: State = serializer::deserialize(reader).unwrap();
 
     init_state(data);
-
-    // info!(version = %args.wasm_version, "Post-upgrade complete");
 }

@@ -5,7 +5,6 @@ use tracing::info;
 use crate::{memory::get_memory_upgrades, take_state};
 
 #[pre_upgrade]
-// #[trace]
 fn pre_upgrade() {
     info!("Pre-upgrade starting");
 

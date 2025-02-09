@@ -1,6 +1,5 @@
 pub mod conversions;
 pub mod european_options;
-pub mod model;
 
 use url::Url;
 

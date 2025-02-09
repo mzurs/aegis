@@ -18,7 +18,7 @@ use crate::{
 
 #[update]
 pub async fn get_exchange_rate(asset: OptionsAssets) -> Result<u64, String> {
-    let mgmt = ManagementCanister::new();
+    let mgmt: ManagementCanister = ManagementCanister::new();
     mgmt.xrc(Into::<Ticker>::into(asset).0, get_canister_id(CanisterName::ExchangeRate))
         .await
 }

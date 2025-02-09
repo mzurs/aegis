@@ -12,15 +12,6 @@ use crate::{
 fn init(args: InitArgs) {
     init_state(State::default());
 
-    // mutate_state(|s| {
-    //     {
-    //         *s = State {
-    //             stable_state: init_stable_states(),
-    //             heap_state: init_heap_state(),
-    //         }
-    //     }
-    // });
-
     mutate_state(|s| {
         let res: &mut StableStates = &mut s.stable_state;
         let _ = res.init.set(args);

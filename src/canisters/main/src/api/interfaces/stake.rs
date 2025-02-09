@@ -6,7 +6,6 @@ use super::{constants::StakeAsset, state::StakeExecutionLogs};
 pub trait Stake {
     // stake functions arguments
     type NewArgs;
-    // type NewRes=Self;
 
     type StakeArgs;
     type StakeRes;

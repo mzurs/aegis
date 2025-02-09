@@ -14,12 +14,6 @@ pub const CONTRACT_TIMESTAMPS_MEMORY: MemoryId = MemoryId::new(6);
 pub const CONTRACT_OFFER_DURATION_MEMORY: MemoryId = MemoryId::new(7);
 pub const TRADED_OPTIONS_BY_PRINCIPAL_MEMORY: MemoryId = MemoryId::new(8);
 
-// pub const ICRC_STAKE_MEMORY: MemoryId = MemoryId::new(2);
-// pub const ICRC_STAKE_TIMESTAMP_MEMORY: MemoryId = MemoryId::new(3);
-// pub const ICRC_UNSTAKE_TIMESTAMP_MEMORY: MemoryId = MemoryId::new(4);
-// pub const ICRC_TOTAL_VALUE_LOCKED_MEMORY: MemoryId = MemoryId::new(5);
-// pub const STAKE_EXECUTION_LOGS_MEMORY: MemoryId = MemoryId::new(6);
-
 std::thread_local! {
 
     static MEMORY_MANAGER: RefCell<MemoryManager<DefaultMemoryImpl>> =memory_manager_init();

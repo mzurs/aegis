@@ -4,7 +4,6 @@ pub mod lifecycle;
 pub mod memory;
 pub mod queries;
 pub mod updates;
-pub mod utils;
 
 use candid::{Nat, Principal};
 use ic_cdk::{api::management_canister::bitcoin::BitcoinNetwork, export_candid};
@@ -24,5 +23,4 @@ use crate::api::lifecycle::init::InitArgs;
 
 canister_state!(State);
 
-// type  a=IcrcTransferFromResult;;
 export_candid!();

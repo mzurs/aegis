@@ -17,6 +17,4 @@ fn post_upgrade() {
     init_state(data);
 
     rewrite_contract_expiry()
-
-    // info!(version = %args.wasm_version, "Post-upgrade complete");
 }
